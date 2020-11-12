@@ -1,0 +1,171 @@
+<script>
+    
+    var confirmLoginList = [];
+            
+            var phone = "";
+            var os = "";
+            var phoneUser = "";
+            
+            //PasswordEncryption.password = "hoi";
+            //document.getElementById("addUserTbx").value = password;
+            
+           
+
+            function confirmInformation(givenPhoneVar, givenOSVar, givenPhoneUserVar){
+                givenPhoneVar = document.getElementById('phoneTypeFilterInput').value;
+                givenOsVar = document.getElementById('phoneOsFilterInput').value;
+                givenPhoneUserVar = document.getElementById('phoneUserFilterInput').value;
+                if (document.getElementById('phoneTypeFilterInput').value != "" || document.getElementById('phoneOsFilterInput').value != "" || document.getElementById('phoneUserFilterInput').value != "") {
+                    document.getElementById('phoneTypeFilterInput').innerHTML = "Hoi";
+                }
+                return givenPhoneVar, givenOsVar, givenPhoneUserVar
+            }
+
+            function tbxDarkModeChange(givenTextbox){
+                document.getElementById(givenTextbox).style.backgroundColor = 'rgb(2, 22, 23)';
+                document.getElementById(givenTextbox).style.color = 'grey';
+                document.getElementById(givenTextbox).style.borderColor = 'rgb(2, 22, 23)';
+            }
+
+            function tbxLightModeChange(givenTextbox){
+                document.getElementById(givenTextbox).style.backgroundColor = 'rgb(255, 255, 255)';
+                document.getElementById(givenTextbox).style.color = 'rgb(2, 22, 23)';
+                document.getElementById(givenTextbox).style.borderColor = 'rgb(255, 255, 255)';
+            }
+
+            function changeBtnToDarkMode(givenGrid){
+                document.getElementById(givenGrid).style.backgroundColor = 'rgb(90, 90, 90)';
+                document.getElementById(givenGrid).style.color = 'rgb(255, 255, 255)';
+            }
+
+            function changeBtnToLightMode(givenGrid){
+                document.getElementById(givenGrid).style.backgroundColor = 'rgb(255, 255, 255)';
+                document.getElementById(givenGrid).style.color = 'rgb(2, 22, 23)';
+            }
+
+            function changeGridToDarkMode(givenGrid){
+                document.getElementById(givenGrid).style.backgroundColor = 'rgb(2, 22, 23)';
+                document.getElementById(givenGrid).style.color = 'rgb(255, 255, 255)';
+            }
+
+            function changeGridToLightMode(givenGrid){
+                document.getElementById(givenGrid).style.backgroundColor = 'rgb(255, 255, 255)';
+                document.getElementById(givenGrid).style.color = 'rgb(2, 22, 23)';
+            }
+
+            function toggleDarkMode(){
+                
+                // test for rgb color 
+                // document.getElementById('usernameTbx').value = document.body.style.backgroundColor;
+
+                // if dark mode, change to light mode
+                if (document.body.style.backgroundColor == 'rgb(2, 22, 23)'){
+                    document.body.style.backgroundColor = 'rgb(255, 255, 255)';
+                    document.body.style.color = 'rgb(2, 22, 23)';
+                    
+                }
+
+                // if light mode, change to dark mode
+                else{
+                    // <backup color> document.body.style.backgroundColor = 'rgb(49, 58, 67)'
+                    document.body.style.backgroundColor = 'rgb(2, 22, 23)';
+                    document.body.style.color = 'rgb(255, 255, 255)';
+                    
+                }
+            }
+
+            function toggleVisibilityOfObject(givenElement, givenElement2, givenElement3){
+                if (document.getElementById(givenElement).style.visibility == "visible") {
+                    document.getElementById(givenElement).style.visibility = "hidden";
+                    document.getElementById(givenElement2).style.visibility = "hidden";
+                    document.getElementById(givenElement3).style.visibility = "hidden";
+                } else {
+                    document.getElementById(givenElement).style.visibility = "visible";
+                    document.getElementById(givenElement2).style.visibility = "visible";
+                    document.getElementById(givenElement3).style.visibility = "visible";
+                }
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+                document.getElementById("main").style.marginLeft = "250px";
+                document.style.backgroundColor = "rgba(0,0,0,0.4)";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+                document.getElementById("main").style.marginLeft= "0";
+                document.querySelector("main").disabled = true;
+                document.style.backgroundColor = "white";
+            }
+</script>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+      </div>
+      
+    <div id="main">
+        <span style="font-size:15px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+    
+        <div class="grid-container">
+            
+            <div id="headerDiv" class="headerItem">
+            </div>
+            
+            <div id="filterDiv" class="filterItem">
+                <label>Filter on Phone type</label>
+                <input id="phoneTypeFilterCbx" type="checkbox"  onchange="toggleVisibilityOfObject('phoneTypeFilterInput', 'phoneTypeLbl')"/><br>
+                <label>Filter on Phone OS</label>
+                <input id="phoneOsFilterCbx" type="checkbox"  onchange="toggleVisibilityOfObject('phoneOsFilterInput', 'phoneOsLbl')"/><br>
+                <label>Filter on Phone User</label>
+                <input id="phoneUserFilterCbx" type="checkbox"  onchange="toggleVisibilityOfObject('phoneUserFilterInput', 'phoneUserLbl')"/><br>
+                <label id="phoneTypeLbl" style="visibility: hidden;">Phone Type: </label>
+                <input id="phoneTypeFilterInput" style="visibility: hidden;"><br>
+                <label id="phoneOsLbl" style="visibility: hidden;">Phone OS: </label>
+                <input id="phoneOsFilterInput" style="visibility: hidden;"><br>
+                <label id="phoneUserLbl" style="visibility: hidden;">Phone User: </label>
+                <input id="phoneUserFilterInput" style="visibility: hidden;"><br><br>
+                <button id="phoneUserFilterBtn" onclick="phone, os, phoneUser = confirmInformation(phone, os, phoneUser)" style="cursor: pointer;">Filter</button><br>
+            </div>
+            
+            <div id="tableDiv" class="tableItem">
+                <table id="userDataTbl" style="width:100%; height: 50px;">
+                    <tr>
+                        <th>Phone Type</th>
+                        <th>OS</th>
+                        <th>User</th>
+                    </tr>
+                </table>
+            </div>
+            
+            <div id="additionDiv" class="additionItem">
+                <label id="userLbl" class="labelToLeft">Add User: </label>
+                <input id="addUserTbx" class="elementToLeft"><br>
+                <label id="passwordLbl" class="labelToLeft">Add User Password: </label>
+                <input id="addPasswordTbx" class="elementToLeft"><br>
+                <label id="appendLbl" class="labelToLeft">Append to Group: </label>
+                <input id="appendToGroupTbx" class="elementToLeft">
+            </div>
+        
+        </div>
+        <button id="backBtn" onclick="location.href='PasswordEncryption.html'" style="left:20px;  cursor: pointer;">Back</button>
+
+        <script>
+            function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+            document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+            }
+            
+            function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+            document.body.style.backgroundColor = "white";
+            }
+        </script>
+    </div>
+</body>

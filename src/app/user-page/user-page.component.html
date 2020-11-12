@@ -1,0 +1,40 @@
+<h2>Users</h2>
+<label>Welcome to the Users Page. On this page you are able to select your desired group and </label>
+<table style="text-align: center;">
+    <tr>
+        <th>Name</th>
+        <th>Password</th>
+        <th>Status</th>
+    </tr>
+    
+        <div *ngFor="let user of users; index as userId">
+            <tr>
+                <td>
+                    <h3>
+                        <a [title]="user.name + ' details'" [routerLink]="['/users', userId]">
+                            {{ user.name }}
+                        </a>
+                    </h3>
+                </td>
+
+                <td>
+                    Password: {{ user.password }}
+                </td>
+                   
+                <td>
+                    Status: {{ user.status }}
+                </td>
+            </tr>
+
+                <button (click)="add()">
+                    Add
+                </button>
+
+                <app-user-alerts
+                    [user]="user"
+                    (notify)="onNotify()">
+                </app-user-alerts>
+            
+        </div>
+    
+</table>

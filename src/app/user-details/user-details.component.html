@@ -1,0 +1,10 @@
+
+
+<div *ngIf="user">
+  <h3>{{ user.name }}</h3>
+  <h4>{{ user.password }}</h4>
+  <p>{{ user.status }}</p>
+  <input name='testInput'>
+  <button (click)="addToItems(user)">Add</button>
+  <button (click)="getItems()">Get Items</button>
+</div>

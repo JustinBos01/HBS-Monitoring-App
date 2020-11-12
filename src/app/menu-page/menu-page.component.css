@@ -1,0 +1,99 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    align-self: center;
+}
+
+th {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+td {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+
+.headerItem {    
+    grid-area: header;
+    border: 1px solid rgba(0, 0, 0, 0.8);    
+}
+
+.dark-mode {
+    background: rgb(77,77,77);
+    background: -moz-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgb(77,77,77)), color-stop(0%, rgb(43,43,43)), color-stop(0%, rgb(0,0,0)), color-stop(0%, rgb(89,89,89)), color-stop(0%, rgb(102,102,102)), color-stop(0%, rgb(102,102,102)), color-stop(0%, rgb(89,89,89)), color-stop(0%, rgb(89,89,89)), color-stop(0%, rgb(71,71,71)), color-stop(0%, rgb(18,18,18)), color-stop(49%, rgb(59,58,59)), color-stop(91%, rgb(28,28,28)), color-stop(100%, rgb(18,18,18)));
+    background: -webkit-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: -o-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: -ms-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: linear-gradient(to right, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d4d4d', endColorstr='#121212', GradientType=1 );
+}
+
+.mainItem {
+    grid-area: main;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: right;
+    font-size: 15px;
+}
+
+.menuItem {
+    top: 1px;
+    grid-area: menu;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+.locationItem {
+    top: 1px;
+    grid-area: location;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: left;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'header header header header header header'
+        'menu location location location location location'
+        'menu location location location location location';
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.block {
+    display: block;
+    width: 100%;
+    border: white;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 15px;
+}
+
+.normal-text {
+    font-size: 16px;
+}
+
+.comment-text {
+    color: gray;
+    font-size: 16px;
+}
+
+.toRight {
+    position: fixed;
+    right: 20px;
+}
