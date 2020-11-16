@@ -1,0 +1,146 @@
+.dark-mode{
+    background: rgb(77,77,77);
+    background: -moz-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgb(77,77,77)), color-stop(0%, rgb(43,43,43)), color-stop(0%, rgb(0,0,0)), color-stop(0%, rgb(89,89,89)), color-stop(0%, rgb(102,102,102)), color-stop(0%, rgb(102,102,102)), color-stop(0%, rgb(89,89,89)), color-stop(0%, rgb(89,89,89)), color-stop(0%, rgb(71,71,71)), color-stop(0%, rgb(18,18,18)), color-stop(49%, rgb(59,58,59)), color-stop(91%, rgb(28,28,28)), color-stop(100%, rgb(18,18,18)));
+    background: -webkit-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: -o-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: -ms-linear-gradient(left, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    background: linear-gradient(to right, rgb(77,77,77) 0%, rgb(43,43,43) 0%, rgb(0,0,0) 0%, rgb(89,89,89) 0%, rgb(102,102,102) 0%, rgb(102,102,102) 0%, rgb(89,89,89) 0%, rgb(89,89,89) 0%, rgb(71,71,71) 0%, rgb(18,18,18) 0%, rgb(59,58,59) 49%, rgb(28,28,28) 91%, rgb(18,18,18) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d4d4d', endColorstr='#121212', GradientType=1 );
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    align-self: center;
+}
+
+th {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+td {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+
+.headerItem {    
+    grid-area: header;
+    border: 1px solid rgba(0, 0, 0, 0.8);    
+}
+
+.tableItem {
+    grid-area: tbl;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    font-size: 15px;
+}
+
+.additionItem {
+    grid-area: addition;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+.filterItem {
+    grid-area: filter;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: right
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'header header header header header header'
+        'tbl tbl tbl tbl filter filter'
+        'addition addition addition addition addition addition';
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 15px;
+}
+
+.labelToLeft {
+    position: fixed;
+    left: 50px;
+}
+
+.elementToLeft {
+    position: fixed;
+    left: 190px;
+}
+
+.elementToRight {
+    position: fixed;
+    right: 20px;
+}
+
+.visibilityToggle {
+    visibility: "visible";
+}
+
+.filterMenuInput {
+    left: 30px;
+}
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Styling */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  grid-area: concept;
+  
+  height: 750px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: justify;
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-label {
+    background-color: #fefefe;
+    left: 70px;
+}
+.modal-textbox {
+    background-color: #fefefe;
+    left: 110px;
+}

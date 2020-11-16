@@ -1,0 +1,10 @@
+{
+    "/": {
+        "target": "https://budgetonderzoek.test.cbs.nl",
+        "secure": true,
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^http://localhost:4200": "https://budgetonderzoek.test.cbs.nl"
+        }
+    }
+}

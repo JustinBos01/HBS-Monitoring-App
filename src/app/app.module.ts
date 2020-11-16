@@ -16,6 +16,7 @@ import { ConfigService } from './config/config.service';
 import { MenuPageComponent } from './menu-page/menu-page.component';
 import { PhonePageComponent } from './phone-page/phone-page.component';
 import { ReceiptPageComponent } from './receipt-page/receipt-page.component';
+import { GroupPageComponent } from './group-page/group-page.component';
 
 @NgModule({
   imports: [
@@ -23,8 +24,10 @@ import { ReceiptPageComponent } from './receipt-page/receipt-page.component';
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      {path: '', component: MenuPageComponent},
-      {path: 'user', component: UserComponent},
+      {path: '', component: ConfigComponent},
+      {path: 'groups/:groupId', component: GroupPageComponent},
+      {path: 'menu', component: MenuPageComponent},
+      {path: 'user', component: UserPageComponent},
       {path: 'phone', component: PhonePageComponent},
       {path: 'users/:userId', component: UserDetailsComponent },
       {path: 'login', component: LoginPageComponent}])
@@ -40,7 +43,8 @@ import { ReceiptPageComponent } from './receipt-page/receipt-page.component';
     UserComponent,
     MenuPageComponent,
     PhonePageComponent,
-    ReceiptPageComponent
+    ReceiptPageComponent,
+    GroupPageComponent
   ],
   providers: [ConfigService],
   bootstrap: [AppComponent]

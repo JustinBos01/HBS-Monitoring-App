@@ -10,15 +10,15 @@ import { UserPageService } from '../user-page/user-page.service'
 
 export class LoginPageComponent {
   items;
-  checkoutForm;
+  loginForm;
 
   constructor(
     private userPageService: UserPageService,
     private formBuilder: FormBuilder,
   ) {
-    this.checkoutForm = this.formBuilder.group({
+    this.loginForm = this.formBuilder.group({
       name: '',
-      address: ''
+      password: ''
     });
   }
 
@@ -26,11 +26,11 @@ export class LoginPageComponent {
     this.items = this.userPageService.getItems();
   }
 
-  onSubmit(customerData) {
+  onSubmit(userData) {
     // Process checkout data here
     this.items = this.userPageService.clearItems();
-    this.checkoutForm.reset();
-
-    console.warn('Your order has been submitted', customerData);
+    this.loginForm.reset();
+    console.log(userData)
+    console.warn('Thanks for using our application', userData.name);
   }
  }

@@ -1,9 +1,5 @@
-<p>user works!</p>
-<div *ngFor="let item of items">
-    <span>{{ item.name }}</span>
-    <span>{{ item.password }}</span>
-    
-</div>
+<!-- 
+
 <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
     <div>
         <label for="name">
@@ -20,4 +16,69 @@
       </div>
     
       <button class="button" type="submit">Purchase</button>
-</form>
+</form> -->
+
+<html>
+<body>
+  
+
+  <div class="grid-container" >
+      <div id="headerDiv" class="headerItem">
+
+      </div>
+      
+      <div id="filterDiv" class="filterItem">
+          <!-- togglebar -->
+
+          
+          <label id="superUserFilterLbl">Filter on Super User</label>
+          <input id="superUserFilterCbx" type="checkbox"  onchange="toggleVisibilityOfObject('filterInputSuperUser', 'superUserLbl')"/><br>
+          <label id="groupFilterLbl">Filter on Group</label>
+          <input id="groupFilterCbx" type="checkbox" onchange="toggleVisibilityOfObject('filterInputGroup', 'groupLbl')"><br>
+          <label id="userFilterLbl">Filter on User</label>
+          <input id="userFilterCbx" type="checkbox" onchange="toggleVisibilityOfObject('filterInputUser', 'filterUserBtn', 'userLbl')"><br><br>
+          <label id="superUserLbl" style="visibility: hidden">Search for Super User:</label>
+          <input id="filterInputSuperUser" style="visibility: hidden"><br>
+          <label id="groupLbl" style="visibility: hidden">Search for Group:</label>
+          <input id="filterInputGroup" style="visibility: hidden"><br>
+          <label id="userLbl" style="visibility: hidden">Search for User:</label>
+          <input id="filterInputUser" style="visibility: hidden"><br><br>
+          <button id="filterUserBtn" style="visibility: hidden">Filter</button><br>
+      </div>
+      
+      <!-- <div id="tableDiv" class="tableItem">
+          <label>Shown underneath are the users in each individual groups. <br> Double click the rows for further actions.</label>
+          <table id="HtmlUserTbl" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+          unselectable="on"
+          onselectstart="return false;" 
+          onmousedown="return false;">
+              <tr>
+                  <th>Group</th>
+                  <th>Users</th>
+                  <th>Status</th>
+              </tr>
+              
+              <div *ngFor="let group of groups; index as groupId">
+                <tr  style="cursor: pointer;">
+                    <td [routerLink]="['/groups', groupId]" >{{group.name}}</td>
+                    <td [routerLink]="['/groups', groupId]" >{{group.users}}</td>
+                    <td [routerLink]="['/groups', groupId]" >{{group.status}}</td>
+                </tr>
+            </div>
+            
+          </table>
+      </div>
+       -->
+      
+  </div>
+  <button id="backBtn" onclick="location.href='PasswordEncryption.html'" style="left:20px;">Back</button>
+  
+  <!-- <div id="modalDiv2" class="modal">
+      <div id="modal2" class="modal">
+          <input name="addUserNbx" id='addUserAmountNbx' type="number" style="width: 4%" onkeypress="generateUserTextboxes()">
+          <form id="addUserForm" action='/addUser' method="POST">
+              <button id='generateTextboxesForm2' onclick="generateUserTextboxes()">Generate</button>
+          </form>
+      </div>
+  </div> -->
+</body></html>

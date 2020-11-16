@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService, Config } from './config.service';
+import { ConfigService, GroupData, Users } from './config.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { groups } from '../groups';
 
 
 
@@ -14,8 +15,8 @@ export class Headers {
 })
 
 export class ConfigComponent implements OnInit {
-  config: Config[];
-  
+  users1: Users[];
+  groups: GroupData[];
   headers: Headers;
   
   constructor(
@@ -24,12 +25,12 @@ export class ConfigComponent implements OnInit {
 
   ngOnInit(): void {
     this.showConfigResponse()
+    this.showGroupResponse()
   }
 
   showConfig() {
     this.configService.getConfig()
-      .subscribe((data: Config[]) => this.config = [{
-        
+      .subscribe((data: Users[]) => this.users1 = [{
           id: (data as any).id,
           groupId: (data as any).groupId,
           name: (data as any).name,
@@ -40,16 +41,17 @@ export class ConfigComponent implements OnInit {
 
   showConfigResponse() {
     this.configService.getConfigResponse()
-      // resp is of type `HttpResponse<Config>`
-      .subscribe(config => {
-        //display its headers
-        //const keys = resp.headers.keys();
-        //this.headers = keys.map(key =>
-        //  `${key}: ${resp.headers.get(key)}`);
-  
-        // access the body directly, which is typed as `Config`.
-        this.config = config;
-        console.log(this.config)
+      .subscribe(users => {
+        this.users1 = users;
+        console.log(this.users1)
+      })
+  }
+
+  showGroupResponse() {
+    this.configService.getGroups()
+      .subscribe(groups => {
+        this.groups = groups;
+        console.log(this.groups)
       })
   }
 }
