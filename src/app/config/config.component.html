@@ -7,7 +7,7 @@
         <th>Password</th>
         <th>SyncOrder</th>
     </tr>
-    <tr *ngFor="let users of users1; index as userId">
+    <tr *ngFor="let users of users; index as userId">
         <td>{{users.id}}</td>
         <td>{{users.groupId}}</td>
         <td>{{users.name}}</td>
@@ -15,20 +15,52 @@
         <td>{{users.syncOrder}}</td>
     </tr>
 </table>
-
+<br><br>
 <table>
     <tr>
         <th>Group Id</th>
         <th>Group Name</th>
         <th>Group Status</th>
         <th>Group Infos</th>
+        <th>Group Infos</th>
+        <th>Group Infos</th>
         
     </tr>
+    
     <tr *ngFor="let group of groups; index as groupId">
+        
         <td>{{group.group.id}}</td>
         <td>{{group.group.name}}</td>
         <td>{{group.group.status}}</td>
-        <td>{{group.groupInfos}}</td>
+        <label *ngFor="let groupsInfos of group.groupInfos; index1 as groupInfosId">
         
+            <td>{{groupsInfos.id}}</td>
+            <td>{{groupsInfos.groupId}}</td>
+            <td>{{groupsInfos.key}}</td>
+            <td>{{groupsInfos.value}}</td>
+        </label>
+        
+        
+    </tr>
+</table>
+<br><br>
+<table>
+    <tr>
+        <th>Group Id</th>
+        <th>Group Name</th>
+        <th>Group Status</th>
+        
+    </tr>
+    <tr *ngFor="let group of groups; index as groupId" (click)='getUsersFromGroup(group.group.name)' [routerLink]="['/groups', group.group.id]" style='cursor: pointer;'  >
+        <td>{{group.group.id}}</td>
+        <td>{{group.group.name}}</td>
+        <td>{{group.group.status}}</td>
+    </tr>
+    <br><br>
+
+    <tr *ngFor="let user of users; index as userId">
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.password}}</td>
     </tr>
 </table>

@@ -1,0 +1,75 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    align-self: center;
+}
+
+th {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+td {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+
+.create-group-item {    
+    grid-area: cg;
+    border: 1px solid rgba(0, 0, 0, 0.8);    
+    text-align: center;
+}
+
+.table-item {
+    grid-area: tbl;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    
+}
+
+.functionality1 {
+    grid-area: d;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
+
+.functionality2 {
+    grid-area: c;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
+
+.functionality3 {
+    grid-area: b;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
+
+.functionality4 {
+    grid-area: a;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'tbl tbl tbl tbl tbl tbl'
+        'cg cg d c b a'
+        'cg cg d c b a';
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px 0;
+    font-size: 15px;
+}

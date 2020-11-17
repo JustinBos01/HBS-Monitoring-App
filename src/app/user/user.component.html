@@ -82,3 +82,54 @@
       </div>
   </div> -->
 </body></html>
+<div id="modalDiv" class="modal">
+      
+    <!-- Modal content -->
+    <div id="modal1" class="modal-content">
+        <button onclick="toggleModalOn(modalDiv2), toggleModalOff()">Add User</button>
+        
+        <input name="addUserNbx" id='addUserAmountNbx' type="number" style="width: 4%" onkeypress="generateUserTextboxes()">
+        
+            <button id='generateTextboxes' onclick="generateUserTextboxes()">Generate</button>
+        
+        <button style="cursor: pointer;">Next</button> <button style="cursor: pointer;">Previous</button>
+        <span class="close" onclick="toggleModalOff()">&times;</span>
+        <p id="testPar">
+            <table id="HtmlGroupTbl" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+            unselectable="on"
+            onselectstart="return false;" 
+            onmousedown="return false;">
+                <tr>
+                    <th>Group</th>
+                </tr>
+
+                
+            </table><br><br><br>
+            <div>
+                <label>If you want to add a user to a group, fill in the fields down below.<br><br></label>
+                <label id="groupLbl" class="modal-label;">Add Group: </label>
+                <input id="addGroupTbx" class="modal-textbox"><br>
+                <label id="addUserLbl" class="modal-label">Append to Group: </label>
+                <input id="addUserTbx" class="modal-textbox"><br><br>
+                <button id="appendInfoToTableBtn"  onclick="appendToTable( )">Add</button><br><br><br>
+            </div>
+            <table id="HtmlUserTbl" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+            unselectable="on"
+            onselectstart="return false;" 
+            onmousedown="return false;">
+                <tr>
+                    <th>Group</th>
+                    <th>Users</th>
+                </tr>
+
+                
+            </table><br><br><br>
+            <label>If you want to change the group a user is in, fill in the fields down below <br></label>
+            <label id="changeToGroupLbl" class="modal-label;">Add Group: </label>
+            <input id="changeToGroupTbx" class="modal-textbox"><br>
+            <label id="changeUserToGroupLbl" class="modal-label">Append to Group: </label>
+            <input id="changeUserToGroupTbx" class="modal-textbox"><br><br>
+            <button id="change"  onclick="appendToTable( )">Change</button><br><br><br>
+        
+    </div>
+</div>

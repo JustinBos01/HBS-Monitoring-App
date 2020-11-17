@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-export interface Users {
+export class Users {
   id: number;
   groupId: number;
   name: string;
@@ -11,29 +11,40 @@ export interface Users {
   syncOrder: number;
 }
 
-export interface Group {
+export class Group {
   id: number;
   name: string;
   status: string;
 }
 
-export interface GroupInfos {
-  Id: number;  
-	Group_Id: number;
-	Key: string;
-	Value: string;
+export class GroupInfos {
+  id: number;  
+	groupId: number;
+	key: string;
+	value: string;
 }
 
-export interface GroupData {
+export class GroupData {
   group: Group;
   groupInfos: GroupInfos[];
 }
 
-
+export class GroupBody {
+	Superuser: Users;
+	Group: Group;
+	Group_Infos: GroupInfos[];
+}
 
 @Injectable()
 export class ConfigService {
+  items = [];
+  user = Users;
+  group = Group;
+  groupInfo = GroupInfos;
+  groupData = GroupData;
+  chosenGroup;
   constructor(private http: HttpClient) { }
+  
 
   getConfig() {
     var configUrl = 'http://localhost:4200/budget/users/list';
@@ -53,5 +64,30 @@ export class ConfigService {
         "superuser" : {"name" : "su0", "password" : "su0p"}
        });
   }
+
+  getUsersOfGroup(senderGroup): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/users/list';
+    this.chosenGroup = senderGroup;
+    return this.http.post<Users[]>(
+      configUrl, {
+        "superuser" : {"name" : "su0", "password" : "su0p"},
+        "group": {"name" : senderGroup}
+       });
+  }
+
+  createGroup(superuserName, superuserPassword, groupname, key, value): Observable<GroupBody[]> {
+    var configUrl = 'http://localhost:4200/budget/group/create';
+    
+    return this.http.post<GroupBody[]>(
+      configUrl, {
+        "superuser" : {"name" : superuserName, "password" : superuserPassword},
+        "group": {"name" : groupname},
+        "groupInfos"  : [ {"key" : key, "value" : value}]
+       });
+  }
+
+  
+
+  
 }
 //

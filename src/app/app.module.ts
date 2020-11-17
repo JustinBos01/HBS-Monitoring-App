@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { UserPageComponent } from './user-page/user-page.component';
@@ -23,6 +23,7 @@ import { GroupPageComponent } from './group-page/group-page.component';
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
+    HttpClientJsonpModule,
     RouterModule.forRoot([
       {path: '', component: ConfigComponent},
       {path: 'groups/:groupId', component: GroupPageComponent},

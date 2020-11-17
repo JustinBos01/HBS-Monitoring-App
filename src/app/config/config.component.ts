@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService, GroupData, Users } from './config.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { groups } from '../groups';
-
 
 
 export class Headers {
@@ -15,22 +13,24 @@ export class Headers {
 })
 
 export class ConfigComponent implements OnInit {
-  users1: Users[];
-  groups: GroupData[];
+  users: Users[];
+  public groups: GroupData[];
   headers: Headers;
+  items = [];
   
   constructor(
-    private configService: ConfigService
+    public configService: ConfigService
   ) { }
 
   ngOnInit(): void {
     this.showConfigResponse()
     this.showGroupResponse()
+    this.getItems()
   }
 
   showConfig() {
     this.configService.getConfig()
-      .subscribe((data: Users[]) => this.users1 = [{
+      .subscribe((data: Users[]) => this.users = [{
           id: (data as any).id,
           groupId: (data as any).groupId,
           name: (data as any).name,
@@ -42,8 +42,8 @@ export class ConfigComponent implements OnInit {
   showConfigResponse() {
     this.configService.getConfigResponse()
       .subscribe(users => {
-        this.users1 = users;
-        console.log(this.users1)
+        this.users = users;
+        console.log(this.users)
       })
   }
 
@@ -53,6 +53,18 @@ export class ConfigComponent implements OnInit {
         this.groups = groups;
         console.log(this.groups)
       })
+    }
+
+  
+
+  getUsersFromGroup(group) {
+    this.configService.getUsersOfGroup(group)
+    this.configService.items = group
+    //console.log(group)
+  }
+
+  getItems() {
+    return this.configService.items;
   }
 }
 

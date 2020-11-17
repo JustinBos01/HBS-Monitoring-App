@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { UserPageService } from '../user-page/user-page.service'
 
+import { groups } from '../groups';
+
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -11,6 +13,7 @@ import { UserPageService } from '../user-page/user-page.service'
 export class UserComponent implements OnInit {
   items;
   checkoutForm;
+  groups = groups;
 
   constructor(
     private userPageService: UserPageService,
