@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfigService } from '../config/config.service';
 import { FormBuilder } from '@angular/forms';
+import { LoginPageService } from '../login-page/login-page.service'
+
+
 
 @Component({
   selector: 'app-group-page',
@@ -14,6 +17,7 @@ export class GroupPageComponent implements OnInit {
   group;
   groupData;
   createGroupForm;
+  superuserData
   superuserName;
   superuserPassword;
   groupName;
@@ -22,7 +26,8 @@ export class GroupPageComponent implements OnInit {
   constructor(
     public configService: ConfigService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private loginPageService: LoginPageService
   ) { 
     this.createGroupForm = this.formBuilder.group({
       superuserName: '',
@@ -46,11 +51,15 @@ export class GroupPageComponent implements OnInit {
     });
   }
 
-  createGroup() {
-    this.configService.createGroup(this.superuserName, this.superuserPassword, this.groupName, this.key, this.value)
+  createGroup(userData) {
+    this.superuserData = this.loginPageService.superUserData;
+    console.log(this.superuserData.superuserName)
+    this.configService.createGroup(this.superuserData.superuserName, this.superuserData.superuserPassword, userData.groupName, userData.key, userData.value)
       .subscribe(groupdata => {
         this.groupData = groupdata;
         console.log(this.groupData);
       })
+    this.createGroupForm.reset()
     }
+    
 }

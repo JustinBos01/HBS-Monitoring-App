@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { UserPageService } from '../user-page/user-page.service'
+import { LoginPageService } from '../login-page/login-page.service'
+import { ConfigService } from '../config/config.service';
 
 @Component({
   selector: 'app-login-page',
@@ -8,13 +10,19 @@ import { UserPageService } from '../user-page/user-page.service'
   styleUrls: ['./login-page.component.css']
 })
 
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   items;
   loginForm;
+  superUserData;
+  name;
+  password;
+  superUsers;
 
   constructor(
     private userPageService: UserPageService,
+    private loginPageService: LoginPageService,
     private formBuilder: FormBuilder,
+    public configService: ConfigService,
   ) {
     this.loginForm = this.formBuilder.group({
       name: '',
@@ -24,13 +32,17 @@ export class LoginPageComponent {
 
   ngOnInit() {
     this.items = this.userPageService.getItems();
-  }
+    this.configService.getSuperUsers()
+        .subscribe(users => {
+          this.superUsers = users;
+        })
+    }
 
   onSubmit(userData) {
-    // Process checkout data here
+    this.loginPageService.superUserData = userData;
+    console.log(this.loginPageService.superUserData)
     this.items = this.userPageService.clearItems();
     this.loginForm.reset();
-    console.log(userData)
     console.warn('Thanks for using our application', userData.name);
   }
- }
+}

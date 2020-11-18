@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { LoginPageService } from './login-page/login-page.service'
 
 export class Users {
   id: number;
@@ -55,6 +56,12 @@ export class ConfigService {
     var configUrl = 'http://localhost:4200/budget/users/list';
     return this.http.post<Users[]>(
       configUrl, { superuser: {name: "justin", password: "1jus.tin1"}, group: {name: "Justin's groepje"}});
+  }
+
+  getSuperUsers(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/users/list';
+    return this.http.post<Users[]>(
+      configUrl, { superuser: {name: "justin", password: "1jus.tin1"}, group: {name: "superuser"}});
   }
 
   getGroups(): Observable<GroupData[]> {

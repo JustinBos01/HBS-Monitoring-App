@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService, GroupData, Users } from './config.service';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 
 export class Headers {
@@ -27,7 +26,7 @@ export class ConfigComponent implements OnInit {
     this.showGroupResponse()
     this.getItems()
   }
-
+  
   showConfig() {
     this.configService.getConfig()
       .subscribe((data: Users[]) => this.users = [{
@@ -43,7 +42,6 @@ export class ConfigComponent implements OnInit {
     this.configService.getConfigResponse()
       .subscribe(users => {
         this.users = users;
-        console.log(this.users)
       })
   }
 
@@ -51,7 +49,6 @@ export class ConfigComponent implements OnInit {
     this.configService.getGroups()
       .subscribe(groups => {
         this.groups = groups;
-        console.log(this.groups)
       })
     }
 
@@ -60,7 +57,6 @@ export class ConfigComponent implements OnInit {
   getUsersFromGroup(group) {
     this.configService.getUsersOfGroup(group)
     this.configService.items = group
-    //console.log(group)
   }
 
   getItems() {

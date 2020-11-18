@@ -25,13 +25,13 @@ import { GroupPageComponent } from './group-page/group-page.component';
     ReactiveFormsModule,
     HttpClientJsonpModule,
     RouterModule.forRoot([
-      {path: '', component: ConfigComponent},
+      {path: '', component: LoginPageComponent},
+      {path: 'config', component: ConfigComponent},
       {path: 'groups/:groupId', component: GroupPageComponent},
       {path: 'menu', component: MenuPageComponent},
       {path: 'user', component: UserPageComponent},
       {path: 'phone', component: PhonePageComponent},
-      {path: 'users/:userId', component: UserDetailsComponent },
-      {path: 'login', component: LoginPageComponent}])
+      {path: 'users/:userId', component: UserDetailsComponent }])
   ],
   declarations: [
     AppComponent,
