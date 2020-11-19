@@ -1,0 +1,18 @@
+<p>create-users works!</p>
+<form [formGroup]='createUsersForm'>
+    <div id='createUsersItem' name='createUsersItem'>
+        <input id='amountInput' type="number" formControlName="userAmount" (change)='addvalue()'>
+    </div>
+</form>
+<form [formGroup]='inputForm'>
+    <div id='inputItem' name='inputItem' *ngFor="let value of values; let index = index">
+        <label>Username </label>
+        <input id="name{{index}}" type="text" name="name{{index}}"><br>
+        <label>Password </label>
+        <input id="password{{index}}" type="text" name="password{{index}}"><br><br>
+    </div><br><br><br>
+    <button (click)='printValues()'></button>
+    <label>Add to group:</label>
+    <input type="text" name="appendToGroupTbx" id="appendToGroupTbx" formControlName='correspondingGroup'>
+    <button (click)='createUsers(inputForm.value)'>Add users</button>
+</form>

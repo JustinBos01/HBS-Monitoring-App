@@ -15,6 +15,6 @@
         <input id="password" type="password" formControlName="password">
       </div>
       
-      <button id='loginBtn' type="button"  [routerLink]="['/config']">Login</button>
+      <button id='loginBtn' type="button" (click)="onSubmit(loginForm.value)" [routerLink]="['/config']">Login</button>
            
 </form>

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { LoginPageService } from './login-page/login-page.service'
+import { LoginPageService } from '../login-page/login-page.service'
+import { CreateUsersService } from '../create-users/create-users.service'
 
 export class Users {
   id: number;
@@ -44,7 +45,12 @@ export class ConfigService {
   groupInfo = GroupInfos;
   groupData = GroupData;
   chosenGroup;
-  constructor(private http: HttpClient) { }
+  JsonString;
+
+  constructor(
+    private http: HttpClient,
+    private createUsersService: CreateUsersService,
+    private loginPageService: LoginPageService) { }
   
 
   getConfig() {
@@ -55,20 +61,20 @@ export class ConfigService {
   getConfigResponse(): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/list';
     return this.http.post<Users[]>(
-      configUrl, { superuser: {name: "justin", password: "1jus.tin1"}, group: {name: "Justin's groepje"}});
+      configUrl, { superuser: {"name": this.loginPageService.superUserData.name, "password": this.loginPageService.superUserData.password}, group: {name: "Justin's groepje"}});
   }
 
   getSuperUsers(): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/list';
     return this.http.post<Users[]>(
-      configUrl, { superuser: {name: "justin", password: "1jus.tin1"}, group: {name: "superuser"}});
+      configUrl, { superuser: {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password}, group: {name: "superuser"}});
   }
 
   getGroups(): Observable<GroupData[]> {
     var configUrl = 'http://localhost:4200/budget/group/list';
     return this.http.post<GroupData[]>(
       configUrl, {
-        "superuser" : {"name" : "su0", "password" : "su0p"}
+        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password}
        });
   }
 
@@ -77,24 +83,34 @@ export class ConfigService {
     this.chosenGroup = senderGroup;
     return this.http.post<Users[]>(
       configUrl, {
-        "superuser" : {"name" : "su0", "password" : "su0p"},
+        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
         "group": {"name" : senderGroup}
        });
   }
 
-  createGroup(superuserName, superuserPassword, groupname, key, value): Observable<GroupBody[]> {
+  createGroup(groupname, key, value): Observable<GroupBody[]> {
     var configUrl = 'http://localhost:4200/budget/group/create';
     
     return this.http.post<GroupBody[]>(
       configUrl, {
-        "superuser" : {"name" : superuserName, "password" : superuserPassword},
+        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
         "group": {"name" : groupname},
         "groupInfos"  : [ {"key" : key, "value" : value}]
        });
   }
 
-  
-
-  
+  createMultipleUsers(groupname): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/users/create';
+    this.JsonString = {
+      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "group"     : {"name" : groupname},
+      "users"     :
+        this.createUsersService.userString
+      
+     }
+     console.log(this.JsonString.group, this.JsonString.superuser, this.JsonString.users)
+    return this.http.post<Users[]>(
+      configUrl, this.JsonString);
+  } 
 }
 //

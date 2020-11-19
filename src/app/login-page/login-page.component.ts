@@ -32,15 +32,12 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
     this.items = this.userPageService.getItems();
-    this.configService.getSuperUsers()
-        .subscribe(users => {
-          this.superUsers = users;
-        })
+    
     }
 
   onSubmit(userData) {
     this.loginPageService.superUserData = userData;
-    console.log(this.loginPageService.superUserData)
+    console.log(this.loginPageService.superUserData.name)
     this.items = this.userPageService.clearItems();
     this.loginForm.reset();
     console.warn('Thanks for using our application', userData.name);

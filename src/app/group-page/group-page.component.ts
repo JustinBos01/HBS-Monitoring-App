@@ -18,8 +18,7 @@ export class GroupPageComponent implements OnInit {
   groupData;
   createGroupForm;
   superuserData
-  superuserName;
-  superuserPassword;
+  
   groupName;
   key;
   value;
@@ -30,8 +29,6 @@ export class GroupPageComponent implements OnInit {
     private loginPageService: LoginPageService
   ) { 
     this.createGroupForm = this.formBuilder.group({
-      superuserName: '',
-      superuserPassword: '',
       groupName: '',
       key: '',
       value: ''
@@ -54,12 +51,17 @@ export class GroupPageComponent implements OnInit {
   createGroup(userData) {
     this.superuserData = this.loginPageService.superUserData;
     console.log(this.superuserData.superuserName)
-    this.configService.createGroup(this.superuserData.superuserName, this.superuserData.superuserPassword, userData.groupName, userData.key, userData.value)
+    this.configService.createGroup(userData.groupName, userData.key, userData.value)
       .subscribe(groupdata => {
         this.groupData = groupdata;
         console.log(this.groupData);
       })
     this.createGroupForm.reset()
     }
+
+  createInput() {
+    let row = document.createElement('div');
+    row.innerHTML = `<br> <input type='number'>`
+  }
     
 }

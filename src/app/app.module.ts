@@ -17,6 +17,7 @@ import { MenuPageComponent } from './menu-page/menu-page.component';
 import { PhonePageComponent } from './phone-page/phone-page.component';
 import { ReceiptPageComponent } from './receipt-page/receipt-page.component';
 import { GroupPageComponent } from './group-page/group-page.component';
+import { CreateUsersComponent } from './create-users/create-users.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { GroupPageComponent } from './group-page/group-page.component';
       {path: 'menu', component: MenuPageComponent},
       {path: 'user', component: UserPageComponent},
       {path: 'phone', component: PhonePageComponent},
-      {path: 'users/:userId', component: UserDetailsComponent }])
+      {path: 'users/:userId', component: UserDetailsComponent },
+      {path: 'createUsers', component: CreateUsersComponent}])
   ],
   declarations: [
     AppComponent,
@@ -45,7 +47,8 @@ import { GroupPageComponent } from './group-page/group-page.component';
     MenuPageComponent,
     PhonePageComponent,
     ReceiptPageComponent,
-    GroupPageComponent
+    GroupPageComponent,
+    CreateUsersComponent
   ],
   providers: [ConfigService],
   bootstrap: [AppComponent]

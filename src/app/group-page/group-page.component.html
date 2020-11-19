@@ -18,24 +18,12 @@
     </div>
     <div id='createGroupForm' class='create-group-item'>
         <form [formGroup]="createGroupForm" (ngSubmit)="createGroup(createGroupForm.value)" class="login">
-            <div>
-                <label for="superuserName">
-                Superuser Name
-                </label>
-                <input id="superuserName" type="text" formControlName="superuserName">
-            </div>
             
-            <div>
-                <label for="superuserPassword">
-                Superuser Password
-                </label>
-                <input id="superuserPassword" type="password" formControlName="superuserPassword">
-            </div>
             <div>
                 <label for="groupName">
                 Group Name
                 </label>
-                <input id="groupName" formControlName="groupName">
+                <input style='align-self: right; left: 50px;' id="groupName" formControlName="groupName">
             </div>
             <div>
                 <label for="key">
@@ -57,7 +45,7 @@
         
     </div>
     <div id='n' class='functionality1'>
-        <button>click</button>
+        <button [routerLink]="['/createUsers']">click</button>
     </div>
     <div id='a' class='functionality2'>
         <button>click</button>

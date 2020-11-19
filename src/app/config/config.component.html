@@ -4,14 +4,12 @@
         <th>Id</th>
         <th>GroupId</th>
         <th>Name</th>
-        <th>Password</th>
         <th>SyncOrder</th>
     </tr>
     <tr *ngFor="let users of users; index as userId">
         <td>{{users.id}}</td>
         <td>{{users.groupId}}</td>
         <td>{{users.name}}</td>
-        <td>{{users.password}}</td>
         <td>{{users.syncOrder}}</td>
     </tr>
 </table>
