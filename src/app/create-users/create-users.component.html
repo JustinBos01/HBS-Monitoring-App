@@ -10,9 +10,9 @@
         <input id="name{{index}}" type="text" name="name{{index}}"><br>
         <label>Password </label>
         <input id="password{{index}}" type="text" name="password{{index}}"><br><br>
-    </div><br><br><br>
+    </div>
+    <button (click)="createSuperUsers()">Add To Superusers Group</button><br><br><br>
     <button (click)='printValues()'></button>
-    <label>Add to group:</label>
-    <input type="text" name="appendToGroupTbx" id="appendToGroupTbx" formControlName='correspondingGroup'>
-    <button (click)='createUsers(inputForm.value)'>Add users</button>
+    
+    <button (click)='createUsers(inputForm.value)'>Add Users</button>
 </form>

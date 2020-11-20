@@ -13,8 +13,8 @@ import { CreateUsersService } from './create-users.service'
 export class CreateUsersComponent implements OnInit {
   createUsersForm;
   inputForm;
-  userName = '';
-  userPassword = '';
+  userName;
+  userPassword;
   userString;
   givenGroup;
   values = [];
@@ -31,7 +31,7 @@ export class CreateUsersComponent implements OnInit {
     });
 
     this.inputForm = this.formBuilder.group({
-      correspondingGroup: ''
+      
     })
   }
 
@@ -42,7 +42,7 @@ export class CreateUsersComponent implements OnInit {
     this.values.splice(i,1);
   }
 
-  addvalue(){
+  addvalue() {
     this.values.push(String(this.values.length));
     console.log(this.values.length)
   }
@@ -57,22 +57,38 @@ export class CreateUsersComponent implements OnInit {
     this.createUsersService.userString.length = 0;
     for (let index of this.values){
       
-      this.userName = document.getElementById("name"+index).value;
-      this.userPassword = document.getElementById("password"+index).value;
-      
+      this.userName = document.getElementById("name"+index);
+      this.userPassword = document.getElementById("password"+index);
+      this.userName = this.userName.value;
+      this.userPassword = this.userPassword.value;
       this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
-      
-      
     }
-    //this.createUsersService.userString = this.createUsersService.userString.replace(/["{]/g, '"{')
-    //this.createUsersService.userString = this.createUsersService.userString.replace(/[}"]/g, '}"')
-    console.log(this.createUsersService.userString)
-    this.givenGroup = Group.correspondingGroup
-    this.configService.createMultipleUsers(this.givenGroup)
+
+    
+    this.configService.createMultipleUsers(this.configService.chosenGroup)
     .subscribe(users => {
       this.users = users;
     })  
   }
 
+  createSuperUsers(){
+    this.userName = ''
+    this.userPassword = ''
+    this.createUsersService.userString.length = 0;
+    for (let index of this.values){
+      
+      this.userName = document.getElementById("name"+index);
+      this.userPassword = document.getElementById("password"+index);
+      this.userName = this.userName.value;
+      this.userPassword = this.userPassword.value;
+      this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
+    }
+
+    
+    this.configService.createSuperUser()
+    .subscribe(users => {
+      this.users = users;
+    })
+  }
   
 }

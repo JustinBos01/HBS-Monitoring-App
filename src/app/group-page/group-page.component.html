@@ -1,5 +1,6 @@
 <div class="grid-container">
     <div id='tableForm' class='table-item'>
+        <label>Down below are the users in the group: {{chosenGroup}}</label>
         <table>
             <tr>
                 <th>Id</th>
@@ -10,8 +11,8 @@
             </tr>
             <tr *ngFor="let user of user; index as userId">
                 <td>{{user.id}}</td>
+                <td>{{user.groupId}}</td>
                 <td>{{user.name}}</td>
-                <td>{{user.password}}</td>
             </tr>
         </table>
         
@@ -47,14 +48,29 @@
     <div id='n' class='functionality1'>
         <button [routerLink]="['/createUsers']">click</button>
     </div>
-    <div id='a' class='functionality2'>
-        <button>click</button>
-    </div>
-    <div id='d' class='functionality3'>
-        <button>click</button>
-    </div>
+    <label *ngFor="let group of groups">
+        <div id='a' class='functionality2' *ngIf="chosenGroup == group.group.name">
+            <label>This group is currently {{group.group.status}}</label><br>
+            <button *ngIf="group.group.status == 'disabled'" (click)="enableGroup()" [routerLink]="['/groups', group.group.id]">Enable Group</button>
+            <button *ngIf="group.group.status == 'enabled'" (click)="disableGroup()" [routerLink]="['/groups', group.group.id]">Disable Group</button>
+        </div>
+    </label>
+    <form [formGroup]='changeGroupInfosForm'>
+        <div *ngFor="let group of groups">
+            <div id='b' class='functionality3' *ngIf="chosenGroup == group.group.name">
+                <label *ngFor="let groupInfos of group.groupInfos; index as infosId">
+                    
+                    <label *ngIf='chosenGroup == group.group.name'>Key: </label>
+                    <input id="key{{infosId}}" type="text" name="key{{infosId}}" *ngIf='chosenGroup == group.group.name' formControlName='keyChangeInfos'><br>
+                    <label *ngIf='chosenGroup == group.group.name'>Value: </label>
+                    <input id="value{{infosId}}" type="text" name="value{{infosId}}" *ngIf='chosenGroup == group.group.name' formControlName='valueChangeInfos'><br><br><br>
+                    
+                </label>
+            </div>
+        </div>
+        <button (click)='changeGroupInfos()'>Change</button>
+    </form>
     <div id='c' class='functionality4'>
         <button>click</button>
     </div>
-    
 </div>
