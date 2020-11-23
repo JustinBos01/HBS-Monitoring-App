@@ -21,7 +21,11 @@ export class GroupPageComponent implements OnInit {
   groups;
   chosenGroup = this.configService.chosenGroup;
   groupData;
-  superuserData
+  superuserData;
+  changePasswordUser;
+  newPassword;
+  groupInfosLength = [{key: '',
+                      value: ''}];
   
   enabledGroup;
   keyChangeInfos;
@@ -55,6 +59,7 @@ export class GroupPageComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.user = this.configService.getUsersOfGroup(this.configService.chosenGroup)[+params.get('id')]
     });
+    //this.getGroupInfosAmount()
   }
 
   createGroup(userData) {
@@ -127,4 +132,42 @@ export class GroupPageComponent implements OnInit {
       this.newMadeGroupInfos = newGroupInfos;
     })
   }
+  
+  changePassword(userId, correspondingUser) {
+    this.newPassword = document.getElementById('passwordValue'+userId)
+    this.configService.changePassword(correspondingUser, this.newPassword.value)
+    .subscribe(users => {
+      this.changePasswordUser = users;
+    })
+    
+  
+    this.configService.getUsersOfGroup(this.configService.chosenGroup)
+    .subscribe(users => {
+        this.user = users;
+        console.log(this.user)
+    })
+  
+  }
+
+  // getGroupInfosAmount() {
+  //   this.showGroupResponse()
+  //   for (let group of this.groups) {
+  //     console.log(group)
+  //     if (group == this.chosenGroup) {
+  //       for (let groupInfos of group) {
+  //         this.groupInfosLength.push(groupInfos.key,  groupInfos.value)
+  //         console.log(this.groupInfosLength)
+  //       }
+  //     }
+  //   }
+  //   console.log(this.groupInfosLength)
+  // }
+
+  addToGroupInfos(){
+    document.getElementById('')
+  }
+
+  changeLabelName(lbl, val) {
+    document.getElementById(lbl).innerHTML = val;
+  } 
 }

@@ -155,6 +155,19 @@ export class ConfigService {
     console.log(this.JsonString.group, this.JsonString.superuser, this.JsonString.users)
     return this.http.post<Users[]>(
     configUrl, this.JsonString);
+  }
+
+  changePassword(correspondingUser, newPassword): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/users/passwords';
+    console.log(newPassword)
+    console.log(correspondingUser)
+    this.JsonString = {
+      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "users"     : [ {"name" : correspondingUser, "password" : newPassword} ]
+     }
+    
+    return this.http.post<Users[]>(
+    configUrl, this.JsonString);
   } 
 }
 //

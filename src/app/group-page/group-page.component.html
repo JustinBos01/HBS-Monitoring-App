@@ -1,11 +1,19 @@
 <div class="grid-container">
     <div id='tableForm' class='table-item'>
-        <label>Down below are the users in the group: {{chosenGroup}}</label>
+        <label #statusLbl id='statusLbl'>Down below are the users in the group: <b>{{chosenGroup}}</b></label><br>
+        <label *ngFor="let group of groups">
+            <div *ngIf="chosenGroup == group.group.name">
+                <label>This group is currently: <b> {{group.group.status}}</b></label><br>
+                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(statusLbl.id, 'disabled')" [routerLink]="['/groups', group.group.id]">Enable Group</button>
+                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(statusLbl.id, 'enabled')" [routerLink]="['/groups', group.group.id]">Disable Group</button>
+            </div>
+        </label>
         <table>
             <tr>
                 <th>Id</th>
                 <th>GroupId</th>
                 <th>Name</th>
+                <th>Password</th>
                 <!-- <th>Password</th>
                 <th>SyncOrder</th> -->
             </tr>
@@ -13,9 +21,32 @@
                 <td>{{user.id}}</td>
                 <td>{{user.groupId}}</td>
                 <td>{{user.name}}</td>
+                <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
             </tr>
         </table>
         
+        <br><br>
+
+        <table id='groupInfosTbl'>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+            
+            <div *ngFor="let group of groups">
+                
+                
+                    <tr *ngFor="let groupInfos of group.groupInfos; index as infosId">         
+                        <div *ngIf="chosenGroup == group.group.name">           
+                        <td><input id="key{{infosId}}"  name="key{{infosId}}" value="{{group.groupInfos.key}}" (keyup.enter)="changeGroupInfos()"></td>
+                        <td><input id="value{{infosId}}" name="value{{infosId}}" value="{{group.groupInfos.value}}" (keyup.enter)="changeGroupInfos()"></td>
+                        </div>
+                    </tr>
+                
+            </div>
+        </table>
+        <!--
+         -->
     </div>
     <div id='createGroupForm' class='create-group-item'>
         <form [formGroup]="createGroupForm" (ngSubmit)="createGroup(createGroupForm.value)" class="login">
@@ -48,13 +79,7 @@
     <div id='n' class='functionality1'>
         <button [routerLink]="['/createUsers']">click</button>
     </div>
-    <label *ngFor="let group of groups">
-        <div id='a' class='functionality2' *ngIf="chosenGroup == group.group.name">
-            <label>This group is currently {{group.group.status}}</label><br>
-            <button *ngIf="group.group.status == 'disabled'" (click)="enableGroup()" [routerLink]="['/groups', group.group.id]">Enable Group</button>
-            <button *ngIf="group.group.status == 'enabled'" (click)="disableGroup()" [routerLink]="['/groups', group.group.id]">Disable Group</button>
-        </div>
-    </label>
+    
     <form [formGroup]='changeGroupInfosForm'>
         <div *ngFor="let group of groups">
             <div id='b' class='functionality3' *ngIf="chosenGroup == group.group.name">
@@ -68,7 +93,7 @@
                 </label>
             </div>
         </div>
-        <button (click)='changeGroupInfos()'>Change</button>
+        <button (click)='changeGroupInfos()' type="button">Change</button>
     </form>
     <div id='c' class='functionality4'>
         <button>click</button>
