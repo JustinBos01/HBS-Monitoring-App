@@ -47,7 +47,11 @@ export class ConfigService {
   groupData = GroupData;
   chosenGroup;
   JsonString;
-
+  chosenGroupInfos = [{key: '',
+                       value: ''}]
+  groupInfosValues = [{key: '',
+                       value: ''}]
+    
   constructor(
     private http: HttpClient,
     private createUsersService: CreateUsersService,
@@ -83,6 +87,7 @@ export class ConfigService {
   getUsersOfGroup(senderGroup): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/list';
     this.chosenGroup = senderGroup;
+    
     return this.http.post<Users[]>(
       configUrl, {
         "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
@@ -166,8 +171,41 @@ export class ConfigService {
       "users"     : [ {"name" : correspondingUser, "password" : newPassword} ]
      }
     
-    return this.http.post<Users[]>(
-    configUrl, this.JsonString);
-  } 
+     return this.http.post<Users[]>(
+      configUrl, this.JsonString);
+  }
+
+  regroupUsers(correspondingUser, newGroup): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/users/regroupusers';
+    console.log(newGroup)
+    console.log(correspondingUser)
+    this.JsonString = {
+      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "regroup"   : {"name" : newGroup},
+      "users"     : [ {"name" : correspondingUser} ]
+    }
+    
+    return this.http.post<Users[]>(configUrl, this.JsonString);
+  }
+
+  regroupGroup(groupName, newGroup): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/users/regroupgroup';
+    this.JsonString = {
+      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "group"     : {"name" : groupName},
+      "regroup"   : {"name" : newGroup}
+     }
+    return this.http.post<Users[]>(configUrl, this.JsonString);
+  }
+
+  renameGroup(groupName, newName): Observable<Group[]> {
+    var configUrl = 'https://budgetonderzoek.test.cbs.nl/budget/group/rename';
+    this.JsonString = {
+      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "group"     : {"name" : groupName},
+      "regroup"   : {"name" : newName}
+     }
+     
+    return this.http.post<Group[]>(configUrl, this.JsonString);
+  }
 }
-//

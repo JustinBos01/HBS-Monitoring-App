@@ -1,14 +1,16 @@
+<span (click)='navigation.toggle()' style='cursor: pointer;'>&#9776; Navigation</span>
+
 <body>
     <div class="grid-container">
         <div id="headerDiv" class="headerItem">Welcome to the Household Budget Survey Application.<br> In this window, you have the opportunity to log in and navigate through the menu.</div>
 
         <div id="menuDiv" class="menuItem">
-            <button id="goToUsersPage" class="block" onClick="location.href='user'" style='cursor: pointer;'>Users</button><br>
-            <button id="goToPhonesPage" class="block" onClick="location.href='phone'" style='cursor: pointer;'>Phones</button><br>
-            <button id="goToStoresPage" class="block" onClick="location.href='StoreData.html'" style='cursor: pointer;'>Stores</button><br>
-            <button id="goToReceiptsPage" class="block" onClick="location.href='ReceiptsPage.html'" style='cursor: pointer;'>Receipts</button><br>
-            <button id="goToFeedbackPage" class="block" onClick="location.href='FeedbackPage.html'" style='cursor: pointer;'>Feedback</button><br>
-            <button id="goToChartsPage" class="block" onClick="location.href='ChartsPage.html'" style='cursor: pointer;'>Graphs</button>
+            <button id="goToOverviewPage" class="block" [routerLink]="['/overview']" style='cursor: pointer;'>Group Overview</button><br>
+            <button id="goToPhonesPage" class="block" [routerLink]="['/phone']" style='cursor: pointer;'>Phones</button><br>
+            <button id="goToStoresPage" class="block" [routerLink]="['/menu']" style='cursor: pointer;'>Stores</button><br>
+            <button id="goToReceiptsPage" class="block" [routerLink]="['/menu']" style='cursor: pointer;'>Receipts</button><br>
+            <button id="goToFeedbackPage" class="block" [routerLink]="['/menu']" style='cursor: pointer;'>Feedback</button><br>
+            <button id="goToChartsPage" class="block" [routerLink]="['/menu']" style='cursor: pointer;'>Graphs</button>
         </div>
 
         <div id="commonLocationDiv" class="locationItem">

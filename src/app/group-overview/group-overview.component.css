@@ -1,0 +1,45 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    align-self: center;
+}
+
+th {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+td {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+
+.table {
+    grid-area: tbl;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    
+}
+
+.create-group {
+    
+    grid-area: cg;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'tbl'
+        'cg';
+    grid-gap: 10px;
+    padding: 10px;
+}

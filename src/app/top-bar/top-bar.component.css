@@ -1,9 +1,22 @@
-.block {
-    display: block;
-    width: 100px;
-    border: white;
+.top-bar {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    width: 100px; 
     padding: 14px 28px;
     font-size: 16px;
     cursor: pointer;
     text-align: center;
+    background-color: grey;
+}
+
+.block {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    width: 100px; 
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+span + span {
+    margin-left: 10px;
 }

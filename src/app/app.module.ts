@@ -18,8 +18,11 @@ import { PhonePageComponent } from './phone-page/phone-page.component';
 import { ReceiptPageComponent } from './receipt-page/receipt-page.component';
 import { GroupPageComponent } from './group-page/group-page.component';
 import { CreateUsersComponent } from './create-users/create-users.component';
+import { GroupOverviewComponent } from './group-overview/group-overview.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
+  
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -27,12 +30,12 @@ import { CreateUsersComponent } from './create-users/create-users.component';
     HttpClientJsonpModule,
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},
+      {path: 'menu', component: MenuPageComponent},
+      {path: 'overview', component: GroupOverviewComponent},
       {path: 'config', component: ConfigComponent},
       {path: 'groups/:groupId', component: GroupPageComponent},
-      {path: 'menu', component: MenuPageComponent},
-      {path: 'user', component: UserPageComponent},
       {path: 'phone', component: PhonePageComponent},
-      {path: 'users/:userId', component: UserDetailsComponent },
+      {path: 'receipt', component: ReceiptPageComponent},
       {path: 'createUsers', component: CreateUsersComponent}])
   ],
   declarations: [
@@ -48,9 +51,10 @@ import { CreateUsersComponent } from './create-users/create-users.component';
     PhonePageComponent,
     ReceiptPageComponent,
     GroupPageComponent,
-    CreateUsersComponent
+    CreateUsersComponent,
+    GroupOverviewComponent
   ],
-  providers: [ConfigService],
+  providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

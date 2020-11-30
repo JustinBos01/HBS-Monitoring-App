@@ -26,12 +26,17 @@ export class GroupPageComponent implements OnInit {
   newPassword;
   groupInfosLength = [{key: '',
                       value: ''}];
+  groupInfosValues = [{key: '',
+                      value: ''}];
+  newGroup;
+  changeGroup;
+  chosenGroupInfos;
   
   enabledGroup;
   keyChangeInfos;
   valueChangeInfos;
   groupName;
-  key;
+  key;  
   value;
 
   constructor(
@@ -55,31 +60,32 @@ export class GroupPageComponent implements OnInit {
   ngOnInit(): void {
     this.showGroupResponse()
     this.getUsersOfGroup()
-    console.log(this.chosenGroup)
+    //this.getChosenGroupInfos()
+    
     this.route.paramMap.subscribe(params => {
       this.user = this.configService.getUsersOfGroup(this.configService.chosenGroup)[+params.get('id')]
     });
     //this.getGroupInfosAmount()
+    console.log(this.configService.chosenGroupInfos)
+    this.chosenGroupInfos = this.configService.chosenGroupInfos
+    //this.getChosenGroupInfos()
+    //this.getGroupInfosAmount()
+    
   }
 
-  createGroup(userData) {
-    this.superuserData = this.loginPageService.superUserData;
-    console.log(this.superuserData.superuserName)
-    this.configService.createGroup(userData.groupName, userData.key, userData.value)
-      .subscribe(groupdata => {
-        this.groupData = groupdata;
-        console.log(this.groupData);
-      })
-    this.createGroupForm.reset()
-    }
-
+  
+  print() {
+    console.log(this.groups)
+    
+  }
   getUsersOfGroup() {
     this.configService.getUsersOfGroup(this.configService.chosenGroup)
     .subscribe(users => {
         this.user = users;
-        console.log(this.user)
     })
   }
+
+ 
 
   showGroupResponse() {
     this.configService.getGroups()
@@ -102,19 +108,30 @@ export class GroupPageComponent implements OnInit {
       })
     }
 
-  reload() {
-    window.location.reload()
+  
+  
+  printGroups() {
+    console.log(this.groups)
+    for (let group of this.groups) {
+      console.log(this.groups)
+      if (this.chosenGroup == group.group.name) {
+        console.log(this.groups)
+        for (let infos of group.groupInfos) {
+          this.groupInfosValues.push({key: infos.key, value: infos.value})
+        }
+      }
+    }
   }
+  
 
   changeGroupInfos(){
+    
     this.keyChangeInfos = '';
     this.valueChangeInfos = '';
     this.groupPageService.groupInfosString.length = 0;
     for (let group of this.groups){
       if (this.chosenGroup == group.group.name){
         for (var index in group.groupInfos){
-          console.log(index)
-          
           this.keyChangeInfos = document.getElementById("key"+index);
           this.valueChangeInfos = document.getElementById("value"+index);
           this.keyChangeInfos = this.keyChangeInfos.value
@@ -146,22 +163,34 @@ export class GroupPageComponent implements OnInit {
         this.user = users;
         console.log(this.user)
     })
-  
   }
 
-  // getGroupInfosAmount() {
-  //   this.showGroupResponse()
-  //   for (let group of this.groups) {
-  //     console.log(group)
-  //     if (group == this.chosenGroup) {
-  //       for (let groupInfos of group) {
-  //         this.groupInfosLength.push(groupInfos.key,  groupInfos.value)
-  //         console.log(this.groupInfosLength)
-  //       }
-  //     }
-  //   }
-  //   console.log(this.groupInfosLength)
-  // }
+  regroupUsers(userId, correspondingUser) {
+    this.newGroup = document.getElementById('group'+userId)
+    this.configService.regroupUsers(correspondingUser, this.newGroup.value)
+    .subscribe(users => {
+      this.changeGroup = users;
+    })
+  }
+
+  regroupGroup(reGroupValue) {
+    this.configService.regroupGroup(this.configService.chosenGroup, reGroupValue)
+    .subscribe(users => {
+      this.changeGroup = users;
+    })
+  }
+
+  //getGroupInfosAmount() {
+  //  for (let group of this.groups) {
+  //    if (group == this.chosenGroup) {
+  //      for (let index of group.groupInfos) {
+  //        this.configService.chosenGroupInfos.push({key: index.key, value: index.value})
+  //        
+  //      }
+  //    }
+  //  }
+  //  console.log(this.groupInfosLength)
+  //}
 
   addToGroupInfos(){
     document.getElementById('')
@@ -169,5 +198,9 @@ export class GroupPageComponent implements OnInit {
 
   changeLabelName(lbl, val) {
     document.getElementById(lbl).innerHTML = val;
-  } 
+  }
+
+  getRandomNumberBetween(min,max){
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
 }

@@ -21,8 +21,8 @@
         background-color: #dddddd;
     }
 
-    .create-group-item {    
-        grid-area: cg;
+    .regroup-item {    
+        grid-area: rg;
         border: 1px solid rgba(0, 0, 0, 0.8);    
         text-align: center;
     }
@@ -37,36 +37,18 @@
         text-align: left;
     }
 
-    .functionality1 {
-        grid-area: d;
-        border: 1px solid rgba(0, 0, 0, 0.8);
-        text-align: center;
-    }
-
-    .functionality2 {
-        grid-area: c;
-        border: 1px solid rgba(0, 0, 0, 0.8);
-        text-align: center;
-    }
-
-    .functionality3 {
+    .change {
         grid-area: b;
         border: 1px solid rgba(0, 0, 0, 0.8);
         text-align: center;
     }
 
-    .functionality4 {
-        grid-area: a;
-        border: 1px solid rgba(0, 0, 0, 0.8);
-        text-align: center;
-    }
 
     .grid-container {
         display: grid;
         grid-template-areas:
-            'tbl tbl tbl tbl tbl tbl'
-            'cg cg d c c a'
-            'b b b b b b';
+            'tbl tbl'
+            'rg rg';
         grid-gap: 10px;
         padding: 10px;
     }

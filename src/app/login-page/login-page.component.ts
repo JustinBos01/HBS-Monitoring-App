@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { UserPageService } from '../user-page/user-page.service'
 import { LoginPageService } from '../login-page/login-page.service'
 import { ConfigService } from '../config/config.service';
+import { TopBarService } from '../top-bar/top-bar.service';
 
 @Component({
   selector: 'app-login-page',
@@ -23,17 +24,19 @@ export class LoginPageComponent implements OnInit {
     private loginPageService: LoginPageService,
     private formBuilder: FormBuilder,
     public configService: ConfigService,
+    public navigation: TopBarService
   ) {
     this.loginForm = this.formBuilder.group({
       name: '',
       password: ''
     });
+    
   }
 
   ngOnInit() {
     this.items = this.userPageService.getItems();
-    
-    }
+    this.navigation.hide();
+  }
 
   onSubmit(userData) {
     this.loginPageService.superUserData = userData;

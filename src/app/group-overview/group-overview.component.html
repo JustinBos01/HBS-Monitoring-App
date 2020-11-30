@@ -1,0 +1,44 @@
+<form #tableForm="ngForm" id='tableForm' [formGroup]="">
+    <div class="table">
+        <table>
+            <tr>
+                <th>Group Id</th>
+                <th>Group Name</th>
+                <th>Group Status</th>
+                <th>Amount of Users</th>
+                
+            </tr>
+            <tr *ngFor="let group of groups; index as groupId" (click)='getUsersFromGroup(group.group.name)' style='cursor: pointer;' [routerLink]="['/groups', group.id]">
+                <td>{{group.group.id}}</td>
+                <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td >{{group.group.status}}</td>
+                <td>{{group.group.users}}</td>
+            </tr>
+        </table>
+    </div>
+</form>
+<form [formGroup]="createGroupForm" (ngSubmit)="createGroup(createGroupForm.value)" class="create-group">
+    <div>
+        <label for="groupName">
+        Group Name
+        </label>
+        <input style='align-self: right; left: 50px;' id="groupName" formControlName="groupName">
+    </div>
+    <div>
+        <label for="key">
+        Key
+        </label>
+        <input id="key" formControlName="key">
+    </div>
+    <div>
+        <label for="value">
+        Value
+        </label>
+        <input id="value" formControlName="value">
+    </div>
+    <p>
+        <button class="button" type="submit">Create Group</button>
+    </p>
+</form>
+
+<button [routerLink]="['/menu']">Back</button>
