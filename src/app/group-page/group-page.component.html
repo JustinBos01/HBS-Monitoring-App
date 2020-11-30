@@ -1,6 +1,8 @@
 <div class="grid-container">
     <div id='tableForm' class='table-item'>
-        <label #statusLbl id='statusLbl'>Down below are the users in the group: <b>{{chosenGroup}}</b></label><br>
+        <label #statusLbl id='statusLbl'>Down below are the users in the group: <b>{{chosenGroup}}</b></label><br><br>
+        <label>To add a user to this group, click this button | </label>
+        <button [routerLink]="['/createUsers']">Add users</button><br><br>
         <label *ngFor="let group of groups">
             <div *ngIf="chosenGroup == group.group.name">
                 <label>This group is currently: <b> {{group.group.status}}</b></label><br>
@@ -14,88 +16,60 @@
                 <th>GroupId</th>
                 <th>Name</th>
                 <th>Password</th>
-                <!-- <th>Password</th>
-                <th>SyncOrder</th> -->
+                <th>Group</th>
             </tr>
             <tr *ngFor="let user of user; index as userId">
                 <td>{{user.id}}</td>
                 <td>{{user.groupId}}</td>
                 <td>{{user.name}}</td>
                 <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
+                <td><input id='group{{userId}}' value='{{chosenGroup}}' (keyup.enter)="regroupUsers(userId, user.name)"></td>
             </tr>
         </table>
         
         <br><br>
-
+        <label></label>
+        <div ng-init="printGroups()"></div>
         <table id='groupInfosTbl'>
             <tr>
                 <th>Key</th>
                 <th>Value</th>
             </tr>
             
-            <div *ngFor="let group of groups">
+           
+            <tr () *ngFor="let infos of chosenGroupInfos; index as infosId">
+            
+                <td>
+                    <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
+                </td>
+                <td>
+                    <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()">
+                </td>
+            </tr>
                 
-                
-                    <tr *ngFor="let groupInfos of group.groupInfos; index as infosId">         
-                        <div *ngIf="chosenGroup == group.group.name">           
-                        <td><input id="key{{infosId}}"  name="key{{infosId}}" value="{{group.groupInfos.key}}" (keyup.enter)="changeGroupInfos()"></td>
-                        <td><input id="value{{infosId}}" name="value{{infosId}}" value="{{group.groupInfos.value}}" (keyup.enter)="changeGroupInfos()"></td>
-                        </div>
-                    </tr>
-                
-            </div>
+            
         </table>
         <!--
          -->
     </div>
-    <div id='createGroupForm' class='create-group-item'>
-        <form [formGroup]="createGroupForm" (ngSubmit)="createGroup(createGroupForm.value)" class="login">
-            
-            <div>
-                <label for="groupName">
-                Group Name
-                </label>
-                <input style='align-self: right; left: 50px;' id="groupName" formControlName="groupName">
-            </div>
-            <div>
-                <label for="key">
-                Key
-                </label>
-                <input id="key" formControlName="key">
-            </div>
-            <div>
-                <label for="value">
-                Value
-                </label>
-                <input id="value" formControlName="value">
-            </div>
-            
-            <p>
-                <button class="button" type="submit">Create Group</button>
-            </p>
-        </form>
-        
-    </div>
-    <div id='n' class='functionality1'>
-        <button [routerLink]="['/createUsers']">click</button>
+    <div id='regroupGroup' class='regroup-item'>
+        <label>To change all users in this group, fill in the field down below and press "confirm" when ready.</label>
+        <input #regroupGroupTbx id='regroupGroupTbx'>
+        <button  (click)="regroupGroup(regroupGroupTbx.value)" [routerLink]="['/overview']">Confirm</button>
     </div>
     
     <form [formGroup]='changeGroupInfosForm'>
-        <div *ngFor="let group of groups">
-            <div id='b' class='functionality3' *ngIf="chosenGroup == group.group.name">
-                <label *ngFor="let groupInfos of group.groupInfos; index as infosId">
-                    
-                    <label *ngIf='chosenGroup == group.group.name'>Key: </label>
+        <label *ngFor="let group of groups">
+            <div id='b' class='functionality3'  *ngIf="chosenGroup == group.group.name">
+                <div *ngFor="let groupInfos of group.groupInfos; index as infosId">
+                    <br><label *ngIf='chosenGroup == group.group.name'>Key: </label>
                     <input id="key{{infosId}}" type="text" name="key{{infosId}}" *ngIf='chosenGroup == group.group.name' formControlName='keyChangeInfos'><br>
                     <label *ngIf='chosenGroup == group.group.name'>Value: </label>
-                    <input id="value{{infosId}}" type="text" name="value{{infosId}}" *ngIf='chosenGroup == group.group.name' formControlName='valueChangeInfos'><br><br><br>
-                    
-                </label>
+                    <input id="value{{infosId}}" type="text" name="value{{infosId}}" *ngIf='chosenGroup == group.group.name' formControlName='valueChangeInfos'><br><br>
+                
+                </div>
+                <button (click)='changeGroupInfos()' type="button">Change</button><br><br>
             </div>
-        </div>
-        <button (click)='changeGroupInfos()' type="button">Change</button>
+        </label>
     </form>
-    <div id='c' class='functionality4'>
-        <button>click</button>
-    </div>
-</div>
+<button [routerLink]="['/overview']">Back</button>
