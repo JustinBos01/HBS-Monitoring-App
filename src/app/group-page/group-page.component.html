@@ -6,8 +6,8 @@
         <label *ngFor="let group of groups">
             <div *ngIf="chosenGroup == group.group.name">
                 <label>This group is currently: <b> {{group.group.status}}</b></label><br>
-                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(statusLbl.id, 'disabled')" [routerLink]="['/groups', group.group.id]">Enable Group</button>
-                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(statusLbl.id, 'enabled')" [routerLink]="['/groups', group.group.id]">Disable Group</button>
+                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup()" [routerLink]="['/groups', group.group.id]">Enable Group</button>
+                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup()" [routerLink]="['/groups', group.group.id]">Disable Group</button>
             </div>
         </label>
         <table>
@@ -29,16 +29,14 @@
         
         <br><br>
         <label></label>
-        <div ng-init="printGroups()"></div>
-        <table id='groupInfosTbl'>
+        <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0'>
             <tr>
                 <th>Key</th>
                 <th>Value</th>
             </tr>
             
            
-            <tr () *ngFor="let infos of chosenGroupInfos; index as infosId">
-            
+            <tr *ngFor="let infos of chosenGroupInfos; index as infosId">
                 <td>
                     <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
                 </td>
@@ -57,19 +55,6 @@
         <input #regroupGroupTbx id='regroupGroupTbx'>
         <button  (click)="regroupGroup(regroupGroupTbx.value)" [routerLink]="['/overview']">Confirm</button>
     </div>
-    
-    <form [formGroup]='changeGroupInfosForm'>
-        <label *ngFor="let group of groups">
-            <div id='b' class='functionality3'  *ngIf="chosenGroup == group.group.name">
-                <div *ngFor="let groupInfos of group.groupInfos; index as infosId">
-                    <br><label *ngIf='chosenGroup == group.group.name'>Key: </label>
-                    <input id="key{{infosId}}" type="text" name="key{{infosId}}" *ngIf='chosenGroup == group.group.name' formControlName='keyChangeInfos'><br>
-                    <label *ngIf='chosenGroup == group.group.name'>Value: </label>
-                    <input id="value{{infosId}}" type="text" name="value{{infosId}}" *ngIf='chosenGroup == group.group.name' formControlName='valueChangeInfos'><br><br>
-                
-                </div>
-                <button (click)='changeGroupInfos()' type="button">Change</button><br><br>
-            </div>
-        </label>
-    </form>
-<button [routerLink]="['/overview']">Back</button>
+
+</div>
+<button [routerLink]="['/overview']" class='back'>Back</button>

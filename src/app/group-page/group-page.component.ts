@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ɵɵqueryRefresh } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfigService } from '../config/config.service';
 import { FormBuilder } from '@angular/forms';
 import { LoginPageService } from '../login-page/login-page.service';
 import { GroupPageService } from './group-page.service';
+import { GroupOverviewService } from '../group-overview/group-overview.service';
 
 
 
@@ -19,7 +20,7 @@ export class GroupPageComponent implements OnInit {
   newMadeGroupInfos;
   user;
   groups;
-  chosenGroup = this.configService.chosenGroup;
+  chosenGroup = localStorage.getItem('chosenGroup');
   groupData;
   superuserData;
   changePasswordUser;
@@ -30,7 +31,7 @@ export class GroupPageComponent implements OnInit {
                       value: ''}];
   newGroup;
   changeGroup;
-  chosenGroupInfos;
+  chosenGroupInfos = [];
   
   enabledGroup;
   keyChangeInfos;
@@ -45,6 +46,7 @@ export class GroupPageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private loginPageService: LoginPageService,
     private groupPageService: GroupPageService,
+    private groupOverviewService: GroupOverviewService,
   ) { 
     this.createGroupForm = this.formBuilder.group({
       groupName: '',
@@ -58,28 +60,28 @@ export class GroupPageComponent implements OnInit {
     ;}
 
   ngOnInit(): void {
+    
     this.showGroupResponse()
     this.getUsersOfGroup()
-    //this.getChosenGroupInfos()
+    // this.route.paramMap.subscribe(params => {
+    //   this.user = this.configService.getUsersOfGroup(this.configService.chosenGroup)[+params.get('id')]
+    // });
     
-    this.route.paramMap.subscribe(params => {
-      this.user = this.configService.getUsersOfGroup(this.configService.chosenGroup)[+params.get('id')]
-    });
-    //this.getGroupInfosAmount()
-    console.log(this.configService.chosenGroupInfos)
-    this.chosenGroupInfos = this.configService.chosenGroupInfos
-    //this.getChosenGroupInfos()
-    //this.getGroupInfosAmount()
+    this.chosenGroup = localStorage.getItem('chosenGroup')
     
   }
 
+  AfterViewInit() {
+
+  }
   
   print() {
     console.log(this.groups)
-    
   }
+
   getUsersOfGroup() {
-    this.configService.getUsersOfGroup(this.configService.chosenGroup)
+    console.log(this.chosenGroup)
+    this.configService.getUsersOfGroup(this.chosenGroup)
     .subscribe(users => {
         this.user = users;
     })
@@ -91,37 +93,29 @@ export class GroupPageComponent implements OnInit {
     this.configService.getGroups()
       .subscribe(groups => {
         this.groups = groups;
+        this.getGroupInfosAmount()
       })
+      
     }
 
   enableGroup() {
     this.configService.enableGroup(this.configService.chosenGroup)
       .subscribe(groups => {
         this.enabledGroup = groups;
+        window.location.reload()
       })
+      
     }
 
   disableGroup() {
     this.configService.disableGroup(this.configService.chosenGroup)
       .subscribe(groups => {
         this.enabledGroup = groups;
+        window.location.reload()
       })
     }
-
   
   
-  printGroups() {
-    console.log(this.groups)
-    for (let group of this.groups) {
-      console.log(this.groups)
-      if (this.chosenGroup == group.group.name) {
-        console.log(this.groups)
-        for (let infos of group.groupInfos) {
-          this.groupInfosValues.push({key: infos.key, value: infos.value})
-        }
-      }
-    }
-  }
   
 
   changeGroupInfos(){
@@ -180,21 +174,23 @@ export class GroupPageComponent implements OnInit {
     })
   }
 
-  //getGroupInfosAmount() {
-  //  for (let group of this.groups) {
-  //    if (group == this.chosenGroup) {
-  //      for (let index of group.groupInfos) {
-  //        this.configService.chosenGroupInfos.push({key: index.key, value: index.value})
-  //        
-  //      }
-  //    }
-  //  }
-  //  console.log(this.groupInfosLength)
-  //}
-
-  addToGroupInfos(){
-    document.getElementById('')
+  getGroupInfosAmount() {
+    
+    for (let group of this.groups) {
+      
+      if (group.group.name == this.chosenGroup) {
+        try {
+          for (let index of group.groupInfos) {
+            this.chosenGroupInfos.push({key: index.key, value: index.value})
+          }
+        }
+        catch {console.log('no infos available')}
+        
+      }
+    }
+    console.log(this.chosenGroupInfos)
   }
+
 
   changeLabelName(lbl, val) {
     document.getElementById(lbl).innerHTML = val;

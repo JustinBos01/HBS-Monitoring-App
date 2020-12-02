@@ -24,7 +24,7 @@ export class LoginPageComponent implements OnInit {
     private loginPageService: LoginPageService,
     private formBuilder: FormBuilder,
     public configService: ConfigService,
-    public navigation: TopBarService
+    public navigation: TopBarService,
   ) {
     this.loginForm = this.formBuilder.group({
       name: '',
@@ -34,15 +34,21 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    
     this.items = this.userPageService.getItems();
     this.navigation.hide();
+    
   }
+
 
   onSubmit(userData) {
     this.loginPageService.superUserData = userData;
     console.log(this.loginPageService.superUserData.name)
     this.items = this.userPageService.clearItems();
-    this.loginForm.reset();
-    console.warn('Thanks for using our application', userData.name);
+    
+    localStorage.setItem('superUserData.name', this.loginPageService.superUserData.name);
+    localStorage.setItem('superUserData.password', this.loginPageService.superUserData.password);
+    console.log(localStorage.getItem('superUserData.name'))
+    console.log(localStorage.getItem('superUserData.password'))
   }
 }

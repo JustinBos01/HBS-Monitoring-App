@@ -45,6 +45,7 @@ export class ConfigService {
   group = Group;
   groupInfo = GroupInfos;
   groupData = GroupData;
+
   chosenGroup;
   JsonString;
   chosenGroupInfos = [{key: '',
@@ -56,9 +57,11 @@ export class ConfigService {
     private http: HttpClient,
     private createUsersService: CreateUsersService,
     private loginPageService: LoginPageService,
-    private groupPageService: GroupPageService) { }
+    private groupPageService: GroupPageService) { 
+      
+    }
   
-
+  
   getConfig() {
     var configUrl = 'http://localhost:4200/budget/users/list';
     return this.http.get<Users[]>(configUrl);
@@ -67,30 +70,29 @@ export class ConfigService {
   getConfigResponse(): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/list';
     return this.http.post<Users[]>(
-      configUrl, { superuser: {"name": this.loginPageService.superUserData.name, "password": this.loginPageService.superUserData.password}, group: {name: "Justin's groepje"}});
+      configUrl, { superuser: {"name": localStorage.getItem('superUserData.name'), group: {name: "Justin's groepje"}}});
   }
 
   getSuperUsers(): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/list';
     return this.http.post<Users[]>(
-      configUrl, { superuser: {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password}, group: {name: "superuser"}});
+      configUrl, { superuser: {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')}, group: {name: "superuser"}});
   }
 
   getGroups(): Observable<GroupData[]> {
     var configUrl = 'http://localhost:4200/budget/group/list';
     return this.http.post<GroupData[]>(
       configUrl, {
-        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password}
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')}
        });
   }
 
   getUsersOfGroup(senderGroup): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/list';
     this.chosenGroup = senderGroup;
-    
     return this.http.post<Users[]>(
       configUrl, {
-        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
         "group": {"name" : senderGroup}
        });
   }
@@ -100,7 +102,7 @@ export class ConfigService {
     
     return this.http.post<GroupBody[]>(
       configUrl, {
-        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
         "group": {"name" : groupname},
         "groupInfos"  : [ {"key" : key, "value" : value}]
        });
@@ -109,7 +111,7 @@ export class ConfigService {
   changeGroupInfos(groupname): Observable<GroupInfos[]> {
     var configUrl = 'http://localhost:4200/budget/group/infos';
     this.JsonString = {
-      "superuser"   : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "superuser"   : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"       : {"name" : groupname}, 
       "groupInfos"  : this.groupPageService.groupInfosString
      }
@@ -124,7 +126,7 @@ export class ConfigService {
     
     return this.http.post<Group>(
       configUrl, {
-        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
         "group"     : {"name" : groupname}
        });
   }
@@ -133,7 +135,7 @@ export class ConfigService {
     var configUrl = 'http://localhost:4200/budget/group/disable';
     return this.http.post<Group[]>(
       configUrl, {
-        "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
         "group"     : {"name" : groupname}
        });
   }
@@ -141,7 +143,7 @@ export class ConfigService {
   createMultipleUsers(groupname): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/create';
     this.JsonString = {
-      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"     : {"name" : groupname},
       "users"     : this.createUsersService.userString
      }
@@ -153,7 +155,7 @@ export class ConfigService {
   createSuperUser(): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/create';
     this.JsonString = {
-      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"     : {"name" : "superuser"},
       "users"     : this.createUsersService.userString
      }
@@ -167,7 +169,7 @@ export class ConfigService {
     console.log(newPassword)
     console.log(correspondingUser)
     this.JsonString = {
-      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "users"     : [ {"name" : correspondingUser, "password" : newPassword} ]
      }
     
@@ -180,7 +182,7 @@ export class ConfigService {
     console.log(newGroup)
     console.log(correspondingUser)
     this.JsonString = {
-      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "regroup"   : {"name" : newGroup},
       "users"     : [ {"name" : correspondingUser} ]
     }
@@ -191,7 +193,7 @@ export class ConfigService {
   regroupGroup(groupName, newGroup): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/regroupgroup';
     this.JsonString = {
-      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"     : {"name" : groupName},
       "regroup"   : {"name" : newGroup}
      }
@@ -199,9 +201,9 @@ export class ConfigService {
   }
 
   renameGroup(groupName, newName): Observable<Group[]> {
-    var configUrl = 'https://budgetonderzoek.test.cbs.nl/budget/group/rename';
+    var configUrl = 'http://localhost:4200/budget/group/rename';
     this.JsonString = {
-      "superuser" : {"name" : this.loginPageService.superUserData.name, "password" : this.loginPageService.superUserData.password},
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"     : {"name" : groupName},
       "regroup"   : {"name" : newName}
      }

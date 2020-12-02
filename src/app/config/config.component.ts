@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService, GroupData, Users } from './config.service';
-
+import { LoginPageService } from '../login-page/login-page.service'
+import { LoginPageComponent } from '../login-page/login-page.component';
 
 export class Headers {
 }
@@ -18,10 +19,12 @@ export class ConfigComponent implements OnInit {
   items = [];
   
   constructor(
-    public configService: ConfigService
+    public configService: ConfigService,
+    public loginPageService: LoginPageComponent
   ) { }
 
   ngOnInit(): void {
+    
     this.showConfigResponse()
     this.showGroupResponse()
     this.getItems()

@@ -1,20 +1,23 @@
-<form [formGroup]='loginForm' (ngSubmit)="onSubmit(loginForm.value)" class="login">
-  <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" width="100" height="100">
-  <br><br><br><br>
-  <div>
-      <label for="name">
-        Name
+<head></head>
+<body>
+  <form [formGroup]='loginForm' (ngSubmit)="onSubmit(loginForm.value)" class="login">
+    <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" width="100" height="100">
+    <br><br><br><br>
+    <div>
+        <label for="name">
+          Name
+        </label>
+      <input id="name" type="text" formControlName="name">
+    </div>
+    <br>
+    <div>
+      <label for="address">
+        Password
       </label>
-    <input id="name" type="text" formControlName="name">
-  </div>
-  <br>
-  <div>
-    <label for="address">
-      Password
-    </label>
-    <input id="password" type="password" formControlName="password">
-  </div>
-  <br>
-  <button id='loginBtn' type="button" (click)="onSubmit(loginForm.value)" [routerLink]="['menu']">Login</button>
-          
-</form>
+      <input id="password" type="password" formControlName="password">
+    </div>
+    <br>
+    <button id='loginBtn' type="button" (click)="onSubmit(loginForm.value)" [routerLink]="['menu']">Login</button>
+            
+  </form>
+</body>

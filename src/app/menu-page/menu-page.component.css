@@ -97,3 +97,11 @@ tr:nth-child(odd) {
     position: fixed;
     right: 20px;
 }
+
+.img {
+    border-radius: 50%;
+    top: 1%;
+    right: 0%;
+    max-height: 2.5%;
+    max-width: 2.5%;
+}

@@ -8,15 +8,16 @@
                 <th>Amount of Users</th>
                 
             </tr>
-            <tr *ngFor="let group of groups; index as groupId" (click)='getUsersFromGroup(group.group.name)' style='cursor: pointer;' [routerLink]="['/groups', group.id]">
+            <tr *ngFor="let group of groups; index as groupId" (click)='getUsersFromGroup(group.group.name)' style='cursor: pointer;' (dblclick)="goToPage(group.group.name, group.group.id)">
                 <td>{{group.group.id}}</td>
-                <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)" (click)='selectGroup(group.group.name)'></td>
                 <td >{{group.group.status}}</td>
                 <td>{{group.group.users}}</td>
             </tr>
         </table>
     </div>
 </form>
+<!-- <button [routerLink]="['/groups', group.id]"></button> -->
 <form [formGroup]="createGroupForm" (ngSubmit)="createGroup(createGroupForm.value)" class="create-group">
     <div>
         <label for="groupName">

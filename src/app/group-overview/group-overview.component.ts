@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../config/config.service';
 import { FormBuilder, NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { LoginPageService } from '../login-page/login-page.service';
 import { GroupPageService } from '../group-page/group-page.service';
+import { GroupOverviewService } from './group-overview.service'
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-group-overview',
@@ -16,12 +20,16 @@ export class GroupOverviewComponent implements OnInit {
   groupData;
   groups;
   newGroupName;
-  users
+  users = [];
+  chosenGroup;
   constructor(
     public configService: ConfigService,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private loginPageService: LoginPageService,
     private groupPageService: GroupPageService,
+    private router: Router,
+    private groupOverviewService: GroupOverviewService,
   ) {
     this.createGroupForm = this.formBuilder.group({
       groupName: '',
@@ -33,6 +41,7 @@ export class GroupOverviewComponent implements OnInit {
     })}
 
   ngOnInit(): void {
+    
     this.showGroupResponse()
   }
 
@@ -65,5 +74,19 @@ export class GroupOverviewComponent implements OnInit {
       this.users = user;
       console.log(this.users);
     })
+  }
+
+  selectGroup(givenGroup) {
+    //console.log('werkt')
+    //this.route.paramMap.subscribe(params => {
+    //  this.chosenGroup = this.configService.getUsersOfGroup(givenGroup)[+params.get('id')]
+    //});
+  }
+
+  goToPage(givenGroupName, givenGroupId, event) {
+    
+    this.groupOverviewService.chosenGroup = givenGroupName;
+    localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
+    this.router.navigate(['/groups', givenGroupId])
   }
 }
