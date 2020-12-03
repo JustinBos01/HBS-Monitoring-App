@@ -53,9 +53,7 @@ export class ConfigComponent implements OnInit {
       .subscribe(groups => {
         this.groups = groups;
       })
-    }
-
-  
+  }
 
   getUsersFromGroup(group) {
     this.configService.getUsersOfGroup(group)

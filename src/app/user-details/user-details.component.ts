@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { users } from '../users';
+import { newlyCreatedUsers } from '../users';
 import { UserPageService } from '../user-page/user-page.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { UserPageService } from '../user-page/user-page.service';
 })
 
 export class UserDetailsComponent implements OnInit {
-  user;
+  newlyCreatedUsers;
 
   constructor(
     private route: ActivatedRoute,
@@ -20,7 +20,7 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.user = users[+params.get('userId')];
+      this.newlyCreatedUsers = newlyCreatedUsers[+params.get('userId')];
     });
   }
 

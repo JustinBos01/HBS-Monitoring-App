@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { users } from '../users';
+import { newlyCreatedUsers } from '../users';
 
 @Component({
   selector: 'app-user-page',
@@ -7,7 +7,7 @@ import { users } from '../users';
   styleUrls: ['./user-page.component.css']
 })
 export class UserPageComponent{
-  users = users;
+  users = newlyCreatedUsers;
 
   add() {
     window.alert('The user has been added')

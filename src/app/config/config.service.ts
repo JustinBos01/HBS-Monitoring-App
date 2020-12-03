@@ -45,7 +45,7 @@ export class ConfigService {
   group = Group;
   groupInfo = GroupInfos;
   groupData = GroupData;
-
+  placeholderVar;
   chosenGroup;
   JsonString;
   chosenGroupInfos = [{key: '',
@@ -99,13 +99,21 @@ export class ConfigService {
 
   createGroup(groupname, key, value): Observable<GroupBody[]> {
     var configUrl = 'http://localhost:4200/budget/group/create';
-    
-    return this.http.post<GroupBody[]>(
-      configUrl, {
+    console.log(key, value)
+    if ((key == null || key == '') && (value == null || value == '')){
+      this.JsonString = {
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+      "group": {"name" : groupname},
+      "groupInfos"  : []
+     }} else {
+       this.JsonString = {
         "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
         "group": {"name" : groupname},
         "groupInfos"  : [ {"key" : key, "value" : value}]
-       });
+       }
+     }
+    return this.http.post<GroupBody[]>(
+      configUrl, this.JsonString);
   }
 
   changeGroupInfos(groupname): Observable<GroupInfos[]> {
@@ -140,14 +148,14 @@ export class ConfigService {
        });
   }
 
-  createMultipleUsers(groupname): Observable<Users[]> {
+  createMultipleUsers(): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/create';
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
-      "group"     : {"name" : groupname},
+      "group"     : {"name" : localStorage.getItem('chosenGroup')},
       "users"     : this.createUsersService.userString
      }
-     console.log(this.JsonString.group, this.JsonString.superuser, this.JsonString.users)
+     console.log(this.JsonString.group)
     return this.http.post<Users[]>(
       configUrl, this.JsonString);
   }
@@ -159,7 +167,7 @@ export class ConfigService {
       "group"     : {"name" : "superuser"},
       "users"     : this.createUsersService.userString
      }
-    console.log(this.JsonString.group, this.JsonString.superuser, this.JsonString.users)
+    console.log(this.JsonString)
     return this.http.post<Users[]>(
     configUrl, this.JsonString);
   }
@@ -206,6 +214,42 @@ export class ConfigService {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"     : {"name" : groupName},
       "regroup"   : {"name" : newName}
+     }
+     
+    return this.http.post<Group[]>(configUrl, this.JsonString);
+  }
+
+  deleteEmptyGroups(groupName): Observable<Group[]> {
+    //this.deleteGroupInfos(groupName).subscribe()
+    console.log(localStorage.getItem('superUserData.name'))
+    console.log(localStorage.getItem('superUserData.password'))
+    var configUrl = 'http://localhost:4200/budget/group/delete';
+    this.JsonString = {
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+      "group"     : {"name" : groupName}
+     }
+     
+    return this.http.post<Group[]>(configUrl, this.JsonString);
+  }
+
+  deleteSingleEmptyGroup(groupName): Observable<Group[]> {
+    var configUrl = 'http://localhost:4200/budget/group/delete';
+    
+    this.JsonString = {
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+      "group"     : {"name" : groupName}
+     }
+     //console.log(groupName +'has been deleted')  
+    return this.http.post<Group[]>(configUrl, this.JsonString);
+  }
+
+  deleteGroupInfos(groupName): Observable<Group[]> {
+                
+    var configUrl = 'http://localhost:4200/budget/group/infos';
+    this.JsonString = {
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+      "group"     : {"name" : groupName},
+      "infos"     : [ ]
      }
      
     return this.http.post<Group[]>(configUrl, this.JsonString);

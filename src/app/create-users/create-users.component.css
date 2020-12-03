@@ -1,0 +1,57 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    align-self: center;
+    max-height: 80%;
+}
+
+th {
+    background-color: black;
+    color: white;
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+td {
+    text-align: center;
+    border: 1px solid gray;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+
+.userAddition {
+    grid-area: UA;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    max-height: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.userAdditionAmount {
+    grid-area: UAAmount;
+    max-height: 40%;
+}
+
+.grid-container {
+    
+    display: grid;
+    grid-template-areas:
+        'UAAmount'
+        'UA';
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.grid-container > div {
+    background-color: lightgray;
+    padding: 20px 0;
+    font-size: 15px;
+}

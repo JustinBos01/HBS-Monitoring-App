@@ -6,6 +6,8 @@ table {
 }
 
 th {
+    background-color: black;
+    color: white;
     text-align: center;
     border: 1px solid #dddddd;
     padding: 8px;
@@ -13,7 +15,7 @@ th {
 
 td {
     text-align: center;
-    border: 1px solid #dddddd;
+    border: 1px solid gray;
     padding: 8px;
 }
 
@@ -21,14 +23,16 @@ tr:nth-child(odd) {
     background-color: #dddddd;
 }
 
-.regroup-item {    
+.regroup-item {
     grid-area: rg;
+    background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);    
     text-align: center;
 }
 
 .table-item {
     grid-area: tbl;
+    background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);
     font-size: 15px;
     max-height: 500px;
@@ -37,8 +41,16 @@ tr:nth-child(odd) {
     text-align: left;
 }
 
+.management-item {
+    grid-area: MI;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+}
+
 .change {
     grid-area: b;
+    background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
 }
@@ -47,6 +59,7 @@ tr:nth-child(odd) {
 .grid-container {
     display: grid;
     grid-template-areas:
+        'MI MI'
         'tbl tbl'
         'rg rg';
     grid-gap: 10px;
@@ -54,7 +67,8 @@ tr:nth-child(odd) {
 }
 
 .grid-container > div {
-    background-color: rgba(255, 255, 255, 0.8);
+    
+    background-color: lightgray;
     padding: 20px 0;
     font-size: 15px;
 }

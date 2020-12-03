@@ -18,10 +18,17 @@
             <label>Shown underneath are the most common visited shops</label>
             <table id="HtmlDataTbl">
                 <tr>
-                    <th>Store</th>
-                    <th>Spent money</th>
-                    <th>Visits</th>
+                    <th>Group Name</th>
+                    <th>User Amount</th>
+                    <th>Status</th>
                 </tr>
+
+                <tr *ngFor="let group of enabledGroups; index as enabledGroupId">
+                    <td>{{group.group.name}}</td>
+                    <td>{{group.group.users}}</td>
+                    <td>{{group.group.status}}</td>
+                </tr>
+                
             </table>
         </div>
     </div>

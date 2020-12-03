@@ -1,16 +1,17 @@
 <div class="grid-container">
-    <div id='tableForm' class='table-item'>
+    <div class='management-item'>
         <label #statusLbl id='statusLbl'>Down below are the users in the group: <b>{{chosenGroup}}</b></label><br><br>
         <label>To add a user to this group, click this button | </label>
         <button [routerLink]="['/createUsers']">Add users</button><br><br>
-        <label *ngFor="let group of groups">
+        <span *ngFor="let group of groups">
             <div *ngIf="chosenGroup == group.group.name">
                 <label>This group is currently: <b> {{group.group.status}}</b></label><br>
                 <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup()" [routerLink]="['/groups', group.group.id]">Enable Group</button>
                 <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup()" [routerLink]="['/groups', group.group.id]">Disable Group</button>
             </div>
-        </label>
-        <table>
+        </span></div>
+        <div id='tableForm' class='table-item'>
+        <table *ngIf='user'>
             <tr>
                 <th>Id</th>
                 <th>GroupId</th>
@@ -25,9 +26,10 @@
                 <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
                 <td><input id='group{{userId}}' value='{{chosenGroup}}' (keyup.enter)="regroupUsers(userId, user.name)"></td>
             </tr>
-        </table>
+        </table><br>
+        <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
         
-        <br><br>
+        <br>
         <label></label>
         <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0'>
             <tr>

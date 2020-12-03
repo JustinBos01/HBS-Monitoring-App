@@ -68,12 +68,8 @@ export class GroupPageComponent implements OnInit {
     // });
     
     this.chosenGroup = localStorage.getItem('chosenGroup')
-    
   }
 
-  AfterViewInit() {
-
-  }
   
   print() {
     console.log(this.groups)
@@ -84,7 +80,9 @@ export class GroupPageComponent implements OnInit {
     this.configService.getUsersOfGroup(this.chosenGroup)
     .subscribe(users => {
         this.user = users;
-    })
+        if (!this.user){
+        alert("There seems to be no users in this group")}
+        })
   }
 
  
@@ -99,7 +97,7 @@ export class GroupPageComponent implements OnInit {
     }
 
   enableGroup() {
-    this.configService.enableGroup(this.configService.chosenGroup)
+    this.configService.enableGroup()
       .subscribe(groups => {
         this.enabledGroup = groups;
         window.location.reload()
@@ -108,7 +106,7 @@ export class GroupPageComponent implements OnInit {
     }
 
   disableGroup() {
-    this.configService.disableGroup(this.configService.chosenGroup)
+    this.configService.disableGroup()
       .subscribe(groups => {
         this.enabledGroup = groups;
         window.location.reload()
@@ -138,7 +136,7 @@ export class GroupPageComponent implements OnInit {
     }
 
     
-    this.configService.changeGroupInfos(this.configService.chosenGroup)
+    this.configService.changeGroupInfos()
     .subscribe(newGroupInfos => {
       this.newMadeGroupInfos = newGroupInfos;
     })
