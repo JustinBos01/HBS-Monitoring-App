@@ -1,9 +1,11 @@
 <span (click)='navigation.toggle()' style='cursor: pointer;'>&#9776; Navigation</span>
 <div class="grid-container">
+    <div id='welcome-item' class="welcome-item">
+        <label style="font-size: large;">Welcome to the <b> group overview page</b>. <br>On this page you are able to manage the existing groups for the HBS research.</label>
+    </div>
     <div class="table">
         <table>
             <tr>
-                
                 <th>Group Name</th>
                 <th>Group Status</th>
                 <th>Amount of Users</th>
@@ -12,14 +14,13 @@
 
             <tr *ngFor="let group of groups; index as groupId" (click)='getUsersFromGroup(group.group.name)' style='cursor: pointer;' (dblclick)="goToPage(group.group.name, group.group.id)">
                 
-                <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)" (click)='selectGroup(group.group.name)'></td>
+                <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
                 <td >{{group.group.status}}</td>
                 <td>{{group.group.users}}</td>
-                <td><button *ngIf="group.group.users == 0 && !group.groupInfos" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
             </tr>
         </table>
     </div>
-    <!-- <button [routerLink]="['/groups', group.id]"></button> -->
     <div class='create-group'>
     <form [formGroup]="createGroupForm" (ngSubmit)="createGroup(createGroupForm.value)" >
         <br>
@@ -27,7 +28,7 @@
             <label for="groupName">
             Group Name
             </label>
-            <input style='align-self: right; left: 50px;' id="groupName" formControlName="groupName">
+            <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="">
         </div>
         <div>
             <label for="key">
@@ -42,7 +43,7 @@
             <input id="value" formControlName="value">
         </div>
         <p>
-            <button class="button" type="submit">Create Group</button>
+            <button *ngIf='newGroupNameTbx.value != ""' class="button" type="submit">Create Group</button>
             <button class="button" type="button" (click)="deleteGroups()">Delete empty groups</button>
             <label #warningLbl id='warningLbl' style="visibility: hidden;"></label>
         </p>

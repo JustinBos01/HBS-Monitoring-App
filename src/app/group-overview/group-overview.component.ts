@@ -34,7 +34,6 @@ export class GroupOverviewComponent implements OnInit {
     private groupPageService: GroupPageService,
     private router: Router,
     private groupOverviewService: GroupOverviewService,
-    
   ) {
     this.createGroupForm = this.formBuilder.group({
       groupName: '',
@@ -47,7 +46,7 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    localStorage.setItem('chosenGroup', '')
+    //localStorage.setItem('chosenGroup', '')
     this.navigation.hide();
     this.showGroupResponse()
   }
@@ -81,12 +80,7 @@ export class GroupOverviewComponent implements OnInit {
     .subscribe()
   }
 
-  selectGroup(givenGroup) {
-    //console.log('werkt')
-    //this.route.paramMap.subscribe(params => {
-    //  this.chosenGroup = this.configService.getUsersOfGroup(givenGroup)[+params.get('id')]
-    //});
-  }
+  
 
   goToPage(givenGroupName, givenGroupId, event) {
     
@@ -103,52 +97,35 @@ export class GroupOverviewComponent implements OnInit {
     }
 
     for (let empty of this.emptyGroups){
-        this.configService.deleteGroupInfos(empty).subscribe(nv => 
-          {
-            this.configService.deleteEmptyGroups(empty).subscribe(nv => 
-              {
-                if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
-                  window.location.reload()
-                }
-              })
-          })
+      this.configService.deleteGroupInfos(empty).subscribe(nv => 
+        {
+          this.configService.deleteEmptyGroups(empty).subscribe(nv => 
+            {
+              if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
+                window.location.reload()
+              }
+            }
+          )
+        }
+      )
     }
-    
   }
 
-  refresh() {
-    this.configService.getConfigResponse()
-  }
+ 
 
   reload() {
     window.location.reload();
   }
 
   deleteSingleEmptyGroup(groupName) {
-    this.configService.deleteSingleEmptyGroup(groupName)
-    .subscribe(nv => {
-      window.location.reload();
-    })
+    this.configService.deleteGroupInfos(groupName).subscribe(nv => 
+      {
+        this.configService.deleteSingleEmptyGroup(groupName)
+        .subscribe(nv => {
+          window.location.reload();
+          }
+        )
+      }
+    )
   }
 }
-
- // if (group.group.name == this.groups[this.groups.length - 1].group.name) {
-          //   this.configService.deleteGroupInfos(group.group.name).subscribe(nv => 
-          //     {
-          //       this.configService.deleteEmptyGroups(group.group.name, this.groups[this.groups.length - 1].group.name).subscribe(nv => 
-          //         {
-          //           window.location.reload()
-          //         })
-          //     })
-          // } else { 
-          //   try {
-          //   this.configService.deleteGroupInfos(group.group.name).subscribe(nv => 
-          //     {
-          //       this.configService.deleteEmptyGroups(group.group.name, this.groups[this.groups.length - 1].group.name).subscribe()
-          // })
-          //   }
-          //  catch {
-          //   return
-          // }
-
-        //}

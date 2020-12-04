@@ -2,7 +2,15 @@
 html { 
     background-image: url(Background.jpg);
     height: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-size: auto;
+    background-repeat: inherit;
     background-position: center;
+    max-height: 10000px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: left;
+}
+
+button {
+    cursor: pointer;
 }

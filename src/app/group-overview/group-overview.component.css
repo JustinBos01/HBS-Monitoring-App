@@ -4,6 +4,7 @@ table {
     width: 100%;
     align-self: center;
     max-height: 30%;
+    height: 30%;
 }
 
 th {
@@ -30,11 +31,18 @@ tr:nth-child(odd) {
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
     max-height: 500px;
+    height: 500px;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: left;
 }
 
+.welcome-item {
+    grid-area: wi;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    max-height: 140px;
+}
 .create-group {
     grid-area: cg;
     border: 1px solid rgba(0, 0, 0, 0.8);
@@ -45,6 +53,7 @@ tr:nth-child(odd) {
 .grid-container {
     display: grid;
     grid-template-areas:
+        'wi wi wi wi wi wi'
         'tbl tbl tbl tbl tbl cg'
         'tbl tbl tbl tbl tbl cg'
         'tbl tbl tbl tbl tbl cg';

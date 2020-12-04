@@ -1,3 +1,4 @@
+<span (click)='navigation.toggle()' style='cursor: pointer;'>&#9776; Navigation</span>
 <div class="grid-container">
     <div class='management-item'>
         <label #statusLbl id='statusLbl'>Down below are the users in the group: <b>{{chosenGroup}}</b></label><br><br>
@@ -6,11 +7,12 @@
         <span *ngFor="let group of groups">
             <div *ngIf="chosenGroup == group.group.name">
                 <label>This group is currently: <b> {{group.group.status}}</b></label><br>
-                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup()" [routerLink]="['/groups', group.group.id]">Enable Group</button>
-                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup()" [routerLink]="['/groups', group.group.id]">Disable Group</button>
+                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)">Enable Group</button>
+                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)">Disable Group</button>
             </div>
-        </span></div>
-        <div id='tableForm' class='table-item'>
+        </span>
+    </div>
+    <div class='table-item'>
         <table *ngIf='user'>
             <tr>
                 <th>Id</th>
@@ -28,16 +30,16 @@
             </tr>
         </table><br>
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
-        
-        <br>
-        <label></label>
-        <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0'>
+    </div><br>
+    <div class='groupInfos-item'>
+        <label *ngIf="chosenGroupInfos.length == 0"><b>There seems to be no groupInfos for this group</b></label>
+        <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
             <tr>
                 <th>Key</th>
                 <th>Value</th>
             </tr>
             
-           
+        
             <tr *ngFor="let infos of chosenGroupInfos; index as infosId">
                 <td>
                     <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
@@ -46,17 +48,27 @@
                     <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()">
                 </td>
             </tr>
-                
-            
+            <tr *ngFor="let value of addedValues; let index = index">
+                <td><input id="newKey{{index}}" type="text" name="name{{index}}" (keyup.enter)='createNewGroupInfos()'></td>
+                <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keyup.enter)='createNewGroupInfos()'></td>
+            </tr>
         </table>
+    </div>
         <!--
          -->
-    </div>
     <div id='regroupGroup' class='regroup-item'>
-        <label>To change all users in this group, fill in the field down below and press "confirm" when ready.</label>
+        <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br>
+            There is also an option to duplicate a group, including its <b>Group Infos</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br>
+            Finally, the <b>Group Infos</b> can be deleted by pressing <b><i>Delete Group Infos</i></b>.</label><br>
         <input #regroupGroupTbx id='regroupGroupTbx'>
-        <button  (click)="regroupGroup(regroupGroupTbx.value)" [routerLink]="['/overview']">Confirm</button>
+        <button (click)="regroupGroup(regroupGroupTbx.value)">Regroup</button>
+        <button (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button>
+        <button (click)="deleteGroupInfos()">Delete Group Infos</button>
+        
+        <br><br>
+        <label>Down below, you are able to add groupInfos to the table above.</label><br>
+        <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
     </div>
-
+    
 </div>
 <button [routerLink]="['/overview']" class='back'>Back</button>

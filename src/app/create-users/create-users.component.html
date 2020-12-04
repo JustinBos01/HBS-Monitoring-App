@@ -1,24 +1,29 @@
 <div class="grid-container">
-<form [formGroup]='createUsersForm'>
-    <div id='createUsersItem' name='createUsersItem' class="userAdditionAmount">
-        <label>Enter the amount of users that needs to be added: </label>
-        <input #amountInput id='amountInput' type="number" formControlName="userAmount" (change)='addvalue(amountInput.value)'>
-    </div>
-</form>
-<form [formGroup]='inputForm'>
-    <div class="userAddition">
-        <table>
-            <tr>
-                <th>Username</th>
-                <th>Password</th>
-            </tr>
-        
-        <tr id='inputItem' name='inputItem' *ngFor="let value of values; let index = index">
-            <td><input id="name{{index}}" type="text" name="name{{index}}" (keyup.enter)='createUsers()'></td>
-            <td><input id="password{{index}}" type="text" name="password{{index}}" (keyup.enter)='createUsers()'></td>
-        </tr></table><br><br>
-        
-    </div>
-    <button (click)="createSuperUsers()" type="button">Add To Superusers Group</button><br><br><br>
-    <button (click)='createUsers()' type="button">Add Users</button>
-</form></div>
+    <form [formGroup]='createUsersForm'>
+        <div id='createUsersItem' name='createUsersItem' class="userAdditionAmount">
+            <label>Enter the amount of users that needs to be added: </label>
+            <input #amountInput id='amountInput' type="number" formControlName="userAmount" (change)='addvalue(amountInput.value)' min="0">
+        </div>
+    </form>
+    <form [formGroup]='inputForm'>
+        <div class="userAddition">
+            <table>
+                <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            
+            <tr id='inputItem' name='inputItem' *ngFor="let value of values; let index = index">
+                <td><input id="name{{index}}" type="text" name="name{{index}}" (keyup.enter)='createUsers()'></td>
+                <td><input id="password{{index}}" type="text" name="password{{index}}" (keyup.enter)='createUsers()'></td>
+            </tr></table><br><br>
+            
+        </div>
+        <div>
+            <button (click)="createSuperUsers()" type="button">Add To Superusers Group</button><br>
+            <button (click)='createUsers()' type="button" *ngIf='chosenGroup != "superuser"'>Add Users</button><br>
+            <label>Corresponding tag: </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*">
+            <button (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br>
+        </div>
+    </form>
+</div>

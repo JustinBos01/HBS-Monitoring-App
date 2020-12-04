@@ -12,6 +12,7 @@ export class MenuPageComponent implements OnInit {
   SUData;
   enabledGroups = [];
   groups;
+  userName = localStorage.getItem('superUserData.name')
   constructor( public navigation: TopBarService,
     public loginPageService: LoginPageService, 
     public configService: ConfigService) { 
@@ -22,6 +23,7 @@ export class MenuPageComponent implements OnInit {
     this.navigation.hide();
     this.SUData = this.loginPageService.superUserData;
     this.getUsers()
+    localStorage.setItem('chosenGroup', '')
   }
 
   getUsers() {
@@ -31,11 +33,9 @@ export class MenuPageComponent implements OnInit {
         for (let selectedGroup of this.groups){
           if (selectedGroup.group.status == 'enabled') {
             this.enabledGroups.push(selectedGroup)
-
           }
         }
-      })
-    
+      }
+    )
   }
-
 }

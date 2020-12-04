@@ -78,7 +78,6 @@ tr:nth-child(odd) {
 }
 
 .grid-container > div {
-    
     background-color: lightgray;
     text-align: center;
     padding: 20px 0;

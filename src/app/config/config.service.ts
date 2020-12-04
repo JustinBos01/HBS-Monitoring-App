@@ -116,11 +116,19 @@ export class ConfigService {
       configUrl, this.JsonString);
   }
 
-  changeGroupInfos(groupname): Observable<GroupInfos[]> {
+  duplicateGroup(JsonString): Observable<GroupBody[]> {
+    console.log('test')
+    console.log(JsonString)
+    var configUrl = 'http://localhost:4200/budget/group/create';
+    return this.http.post<GroupBody[]>(
+      configUrl, JsonString);
+  }
+
+  changeGroupInfos(): Observable<GroupInfos[]> {
     var configUrl = 'http://localhost:4200/budget/group/infos';
     this.JsonString = {
       "superuser"   : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
-      "group"       : {"name" : groupname}, 
+      "group"       : {"name" : localStorage.getItem('chosenGroup')}, 
       "groupInfos"  : this.groupPageService.groupInfosString
      }
 
@@ -129,22 +137,22 @@ export class ConfigService {
       configUrl, this.JsonString);
   }
 
-  enableGroup(groupname): Observable<Group> {
+  enableGroup(): Observable<Group> {
     var configUrl = 'http://localhost:4200/budget/group/enable';
     
     return this.http.post<Group>(
       configUrl, {
         "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
-        "group"     : {"name" : groupname}
+        "group"     : {"name" : localStorage.getItem('chosenGroup')}
        });
   }
 
-  disableGroup(groupname): Observable<Group[]> {
+  disableGroup(): Observable<Group[]> {
     var configUrl = 'http://localhost:4200/budget/group/disable';
     return this.http.post<Group[]>(
       configUrl, {
         "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
-        "group"     : {"name" : groupname}
+        "group"     : {"name" : localStorage.getItem('chosenGroup')}
        });
   }
 
@@ -220,15 +228,11 @@ export class ConfigService {
   }
 
   deleteEmptyGroups(groupName): Observable<Group[]> {
-    //this.deleteGroupInfos(groupName).subscribe()
-    console.log(localStorage.getItem('superUserData.name'))
-    console.log(localStorage.getItem('superUserData.password'))
     var configUrl = 'http://localhost:4200/budget/group/delete';
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"     : {"name" : groupName}
      }
-     
     return this.http.post<Group[]>(configUrl, this.JsonString);
   }
 
@@ -239,12 +243,11 @@ export class ConfigService {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group"     : {"name" : groupName}
      }
-     //console.log(groupName +'has been deleted')  
     return this.http.post<Group[]>(configUrl, this.JsonString);
   }
 
   deleteGroupInfos(groupName): Observable<Group[]> {
-                
+    
     var configUrl = 'http://localhost:4200/budget/group/infos';
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},

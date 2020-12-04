@@ -44,12 +44,9 @@ export class LoginPageComponent implements OnInit {
 
   onSubmit(userData) {
     this.loginPageService.superUserData = userData;
-    console.log(this.loginPageService.superUserData.name)
     this.items = this.userPageService.clearItems();
     
     localStorage.setItem('superUserData.name', this.loginPageService.superUserData.name);
     localStorage.setItem('superUserData.password', this.loginPageService.superUserData.password);
-    console.log(localStorage.getItem('superUserData.name'))
-    console.log(localStorage.getItem('superUserData.password'))
   }
 }

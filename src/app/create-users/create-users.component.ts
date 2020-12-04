@@ -25,6 +25,12 @@ export class CreateUsersComponent implements OnInit {
   newlyCreatedUsers;
   superUserDataString = '';
   userDataString = '';
+  userCreationCode;
+  idString = '';
+  passwordString = '';
+  randomUsernameString;
+  tag;
+  chosenGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,6 +47,7 @@ export class CreateUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.chosenGroup = localStorage.getItem('chosenGroup')
   }
 
   removevalue(i){
@@ -51,18 +58,14 @@ export class CreateUsersComponent implements OnInit {
     this.values.length = 0
     for (var _i = 0; _i < amount; _i++) {
       this.values.push(_i);
-      console.log(this.values.length)}
-      
-  }
-
-  printValues() {
-    console.log(document.getElementById("name0"))
+    }
   }
 
   createUsers() {
     this.userName = ''
     this.userPassword = ''
     this.createUsersService.userString.length = 0;
+    this.superUserDataString = '';
     for (let index of this.values) {
       
       this.userName = document.getElementById("name"+index);
@@ -70,37 +73,82 @@ export class CreateUsersComponent implements OnInit {
       this.userName = this.userName.value;
       this.userPassword = this.userPassword.value;
       this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
-      this.userDataString = this.userDataString + 'username: ' + String(this.createUsersService.userString[index].name) + '; password: ' + String(this.createUsersService.userString[index].password) + ';'
+      this.userDataString = this.userDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
       if (index == this.values[this.values.length -1]){
-      let file = new Blob([this.userDataString], { type: 'text/csv;charset=utf-8' });
+      let file = new Blob(['username;', 'password;\n', this.userDataString], { type: 'text/csv;charset=utf-8' });
       saveAs(file, 'NewPasswords.csv')}
     }
-    this.configService.createMultipleUsers(localStorage.getItem('chosenGroup'))
+    this.configService.createMultipleUsers()
     .subscribe(users => {
       this.users = users;
-    })  
+    })
+  }
+
+  createRandomUsers(tag) {
+    this.createUsersService.userString.length = 0;
+    this.idString = '';
+    this.passwordString = '';
+    this.userDataString = '';
+    for (let index of this.values) {
+      this.idString = '';
+    this.passwordString = '';
+      for (var _i = 0; _i < 6; _i++) {
+        if (_i == 0){
+          this.userCreationCode = this.getRandomInt(1, 10)
+        } else {
+          this.userCreationCode = this.getRandomInt(0, 10)
+        }
+        this.idString = this.idString + String(this.userCreationCode)
+      }
+
+      for (var _i = 0; _i < 6; _i++) {
+        if (_i == 0){
+          this.userCreationCode = this.getRandomInt(1, 10)
+        } else {
+          this.userCreationCode = this.getRandomInt(0, 10)
+        }
+        this.passwordString = this.passwordString + String(this.userCreationCode)
+      }
+      
+      this.randomUsernameString = tag + this.idString
+      this.createUsersService.userString.push({name : this.randomUsernameString, password : this.passwordString })
+      
+      this.userDataString = this.userDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
+      if (index == this.values[this.values.length -1]) {
+        let file = new Blob(['username;', 'password;\n', this.userDataString], { type: 'text/csv;charset=utf-8' });
+        saveAs(file, 'NewPasswords.csv')
+      }
+    }
+    this.configService.createMultipleUsers()
+    .subscribe(users => {
+      this.users = users;
+    })
   }
 
   createSuperUsers(){
     this.userName = ''
     this.userPassword = ''
     this.createUsersService.userString.length = 0;
+    this.superUserDataString = '';
     for (let index of this.values){
       this.userName = document.getElementById("name"+index);
       this.userPassword = document.getElementById("password"+index);
       this.userName = this.userName.value;
       this.userPassword = this.userPassword.value;
       this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
-      this.superUserDataString = this.superUserDataString + 'username: ' + String(this.createUsersService.userString[index].name) + '; password: ' + String(this.createUsersService.userString[index].password) + ';'
+      this.superUserDataString = this.superUserDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
       if (index == this.values[this.values.length -1]){
-      let file = new Blob([this.superUserDataString], { type: 'text/csv;charset=utf-8' });
+      let file = new Blob(['username;', 'password;\n', this.superUserDataString], { type: 'text/csv;charset=utf-8' });
       saveAs(file, 'NewSuPasswords.csv')}
     }
-    
+
     this.configService.createSuperUser()
     .subscribe(users => {
       this.users = users;
     })
   }
-  
+
+  getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
 }
