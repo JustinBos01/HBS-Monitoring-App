@@ -10,7 +10,7 @@
             <select #paradataSelection (change)='paradataSelection.value = paradataSelection.value'>
                 <option value=''></option>
                 <option value='Receipts'>Receipts</option>
-                <option>...</option>
+                <option value="Phones">Phones</option>
             </select><br>
             <label >Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value'><br><br></label>
             
@@ -30,6 +30,41 @@
                     <td *ngIf="filterInput.value == data.userName">{{data.receipts}}</td>
                 </tr>
             </table>
+
+            <table *ngIf="paradataSelection.value == 'Phones'">
+                <tr>
+                    <th>Username</th>
+                    <th>Phone Name</th>
+                    <th>Phone Type</th>
+                    <th>Manufacturer</th>
+                    <th>Model</th>
+                    <th>Receipts</th>
+                    <th>Products</th>
+                    <th>Photos</th>
+                </tr>
+                <tr *ngFor="let data of phoneParadata; index as paraDataId">
+                    <td *ngIf="filterInput.value == ''">{{data.userName}}</td>
+                    <td *ngIf="filterInput.value == ''">{{data.phoneName}}</td>
+                    <td *ngIf="filterInput.value == ''">{{data.phoneType}}</td>
+                    <td *ngIf="filterInput.value == ''">{{data.phoneManufacturer}}</td>
+                    <td *ngIf="filterInput.value == ''">{{data.phoneModel}}</td>
+                    <td *ngIf="filterInput.value == ''">{{data.receipts}}</td>
+                    <td *ngIf="filterInput.value == ''">{{data.products}}</td>
+                    <td *ngIf="filterInput.value == ''">{{data.photos}}</td>
+                    
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.userName}}</td>
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneName}}</td>
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneType}}</td>
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneManufacturer}}</td>
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneModel}}</td>
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.receipts}}</td>
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.products}}</td>
+                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.photos}}</td>
+
+                </tr>
+            </table>
+
+
         </div>
     </div>
 </body>
