@@ -13,19 +13,16 @@
                 </select><br>
             </label>
             
-            
-            <label >Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value'><br><br></label>
+            <label>Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value'><br><br></label>
             
             <table *ngIf="paradataSelection.value == 'Receipts'">
                 <tr>
-                    <th>Username</th>
                     <th>Date</th>
                     <th>Receipts</th>
                 </tr>
                 <tr *ngFor="let data of paradata; index as paraDataId">
-                    <td *ngIf="filterInput.value == ''">{{data.userName}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.date}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.receipts}}</td>
+                    <td>{{data.date}}</td>
+                    <td>{{data.receipts}}</td>
                 </tr>
             </table>
 
@@ -58,8 +55,6 @@
 
                 </tr>
             </table>
-
-
         </div>
     </div>
 </body>

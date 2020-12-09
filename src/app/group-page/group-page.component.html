@@ -15,20 +15,21 @@
     <div class='table-item'>
         <table *ngIf='user'>
             <tr>
-                <th>Id</th>
-                <th>GroupId</th>
                 <th>Name</th>
                 <th>Password</th>
                 <th>Group</th>
                 <th>Paradata</th>
             </tr>
             <tr *ngFor="let user of user; index as userId">
-                <td>{{user.id}}</td>
-                <td>{{user.groupId}}</td>
-                <td>{{user.name}}</td>
-                <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
-                <td><input id='group{{userId}}' value='{{chosenGroup}}' (keyup.enter)="regroupUsers(userId, user.name)"></td>
-                <td><button (click)='goToParaDataPage(user.name, user.id)'>Paradata</button></td>
+                <td *ngIf="filterInput.value == ''">{{user.name}}</td>
+                <td *ngIf="filterInput.value == ''"><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
+                <td *ngIf="filterInput.value == ''"><input id='group{{userId}}' value='{{chosenGroup}}' (keyup.enter)="regroupUsers(userId, user.name)"></td>
+                <td *ngIf="filterInput.value == ''"><button (click)='goToParaDataPage(user.name, user.id)'>Paradata</button></td>
+
+                <td *ngIf="filterInput.value == user.name">{{user.name}}</td>
+                <td *ngIf="filterInput.value == user.name"><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
+                <td *ngIf="filterInput.value == user.name"><input id='group{{userId}}' value='{{chosenGroup}}' (keyup.enter)="regroupUsers(userId, user.name)"></td>
+                <td *ngIf="filterInput.value == user.name"><button (click)='goToParaDataPage(user.name, user.id)'>Paradata</button></td>
             </tr>
         </table><br>
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
@@ -59,6 +60,7 @@
         <!--
          -->
     <div id='regroupGroup' class='regroup-item'>
+        <label>Username Filter: <input #filterInput (keyup)="filterInput.value = filterInput.value"></label><br><br>
         <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br>
             There is also an option to duplicate a group, including its <b>Group Infos</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br>
             Finally, the <b>Group Infos</b> can be deleted by pressing <b><i>Delete Group Infos</i></b>.</label><br>
@@ -67,9 +69,10 @@
         <button (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button>
         <button (click)="deleteGroupInfos()">Delete Group Infos</button>
         
-        <br><br>
+        <br><br>        
         <label>Down below, you are able to add groupInfos to the table above.</label><br>
         <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
+        
     </div>
     
 </div>
