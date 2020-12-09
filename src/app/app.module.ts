@@ -20,8 +20,7 @@ import { GroupPageComponent } from './group-page/group-page.component';
 import { CreateUsersComponent } from './create-users/create-users.component';
 import { GroupOverviewComponent } from './group-overview/group-overview.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { ParadataComponent } from './paradata/paradata.component';
-import { ParadataGroupComponent } from './paradata/paradata-group/paradata-group.component';
+import { ParadataGroupComponent } from './paradata-group/paradata-group.component';
 import { ParadataUserComponent } from './paradata-user/paradata-user.component';
 
 @NgModule({
@@ -37,6 +36,8 @@ import { ParadataUserComponent } from './paradata-user/paradata-user.component';
       {path: 'overview', component: GroupOverviewComponent},
       {path: 'config', component: ConfigComponent},
       {path: 'groups/:groupId', component: GroupPageComponent},
+      {path: 'paradata-group/:groupId', component: ParadataGroupComponent},
+      {path: 'paradata-user/:userId', component: ParadataUserComponent},
       {path: 'phone', component: PhonePageComponent},
       {path: 'receipt', component: ReceiptPageComponent},
       {path: 'createUsers', component: CreateUsersComponent}])
@@ -56,7 +57,6 @@ import { ParadataUserComponent } from './paradata-user/paradata-user.component';
     GroupPageComponent,
     CreateUsersComponent,
     GroupOverviewComponent,
-    ParadataComponent,
     ParadataGroupComponent,
     ParadataUserComponent
   ],

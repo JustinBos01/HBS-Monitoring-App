@@ -25,6 +25,8 @@ export class GroupOverviewComponent implements OnInit {
   placeholderVar;
   undeletable = [];
   emptyGroups = [];
+  statusFilter = "all";
+  isEmpty: boolean;
   constructor(
     public navigation: TopBarService,
     public configService: ConfigService,
@@ -87,6 +89,14 @@ export class GroupOverviewComponent implements OnInit {
     this.groupOverviewService.chosenGroup = givenGroupName;
     localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
     this.router.navigate(['/groups', givenGroupId])
+  }
+
+  goToParaDataPage(givenGroupName, givenGroupId, event) {
+    
+    this.groupOverviewService.chosenGroup = givenGroupName;
+    localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
+    this.router.navigate(['/paradata-group', givenGroupId])
+    console.log(givenGroupName, givenGroupId)
   }
 
   deleteGroups() {

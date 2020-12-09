@@ -243,4 +243,10 @@ export class GroupPageComponent implements OnInit {
       window.location.reload()
     })
   }
+
+  goToParaDataPage(givenUserName, givenUserId, event) {
+    localStorage.setItem('chosenUser', givenUserName)
+    this.router.navigate(['/paradata-user', givenUserId])
+    console.log(givenUserName, givenUserId)
+  }
 }

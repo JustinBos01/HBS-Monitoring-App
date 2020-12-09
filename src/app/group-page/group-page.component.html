@@ -20,6 +20,7 @@
                 <th>Name</th>
                 <th>Password</th>
                 <th>Group</th>
+                <th>Paradata</th>
             </tr>
             <tr *ngFor="let user of user; index as userId">
                 <td>{{user.id}}</td>
@@ -27,6 +28,7 @@
                 <td>{{user.name}}</td>
                 <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
                 <td><input id='group{{userId}}' value='{{chosenGroup}}' (keyup.enter)="regroupUsers(userId, user.name)"></td>
+                <td><button (click)='goToParaDataPage(user.name, user.id)'>Paradata</button></td>
             </tr>
         </table><br>
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>

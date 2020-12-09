@@ -10,14 +10,59 @@
                 <th>Group Status</th>
                 <th>Amount of Users</th>
                 <th>Delete</th>
+                <th>Paradata</th>
             </tr>
 
-            <tr *ngFor="let group of groups; index as groupId" (click)='getUsersFromGroup(group.group.name)' style='cursor: pointer;' (dblclick)="goToPage(group.group.name, group.group.id)">
+            <tr *ngFor="let group of groups; index as groupId" style='cursor: pointer;' (dblclick)="goToPage(group.group.name, group.group.id)">
+                <!-- Show All Groups -->
+                <td *ngIf='statusFilter == "all" && groupFilter.value == ""'><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td *ngIf='statusFilter == "all" && groupFilter.value == ""'>{{group.group.status}}</td>
+                <td *ngIf='statusFilter == "all" && groupFilter.value == ""'>{{group.group.users}}</td>
+                <td *ngIf='statusFilter == "all" && groupFilter.value == ""'><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td *ngIf='statusFilter == "all" && groupFilter.value == ""'><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
+
+                <!-- Show All Groups With Filter -->
+                <td *ngIf='statusFilter == "all" && (groupFilter.value != "" && groupFilter.value == group.group.name)'><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td *ngIf='statusFilter == "all" && (groupFilter.value != "" && groupFilter.value == group.group.name)'>{{group.group.status}}</td>
+                <td *ngIf='statusFilter == "all" && (groupFilter.value != "" && groupFilter.value == group.group.name)'>{{group.group.users}}</td>
+                <td *ngIf='statusFilter == "all" && (groupFilter.value != "" && groupFilter.value == group.group.name)'><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td *ngIf='statusFilter == "all" && (groupFilter.value != "" && groupFilter.value == group.group.name)'><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
+
+                <!-- Show All Disabled Groups -->
+                <td *ngIf='statusFilter == "disabled" && group.group.status == "disabled" && groupFilter.value == ""'><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td *ngIf='statusFilter == "disabled" && group.group.status == "disabled" && groupFilter.value == ""'>{{group.group.status}}</td>
+                <td *ngIf='statusFilter == "disabled" && group.group.status == "disabled" && groupFilter.value == ""'>{{group.group.users}}</td>
+                <td *ngIf='statusFilter == "disabled" && group.group.status == "disabled" && groupFilter.value == ""'><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td *ngIf='statusFilter == "disabled" && group.group.status == "disabled" && groupFilter.value == ""'><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
                 
-                <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
-                <td >{{group.group.status}}</td>
-                <td>{{group.group.users}}</td>
-                <td><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <!-- Show All Enabled Groups -->
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == "")'><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == "")'>{{group.group.status}}</td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == "")'>{{group.group.users}}</td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == "")'><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == "")'><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
+
+                <!-- Show All Enabled Groups With Filter -->
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == group.group.name)'><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == group.group.name)'>{{group.group.status}}</td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == group.group.name)'>{{group.group.users}}</td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == group.group.name)'><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td *ngIf='statusFilter == "enabled" && (group.group.status == "enabled" && groupFilter.value == group.group.name)'><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
+
+                <!-- Show All Disabled Groups With Filter -->
+                <td *ngIf='statusFilter == "disabled" && (group.group.status == "disabled" && groupFilter.value == group.group.name)'><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td *ngIf='statusFilter == "disabled" && (group.group.status == "disabled" && groupFilter.value == group.group.name)'>{{group.group.status}}</td>
+                <td *ngIf='statusFilter == "disabled" && (group.group.status == "disabled" && groupFilter.value == group.group.name)'>{{group.group.users}}</td>
+                <td *ngIf='statusFilter == "disabled" && (group.group.status == "disabled" && groupFilter.value == group.group.name)'><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td *ngIf='statusFilter == "disabled" && (group.group.status == "disabled" && groupFilter.value == group.group.name)'><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
+
+                <td *ngIf='statusFilter == "empty" && group.group.users == 0'><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+                <td *ngIf='statusFilter == "empty" && group.group.users == 0'>{{group.group.status}}</td>
+                <td *ngIf='statusFilter == "empty" && group.group.users == 0'>{{group.group.users}}</td>
+                <td *ngIf='statusFilter == "empty" && group.group.users == 0'><button *ngIf="group.group.users == 0" (click)='deleteSingleEmptyGroup(group.group.name)'>Delete</button></td>
+                <td *ngIf='statusFilter == "empty" && group.group.users == 0'><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
+
+                
             </tr>
         </table>
     </div>
@@ -45,8 +90,19 @@
         <p>
             <button *ngIf='newGroupNameTbx.value != ""' class="button" type="submit">Create Group</button>
             <button class="button" type="button" (click)="deleteGroups()">Delete empty groups</button>
-            <label #warningLbl id='warningLbl' style="visibility: hidden;"></label>
+            <label #warningLbl id='warningLbl' style="visibility: hidden;"></label><br><br>
+            
+            
         </p>
-    </form></div>
+    </form>
+    </div>
+    <div class="filter-item"><br><br><br>
+        <label>Filter on group names: <input #groupFilter (keyup)="groupFilter.value = groupFilter.value"></label><br>
+        <button *ngIf='this.statusFilter == "disabled" || this.statusFilter == "all" || this.statusFilter == "empty"' (click)='this.statusFilter = "enabled"; groupFilter.value = ""'>Show enabled</button>
+        <button *ngIf='this.statusFilter == "enabled" || this.statusFilter == "all" || this.statusFilter == "empty"' (click)='this.statusFilter = "disabled"; groupFilter.value = ""'>Show disabled</button>
+        <br>
+        <button *ngIf='this.statusFilter != "empty"' (click)='this.statusFilter = "empty"'>Empty Groups</button><br><br>
+        <button *ngIf='this.statusFilter != "all"' (click)='this.statusFilter = "all"; groupFilter.value = ""'>Show All</button>
+    </div>
 </div>
 <button [routerLink]="['/menu']">Back</button>

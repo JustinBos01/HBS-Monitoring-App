@@ -97,6 +97,8 @@ export class ConfigService {
        });
   }
 
+  
+
   createGroup(groupname, key, value): Observable<GroupBody[]> {
     var configUrl = 'http://localhost:4200/budget/group/create';
     if ((key == null || key == '') && (value == null || value == '')){
@@ -246,4 +248,13 @@ export class ConfigService {
      
     return this.http.post<Group[]>(configUrl, this.JsonString);
   }
+
+  getAmountOfReceipts(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/dashboard/receiptsperday';
+    return this.http.post<Users[]>(
+      configUrl, {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+        "group": {"name" : localStorage.getItem('chosenGroup')}
+       });
+  } 
 }

@@ -43,11 +43,19 @@ tr:nth-child(odd) {
     text-align: center;
     max-height: 140px;
 }
+
+.filter-item {
+    grid-area: fi;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    max-height: 210px;
+}
+
 .create-group {
     grid-area: cg;
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
-    max-height: 140px;
+    max-height: 200px;
 }
 
 .grid-container {
@@ -55,8 +63,7 @@ tr:nth-child(odd) {
     grid-template-areas:
         'wi wi wi wi wi wi'
         'tbl tbl tbl tbl tbl cg'
-        'tbl tbl tbl tbl tbl cg'
-        'tbl tbl tbl tbl tbl cg';
+        'tbl tbl tbl tbl tbl fi';
     grid-gap: 10px;
     padding: 10px;
 }

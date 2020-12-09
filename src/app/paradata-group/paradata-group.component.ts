@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfigService } from '../config/config.service'
 
 @Component({
   selector: 'app-paradata-group',
@@ -6,10 +7,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./paradata-group.component.css']
 })
 export class ParadataGroupComponent implements OnInit {
-
-  constructor() { }
+  paradata;
+  chosenGroup = localStorage.getItem('chosenGroup')
+  constructor(
+    public configService: ConfigService
+  ) { }
 
   ngOnInit(): void {
+    this.getAmountOfReceipts()
   }
 
+  getAmountOfReceipts() {
+    this.configService.getAmountOfReceipts().subscribe(data => {
+      this.paradata = data;
+      this.paradata = this.paradata.receiptsPerDays
+      console.log(this.paradata)
+    })
+  }
 }
