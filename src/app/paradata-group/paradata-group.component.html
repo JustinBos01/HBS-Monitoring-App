@@ -5,13 +5,15 @@
             You are now viewing the paradata of group: <b>{{chosenGroup}}</b>
         </div>
         <div class="table-item">
-            <label>To select the paradata that you want to see, open this list: </label><br>
+            <label>To select the paradata that you want to see, open this list: 
+                <select #paradataSelection (change)='paradataSelection.value = paradataSelection.value'>
+                    <option value=''></option>
+                    <option value='Receipts'>Receipts</option>
+                    <option value="Phones">Phones</option>
+                </select><br>
+            </label><br>
             
-            <select #paradataSelection (change)='paradataSelection.value = paradataSelection.value'>
-                <option value=''></option>
-                <option value='Receipts'>Receipts</option>
-                <option value="Phones">Phones</option>
-            </select><br>
+            
             <label >Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value'><br><br></label>
             
             <table *ngIf="paradataSelection.value == 'Receipts'">
