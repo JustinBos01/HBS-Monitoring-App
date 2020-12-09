@@ -99,7 +99,6 @@ export class ConfigService {
 
   createGroup(groupname, key, value): Observable<GroupBody[]> {
     var configUrl = 'http://localhost:4200/budget/group/create';
-    console.log(key, value)
     if ((key == null || key == '') && (value == null || value == '')){
       this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
@@ -117,8 +116,6 @@ export class ConfigService {
   }
 
   duplicateGroup(JsonString): Observable<GroupBody[]> {
-    console.log('test')
-    console.log(JsonString)
     var configUrl = 'http://localhost:4200/budget/group/create';
     return this.http.post<GroupBody[]>(
       configUrl, JsonString);
@@ -131,8 +128,6 @@ export class ConfigService {
       "group"       : {"name" : localStorage.getItem('chosenGroup')}, 
       "groupInfos"  : this.groupPageService.groupInfosString
      }
-
-    console.log(this.JsonString)
     return this.http.post<GroupInfos[]>(
       configUrl, this.JsonString);
   }
@@ -163,7 +158,6 @@ export class ConfigService {
       "group"     : {"name" : localStorage.getItem('chosenGroup')},
       "users"     : this.createUsersService.userString
      }
-     console.log(this.JsonString.group)
     return this.http.post<Users[]>(
       configUrl, this.JsonString);
   }
@@ -175,15 +169,12 @@ export class ConfigService {
       "group"     : {"name" : "superuser"},
       "users"     : this.createUsersService.userString
      }
-    console.log(this.JsonString)
     return this.http.post<Users[]>(
     configUrl, this.JsonString);
   }
 
   changePassword(correspondingUser, newPassword): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/passwords';
-    console.log(newPassword)
-    console.log(correspondingUser)
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "users"     : [ {"name" : correspondingUser, "password" : newPassword} ]
@@ -195,8 +186,6 @@ export class ConfigService {
 
   regroupUsers(correspondingUser, newGroup): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/regroupusers';
-    console.log(newGroup)
-    console.log(correspondingUser)
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "regroup"   : {"name" : newGroup},

@@ -22,8 +22,8 @@
         <div>
             <button (click)="createSuperUsers()" type="button">Add To Superusers Group</button><br>
             <button (click)='createUsers()' type="button" *ngIf='chosenGroup != "superuser"'>Add Users</button><br>
-            <label>Corresponding tag: </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*">
-            <button (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br>
+            <label>Corresponding tag: </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' value="" (keyup)='tagTbx.value = tagTbx.value' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*">
+            <button *ngIf='tagTbx.value != ""' class="button" type="submit" (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br>
         </div>
     </form>
 </div>

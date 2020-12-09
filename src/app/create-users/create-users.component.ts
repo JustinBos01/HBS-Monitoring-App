@@ -28,6 +28,7 @@ export class CreateUsersComponent implements OnInit {
   userCreationCode;
   idString = '';
   passwordString = '';
+  userDataStringExcel = '';
   randomUsernameString;
   tag;
   chosenGroup;
@@ -89,40 +90,34 @@ export class CreateUsersComponent implements OnInit {
     this.idString = '';
     this.passwordString = '';
     this.userDataString = '';
+    this.userDataStringExcel = '';
     for (let index of this.values) {
       this.idString = '';
-    this.passwordString = '';
+      this.passwordString = '';
       for (var _i = 0; _i < 6; _i++) {
-        if (_i == 0){
-          this.userCreationCode = this.getRandomInt(1, 10)
-        } else {
-          this.userCreationCode = this.getRandomInt(0, 10)
-        }
+        this.userCreationCode = this.getRandomInt(0, 10)
         this.idString = this.idString + String(this.userCreationCode)
       }
 
       for (var _i = 0; _i < 6; _i++) {
-        if (_i == 0){
-          this.userCreationCode = this.getRandomInt(1, 10)
-        } else {
-          this.userCreationCode = this.getRandomInt(0, 10)
-        }
+        this.userCreationCode = this.getRandomInt(0, 10)
         this.passwordString = this.passwordString + String(this.userCreationCode)
       }
       
       this.randomUsernameString = tag + this.idString
       this.createUsersService.userString.push({name : this.randomUsernameString, password : this.passwordString })
       
-      this.userDataString = this.userDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
-      if (index == this.values[this.values.length -1]) {
-        let file = new Blob(['username;', 'password;\n', this.userDataString], { type: 'text/csv;charset=utf-8' });
-        saveAs(file, 'NewPasswords.csv')
-      }
+      this.userDataString = this.userDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password.slice(0, 6)) + ';\n'
+      this.userDataStringExcel = this.userDataStringExcel + '' + String(this.createUsersService.userString[index].name) + ';#' + String(this.createUsersService.userString[index].password.slice(0, 6)) + ';\n'
     }
     this.configService.createMultipleUsers()
     .subscribe(users => {
       this.users = users;
     })
+    console.log(this.userDataString)
+    let file = new Blob(['username;', 'password;', 'Remove the "#" for your password;\n', this.userDataStringExcel], { type: 'text/csv;charset=utf-8' });
+    saveAs(file, 'NewPasswords.csv')
+    
   }
 
   createSuperUsers(){

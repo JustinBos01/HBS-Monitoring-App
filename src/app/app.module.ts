@@ -20,6 +20,9 @@ import { GroupPageComponent } from './group-page/group-page.component';
 import { CreateUsersComponent } from './create-users/create-users.component';
 import { GroupOverviewComponent } from './group-overview/group-overview.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ParadataComponent } from './paradata/paradata.component';
+import { ParadataGroupComponent } from './paradata/paradata-group/paradata-group.component';
+import { ParadataUserComponent } from './paradata-user/paradata-user.component';
 
 @NgModule({
   
@@ -52,7 +55,10 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     ReceiptPageComponent,
     GroupPageComponent,
     CreateUsersComponent,
-    GroupOverviewComponent
+    GroupOverviewComponent,
+    ParadataComponent,
+    ParadataGroupComponent,
+    ParadataUserComponent
   ],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
