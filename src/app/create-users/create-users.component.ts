@@ -120,9 +120,9 @@ export class CreateUsersComponent implements OnInit {
     for (let index of this.allUsers.userNames) {
       this.allUsernames.push(index.name)
     }
-
+    var i = 0;
     for (let index of this.values) {
-      var i = 0;
+      
       this.idString = '';
       this.passwordString = '';
 
@@ -180,6 +180,7 @@ export class CreateUsersComponent implements OnInit {
           this.unableAdditionAmount -= 1;
           i+= 1
         }
+        console.log(this.userDataString)
         _i += 1
     }
 
