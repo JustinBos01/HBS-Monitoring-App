@@ -179,6 +179,7 @@ export class ConfigService {
       "group"     : {"name" : "superuser"},
       "users"     : this.createUsersService.userString
      }
+     console.log(this.JsonString)
     return this.http.post<Users[]>(
     configUrl, this.JsonString);
   }

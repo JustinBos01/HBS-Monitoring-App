@@ -82,9 +82,6 @@ export class CreateUsersComponent implements OnInit {
     this.createUsersService.userString.length = 0;
     this.superUserDataString = '';
     this.unableAddition.length = 0;
-    for (let index of this.allUsers) {
-      this.allUsernames.push(index.name)
-    }
 
     for (let index of this.values) {
       this.userName = document.getElementById("name"+index);
@@ -92,22 +89,22 @@ export class CreateUsersComponent implements OnInit {
       this.userName = this.userName.value;
       this.userPassword = this.userPassword.value;
       
-      
-      if (this.userName != '' && this.allUsernames.includes(this.userName) == false){
+      if (this.userName != '' && this.userPassword != '' && this.allUsernames.includes(this.userName) == false){
+        this.allUsernames.push(this.userName)
         this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
         this.userDataString = this.userDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
       } else {
         this.unableAddition.push(this.userName)
       }
-      console.log(this.unableAddition)
     }
 
     this.configService.createMultipleUsers()
     .subscribe(_ => {
       let file = new Blob(['username;', 'password;\n', this.userDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
-      saveAs(file, 'NewPasswords.csv');
+      if (this.userDataStringExcel != ''){
+        saveAs(file, 'NewPasswords.csv');
+      }
     })
-    
   }
 
   createRandomUsers(tag) {
@@ -128,23 +125,20 @@ export class CreateUsersComponent implements OnInit {
       var i = 0;
       this.idString = '';
       this.passwordString = '';
-      //for (var _i = 0; _i < 6; _i++) {
-      //  this.userCreationCode = this.getRandomInt(0, 10)
-      //  this.idString = this.idString + String(this.userCreationCode)
-      //}
 
-      this.userCreationCode = 838383
-      this.idString = String(this.userCreationCode)
+      for (var _i = 0; _i < 6; _i++) {
+        this.userCreationCode = this.getRandomInt(0, 10)
+        this.idString = this.idString + String(this.userCreationCode)
+      }
 
-      //for (var _i = 0; _i < 6; _i++) {
-      //  this.userCreationCode = this.getRandomInt(0, 10)
-      //  this.passwordString = this.passwordString + String(this.userCreationCode)
-      //}
-      this.userCreationCode = 838383
-      this.passwordString = this.passwordString + String(this.userCreationCode)
+      for (var _i = 0; _i < 6; _i++) {
+        this.userCreationCode = this.getRandomInt(0, 10)
+        this.passwordString = this.passwordString + String(this.userCreationCode)
+      }
 
       this.randomUsernameString = tag + this.idString;
       newMadeUID.push(this.randomUsernameString)
+
       if (this.allUsernames.includes(newMadeUID[newMadeUID.length-1]) == false && this.allUsernames.includes(this.randomUsernameString) == false){
         this.createUsersService.userString.push({name : this.randomUsernameString, password : this.passwordString });
         this.allUsernames.push(newMadeUID[newMadeUID.length-1])
@@ -153,22 +147,22 @@ export class CreateUsersComponent implements OnInit {
       } else {
         this.unableAdditionAmount += 1
       }
+
       i += 1;
     }
+
     i=0
     this.createUsersService.userString.length = 0;
     var newMadeUID = []
     var _i = 0
+
     while (this.unableAdditionAmount != 0) {
-      
         this.idString = '';
         this.passwordString = '';
         this.userString = [];
-        if (_i != 0) {
-          for (var _ii = 0; _ii < 6; _ii++) {
-            this.userCreationCode = this.getRandomInt(0, 10)
-            this.idString = this.idString + String(this.userCreationCode)
-          }
+        for (var _ii = 0; _ii < 6; _ii++) {
+          this.userCreationCode = this.getRandomInt(0, 10)
+          this.idString = this.idString + String(this.userCreationCode)
         }
 
         for (var _ii = 0; _ii < 6; _ii++) {
@@ -176,11 +170,7 @@ export class CreateUsersComponent implements OnInit {
           this.passwordString = this.passwordString + String(this.userCreationCode)
         }
 
-        if (_i == 0) {
-          this.idString = '838383'
-        }
         this.randomUsernameString = tag + this.idString;
-        //console.log(this.randomUsernameString, this.passwordString, _i)
 
         if (this.allUsernames.includes(this.randomUsernameString) == false) {
           this.allUsernames.push(this.randomUsernameString)
@@ -190,17 +180,15 @@ export class CreateUsersComponent implements OnInit {
           this.unableAdditionAmount -= 1;
           i+= 1
         }
-        
         _i += 1
     }
+
     this.configService.createMultipleUsers()
     .subscribe(users => {
       this.users = users;
       let file = new Blob(['username;', 'password;', 'Remove the "#" for your password;\n', this.userDataStringExcel, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
       saveAs(file, 'NewPasswords.csv')
     })
-    
-    
   }
 
   createSuperUsers(){
@@ -209,21 +197,31 @@ export class CreateUsersComponent implements OnInit {
     this.createUsersService.userString.length = 0;
     this.superUserDataString = '';
     this.unableAddition.length = 0;
+    this.allUsernames = [];
+    
     for (let index of this.values){
       this.userName = document.getElementById("name"+index);
       this.userPassword = document.getElementById("password"+index);
       this.userName = this.userName.value;
       this.userPassword = this.userPassword.value;
-      this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
-      this.superUserDataString = this.superUserDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
-      if (index == this.values[this.values.length -1]){
-      let file = new Blob(['username;', 'password;\n', this.superUserDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
-      saveAs(file, 'NewSuPasswords.csv')}
+      
+      if (this.userName != '' && this.userPassword != '' && this.allUsernames.includes(this.userName) == false){
+        this.allUsernames.push(this.userName)
+        this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
+        this.userDataString = this.userDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
+      } else {
+        this.unableAddition.push(this.userName)
+      }
+      
     }
 
     this.configService.createSuperUser()
     .subscribe(users => {
       this.users = users;
+      let file = new Blob(['username;', 'password;\n', this.superUserDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
+      if (this.userDataStringExcel != ''){
+        saveAs(file, 'NewSuPasswords.csv')
+      }
     })
   }
 
