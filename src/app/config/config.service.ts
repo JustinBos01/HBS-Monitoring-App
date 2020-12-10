@@ -168,7 +168,6 @@ export class ConfigService {
       "group"     : {"name" : localStorage.getItem('chosenGroup')},
       "users"     : this.createUsersService.userString
      }
-     console.log(this.JsonString)
     return this.http.post<Users[]>(
       configUrl, this.JsonString);
   }
