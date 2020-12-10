@@ -87,6 +87,14 @@ export class ConfigService {
        });
   }
 
+  getAllUsers(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/dashboard/allusers';
+    return this.http.post<Users[]>(
+      configUrl, {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')}
+       });
+  }
+
   getUsersOfGroup(senderGroup): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/users/list';
     this.chosenGroup = senderGroup;
@@ -160,6 +168,7 @@ export class ConfigService {
       "group"     : {"name" : localStorage.getItem('chosenGroup')},
       "users"     : this.createUsersService.userString
      }
+     console.log(this.JsonString)
     return this.http.post<Users[]>(
       configUrl, this.JsonString);
   }

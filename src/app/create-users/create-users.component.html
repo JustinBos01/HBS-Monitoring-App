@@ -26,4 +26,10 @@
             <button *ngIf='tagTbx.value != ""' class="button" type="submit" (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br>
         </div>
     </form>
+    <div>
+        <label *ngIf='unableAddition.length != 0'>The following users could not be added: </label>
+        <label *ngFor='let index of unableAddition'><b>{{index}}, </b></label>
+
+        <label *ngIf='unableAdditionAmount != 0'>{{unableAdditionAmount}}</label>
+    </div>
 </div>

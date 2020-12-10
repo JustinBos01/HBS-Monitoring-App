@@ -70,10 +70,7 @@ export class GroupOverviewComponent implements OnInit {
       })
     }
 
-  getUsersFromGroup(group) {
-    this.configService.getUsersOfGroup(group);
-    this.configService.items = group;
-  }
+  
 
   renameGroup(groupId, oldName) {
     this.newGroupName = document.getElementById('group'+groupId)

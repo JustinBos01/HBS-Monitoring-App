@@ -5,11 +5,22 @@
             You are now viewing the paradata of group: <b>{{chosenGroup}}</b>
         </div>
         <div class="table-item">
+            <label>Select the project you want the data from:
+            <select #projectSelection (change)='projectSelection.value = projectSelection.value'>
+                <option value=''></option>
+                <option value='HBS'>HBS</option>
+                <option value='TBO'>TBO</option>
+            </select><br></label>
+
             <label>To select the paradata that you want to see, open this list: 
                 <select #paradataSelection (change)='paradataSelection.value = paradataSelection.value'>
                     <option value=''></option>
-                    <option value='Receipts'>Receipts</option>
-                    <option value="Phones">Phones</option>
+
+                    <option *ngIf='projectSelection.value == "HBS"' value='Receipts'>Receipts</option>
+                    <option *ngIf='projectSelection.value == "HBS"' value="Phones">Phones</option>
+
+                    <option *ngIf='projectSelection.value == "TBO"' value='test1'>test1</option>
+                    <option *ngIf='projectSelection.value == "TBO"' value="test2">test2</option>
                 </select><br>
             </label><br>
             
@@ -33,7 +44,7 @@
                 </tr>
             </table>
 
-            <table *ngIf="paradataSelection.value == 'Phones'">
+            <table *ngIf="paradataSelection.value == 'Phones' && phoneParadata">
                 <tr>
                     <th>Username</th>
                     <th>Phone Name</th>
@@ -63,6 +74,20 @@
                     <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.products}}</td>
                     <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.photos}}</td>
 
+                </tr>
+            </table>
+            <div style="text-align: center;">
+                <label *ngIf="paradataSelection.value == 'Receipts' && !phoneParadata"><b>There is no receipt paradata for this group</b></label>
+                <label *ngIf="paradataSelection.value == 'Phones' && !phoneParadata"><b>There is no phone paradata for this group</b></label>
+            </div>
+            <table *ngIf='paradataSelection.value == "test1"'>
+                <tr>
+                    <th>test1Colmn</th>
+                    <th>test2Colmn</th>
+                </tr>
+                <tr>
+                    <td>test1cell</td>
+                    <td>test2cell</td>
                 </tr>
             </table>
 
