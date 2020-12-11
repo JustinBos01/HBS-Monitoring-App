@@ -9,6 +9,7 @@ import { ConfigService } from '../config/config.service'
 export class ParadataGroupComponent implements OnInit {
   paradata;
   phoneParadata;
+  activityParaData;
   chosenGroup = localStorage.getItem('chosenGroup')
   constructor(
     public configService: ConfigService
@@ -17,6 +18,7 @@ export class ParadataGroupComponent implements OnInit {
   ngOnInit(): void {
     this.getAmountOfReceipts()
     this.getPhoneParadata()
+    this.getActivityParadata()
   }
 
   getAmountOfReceipts() {
@@ -31,6 +33,13 @@ export class ParadataGroupComponent implements OnInit {
     this.configService.getPhoneParadata().subscribe(data => {
       this.phoneParadata = data;
       this.phoneParadata = this.phoneParadata.receiptsPerPhones;
+    })
+  }
+
+  getActivityParadata() {
+    this.configService.getActivityParadata().subscribe(data => {
+      this.activityParaData = data;
+      this.activityParaData = this.activityParaData.paradataDateTimes;
     })
   }
 }

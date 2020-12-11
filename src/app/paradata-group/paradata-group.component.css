@@ -33,6 +33,15 @@ tr:nth-child(odd) {
     overflow-y: auto;
 }
 
+.project-selection-item {
+    grid-area: psi;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 .header-item {
     grid-area: HI;
     background-color: lightgray;
@@ -45,6 +54,7 @@ tr:nth-child(odd) {
     display: grid;
     grid-template-areas:
         'HI HI'
+        'psi psi'
         'tbl tbl';
     grid-gap: 10px;
     padding: 10px;

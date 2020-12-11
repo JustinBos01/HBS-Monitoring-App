@@ -22,6 +22,7 @@ import { GroupOverviewComponent } from './group-overview/group-overview.componen
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ParadataGroupComponent } from './paradata-group/paradata-group.component';
 import { ParadataUserComponent } from './paradata-user/paradata-user.component';
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   
@@ -58,7 +59,8 @@ import { ParadataUserComponent } from './paradata-user/paradata-user.component';
     CreateUsersComponent,
     GroupOverviewComponent,
     ParadataGroupComponent,
-    ParadataUserComponent
+    ParadataUserComponent,
+    ModalComponent
   ],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
