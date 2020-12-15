@@ -91,9 +91,9 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   goToParaDataPage(givenGroupName, givenGroupId, event) {
-    
     this.groupOverviewService.chosenGroup = givenGroupName;
     localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
+    localStorage.setItem('chosenGroupId', givenGroupId)
     this.router.navigate(['/paradata-group', givenGroupId])
   }
 

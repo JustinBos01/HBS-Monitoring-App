@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
-
+import { ChartsModule } from 'ng2-charts';
 
 
 import { AppComponent } from './app.component';
@@ -38,6 +38,7 @@ import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph
     HttpClientModule,
     ReactiveFormsModule,
     HttpClientJsonpModule,
+    ChartsModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -50,7 +51,7 @@ import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph
       {path: 'groups/:groupId', component: GroupPageComponent},
       {path: 'paradata-group/:groupId', component: ParadataGroupComponent},
       {path: 'paradata-user/:userId', component: ParadataUserComponent},
-      {path: 'graphs/:groupId', component: ParadataUserComponent},
+      {path: 'graphs/:groupId', component: ParadataGraphPageComponent},
       {path: 'phone', component: PhonePageComponent},
       {path: 'receipt', component: ReceiptPageComponent},
       {path: 'createUsers', component: CreateUsersComponent}])
@@ -73,7 +74,7 @@ import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph
     ParadataGroupComponent,
     ParadataUserComponent,
     ModalComponent,
-    ParadataGraphPageComponent
+    ParadataGraphPageComponent,
   ],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

@@ -1,3 +1,14 @@
-<label>{{phoneData}}</label>
-<label>{{receiptsData}}</label>
-<label>{{activityData}}</label>
+<label *ngFor='let element of phoneData'>{{element.userName}}</label>
+<label *ngFor='let element of receiptsData'>{{element.phoneManufacturer}}</label>
+<label *ngFor='let element of activityData'>{{element.action}}</label>
+
+<div>
+    <canvas baseChart 
+    [data]="pieChartData" 
+    [labels]="pieChartLabels" 
+    [chartType]="pieChartType"
+    [options]="pieChartOptions"
+    [plugins]="pieChartPlugins"
+    [legend]="pieChartLegend">
+    </canvas>
+</div>
