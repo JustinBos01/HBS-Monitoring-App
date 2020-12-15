@@ -1,3 +1,8 @@
+/* @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+table {
+    width: 100%;
+  } */
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -28,7 +33,7 @@ tr:nth-child(odd) {
     background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);
     font-size: 15px;
-    max-height: 500px;
+    max-height: 650px;
     overflow-x: hidden;
     overflow-y: auto;
 }

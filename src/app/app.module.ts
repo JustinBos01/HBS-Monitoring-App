@@ -1,8 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+
+
 
 import { AppComponent } from './app.component';
 import { UserPageComponent } from './user-page/user-page.component';
@@ -23,6 +26,10 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ParadataGroupComponent } from './paradata-group/paradata-group.component';
 import { ParadataUserComponent } from './paradata-user/paradata-user.component';
 import { ModalComponent } from './modal/modal.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator'
+import {MatSortModule} from '@angular/material/sort';
+import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component'
 
 @NgModule({
   
@@ -31,6 +38,10 @@ import { ModalComponent } from './modal/modal.component';
     HttpClientModule,
     ReactiveFormsModule,
     HttpClientJsonpModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},
       {path: 'menu', component: MenuPageComponent},
@@ -39,6 +50,7 @@ import { ModalComponent } from './modal/modal.component';
       {path: 'groups/:groupId', component: GroupPageComponent},
       {path: 'paradata-group/:groupId', component: ParadataGroupComponent},
       {path: 'paradata-user/:userId', component: ParadataUserComponent},
+      {path: 'graphs/:groupId', component: ParadataUserComponent},
       {path: 'phone', component: PhonePageComponent},
       {path: 'receipt', component: ReceiptPageComponent},
       {path: 'createUsers', component: CreateUsersComponent}])
@@ -60,7 +72,8 @@ import { ModalComponent } from './modal/modal.component';
     GroupOverviewComponent,
     ParadataGroupComponent,
     ParadataUserComponent,
-    ModalComponent
+    ModalComponent,
+    ParadataGraphPageComponent
   ],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

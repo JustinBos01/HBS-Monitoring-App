@@ -138,7 +138,6 @@ export class CreateUsersComponent implements OnInit {
 
       this.randomUsernameString = tag + this.idString;
       newMadeUID.push(this.randomUsernameString)
-
       if (this.allUsernames.includes(newMadeUID[newMadeUID.length-1]) == false && this.allUsernames.includes(this.randomUsernameString) == false){
         this.createUsersService.userString.push({name : this.randomUsernameString, password : this.passwordString });
         this.allUsernames.push(newMadeUID[newMadeUID.length-1])
@@ -147,12 +146,11 @@ export class CreateUsersComponent implements OnInit {
       } else {
         this.unableAdditionAmount += 1
       }
-
+      console.log(this.createUsersService.userString[0])
       i += 1;
     }
 
     i=0
-    this.createUsersService.userString.length = 0;
     var newMadeUID = []
     var _i = 0
 
@@ -183,7 +181,7 @@ export class CreateUsersComponent implements OnInit {
         console.log(this.userDataString)
         _i += 1
     }
-
+    
     this.configService.createMultipleUsers()
     .subscribe(users => {
       this.users = users;

@@ -27,6 +27,10 @@ export class GroupOverviewComponent implements OnInit {
   emptyGroups = [];
   statusFilter = "all";
   isEmpty: boolean;
+  alteredFilter = 'all';
+  givenFilterValue;
+  
+
   constructor(
     public navigation: TopBarService,
     public configService: ConfigService,
@@ -57,7 +61,6 @@ export class GroupOverviewComponent implements OnInit {
     this.configService.createGroup(userData.groupName, userData.key, userData.value)
       .subscribe(groupdata => {
         this.groupData = groupdata;
-        console.log(this.groupData);
         window.location.reload();
       })
       
@@ -74,7 +77,6 @@ export class GroupOverviewComponent implements OnInit {
 
   renameGroup(groupId, oldName) {
     this.newGroupName = document.getElementById('group'+groupId)
-    console.log(this.newGroupName.value)
     this.configService.renameGroup(oldName, this.newGroupName.value)
     .subscribe()
   }
@@ -82,9 +84,9 @@ export class GroupOverviewComponent implements OnInit {
   
 
   goToPage(givenGroupName, givenGroupId, event) {
-    
     this.groupOverviewService.chosenGroup = givenGroupName;
     localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
+    localStorage.setItem('chosenGroupId', givenGroupId)
     this.router.navigate(['/groups', givenGroupId])
   }
 
@@ -93,7 +95,6 @@ export class GroupOverviewComponent implements OnInit {
     this.groupOverviewService.chosenGroup = givenGroupName;
     localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
     this.router.navigate(['/paradata-group', givenGroupId])
-    console.log(givenGroupName, givenGroupId)
   }
 
   deleteGroups() {
@@ -135,4 +136,101 @@ export class GroupOverviewComponent implements OnInit {
       }
     )
   }
+
+  filter(functionType, filterValue) {
+    localStorage.setItem('filterValue', filterValue)
+    this.alteredFilter = functionType
+    this.configService.getGroups()
+      .subscribe(groups => {
+        if (this.alteredFilter == 'enabled' && filterValue != '') {
+          functionType = 'enabled + filter'
+        } else 
+        if (this.alteredFilter == 'enabled' && filterValue == '') {
+          functionType = 'enabled'
+        } else 
+        if (this.alteredFilter == 'disabled' && filterValue != '') {
+          functionType = 'disabled + filter'
+        } else 
+        if (this.alteredFilter == 'disabled' && filterValue == '') {
+          functionType = 'disabled'
+        } else 
+        if (this.alteredFilter == 'empty' && filterValue != '') {
+          functionType = 'empty + filter'
+        } else
+        if (this.alteredFilter == 'empty' && filterValue == '') {
+          functionType = 'empty'
+        } else if (this.alteredFilter == 'all' && filterValue != '') {
+          functionType = 'all + filter'
+        } else if (this.alteredFilter == 'all' && filterValue == '') {
+          functionType = 'all'
+        }
+
+        this.groups = groups;
+        if (functionType == 'enabled'){
+          this.alteredFilter = 'enabled';
+          this.groups = this.groups.filter(this.filterEnabled)
+        } else
+        if (functionType == 'disabled'){
+          this.alteredFilter = 'disabled';
+          this.groups = this.groups.filter(this.filterDisabled)
+        } else
+        if (functionType == 'empty'){
+          this.alteredFilter = 'empty';
+          this.groups = this.groups.filter(this.filterEmpty)
+        } else
+        if (functionType == "all") {
+          this.alteredFilter = 'all';
+          this.groups = this.groups.filter(this.revertFilter)
+        } else
+        if (functionType == 'enabled + filter') {
+          this.groups = this.groups.filter(this.filterEnabled)
+          this.groups = this.groups.filter(this.filterEnabledQuery)
+        } else 
+        if (functionType == 'disabled + filter') {
+          this.groups = this.groups.filter(this.filterDisabled)
+          this.groups = this.groups.filter(this.filterDisabledQuery)
+        } else
+        if (functionType == 'empty + filter') {
+          this.groups = this.groups.filter(this.filterEmpty)
+          this.groups = this.groups.filter(this.filterEmptyQuery)
+        } else
+        if (functionType == 'all + filter') {
+          this.groups = this.groups.filter(this.filterNormal)
+        }
+      })
+    }
+
+  filterEnabled(element, index, array) {
+    return element.group.status == "enabled"
+  }
+
+  filterDisabled(element, index, array) {
+    return element.group.status == "disabled"
+  }
+  
+  filterEmpty(element, index, array) {
+    return element.group.users == 0
+  }
+
+  filterEnabledQuery(element, index, array) {
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+  }
+
+  filterDisabledQuery(element, index, array) {
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+  }
+
+  filterEmptyQuery(element, index, array) {
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+  }
+
+  revertFilter(element, index, array) {
+    return element
+  }
+
+  filterNormal(element, index, array) {
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+  }
+  
+  
 }
