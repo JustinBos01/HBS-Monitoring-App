@@ -29,7 +29,7 @@
         </div>
 
         <div class="table-item" *ngIf='paradataSelection.value != ""'>
-            <table #receiptMatTbl id='receiptMatTbl' mat-table [dataSource]='receiptDataSource' matSort *ngIf="paradataSelection.value == 'Receipts' && receiptDataSource">
+            <table #receiptMatTbl id='receiptMatTbl' mat-table [dataSource]='receiptDataSource' matSort *ngIf="paradataSelection.value == 'Receipts' && paradata">
 
 
                 <ng-container matColumnDef="userName">
@@ -51,25 +51,11 @@
                 <tr mat-header-row *matHeaderRowDef="receiptParadataColumns"></tr>
                 <tr mat-row *matRowDef="let myRowData; columns: receiptParadataColumns"></tr>
                 
-                <!-- <tr>
-                    <th>Username</th>
-                    <th>Date</th>
-                    <th>Receipts</th>
-                </tr>
-                <tr *ngFor="let data of paradata; index as paraDataId">
-                    <td *ngIf="filterInput.value == ''">{{data.userName}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.date}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.receipts}}</td>
-
-                    <td *ngIf="filterInput.value == data.userName">{{data.userName}}</td>
-                    <td *ngIf="filterInput.value == data.userName">{{data.date}}</td>
-                    <td *ngIf="filterInput.value == data.userName">{{data.receipts}}</td>
-                </tr> -->
             </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Receipts'" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator *ngIf="paradataSelection.value == 'Receipts' && paradata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
             
-            <table #phoneMatTbl id='phoneMatTbl' mat-table [dataSource]='phoneDataSource' *ngIf="paradataSelection.value == 'Phones' && phoneDataSource" matSort>
+            <table #phoneMatTbl id='phoneMatTbl' mat-table [dataSource]='phoneDataSource' *ngIf="paradataSelection.value == 'Phones' && phoneParadata" matSort>
                 <ng-container matColumnDef="userName">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
                     <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
@@ -115,10 +101,10 @@
                 <tr mat-row *matRowDef="let myRowData; columns: phoneParadataColumns"></tr>
                 
             </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Phones'" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator *ngIf="paradataSelection.value == 'Phones' && phoneParadata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
 
-            <table #activityMatTbl id='activityMatTbl' mat-table [dataSource]='activityDataSource' *ngIf="paradataSelection.value == 'Activities' && activityDataSource" matSort>
+            <table #activityMatTbl id='activityMatTbl' mat-table [dataSource]='activityDataSource' *ngIf="paradataSelection.value == 'Activities' && activityParadata" matSort>
                 <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
                     <td mat-cell *matCellDef="let element"> {{element.year}}/{{element.month}}/{{element.day}} </td>
@@ -146,45 +132,15 @@
                 
                 <tr mat-header-row *matHeaderRowDef="activityParadataColumns"></tr>
                 <tr mat-row *matRowDef="let myRowData; columns: activityParadataColumns"></tr>
-                <!-- <tr>
-                    <th>Date<br>YYYY/MM/DD</th>
-                    <th>Time<br></th>
-                    <th>Username</th>
-                    <th>Page</th>
-                    <th>Action</th>
-                </tr>
-                <tr>
-                    <td><input></td>
-                    <td><input></td>
-                    <td><input></td>
-                    <td><input></td>
-                    <td><input></td>
-                </tr>
-                <tr *ngFor="let data of activityParadata; index as paraDataId">
-                    <td *ngIf="filterInput.value == ''">{{data.year}}/{{data.month}}/{{data.day}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.hour}}:{{data.min}}:{{data.sec}}.{{data.msec}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.userName}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.objectName}}</td>
-                    <td *ngIf="filterInput.value == ''">{{data.action}}</td>
-                    
-                    
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.userName}}</td>
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneName}}</td>
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneType}}</td>
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneManufacturer}}</td>
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.phoneModel}}</td>
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.receipts}}</td>
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.products}}</td>
-                    <td *ngIf="filterInput.value == data.userName || filterInput.value == data.phoneName || filterInput.value == data.phoneType || filterInput.value == data.phoneManufacturer || filterInput.value == data.phoneModel">{{data.photos}}</td>
-
-                </tr> -->
+                
             </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Activities'" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator *ngIf="paradataSelection.value == 'Activities' && activityParadata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
 
             <div style="text-align: center;">
-                <label *ngIf="paradataSelection.value == 'Receipts' && !phoneParadata"><b>There is no receipt paradata for this group</b></label>
+                <label *ngIf="paradataSelection.value == 'Receipts' && !paradata"><b>There is no receipt paradata for this group</b></label>
                 <label *ngIf="paradataSelection.value == 'Phones' && !phoneParadata"><b>There is no phone paradata for this group</b></label>
+                <label *ngIf="paradataSelection.value == 'Activities' && !activityParadata"><b>There is no activity paradata for this group</b></label>
             </div>
             <table *ngIf='paradataSelection.value == "test1"'>
                 <tr>
@@ -201,4 +157,5 @@
         </div>
     </div>
 </body>
-<button (click)='navigate()'>Graphs</button>
+<button mat-button (click)='navigate()'>Graphs</button>`
+

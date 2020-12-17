@@ -29,6 +29,8 @@ import { ModalComponent } from './modal/modal.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator'
 import {MatSortModule} from '@angular/material/sort';
+import {MatStepperModule} from '@angular/material/stepper'
+import { MatSelectModule } from "@angular/material/select";
 import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component'
 
 @NgModule({
@@ -43,6 +45,8 @@ import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph
     MatPaginatorModule,
     MatSortModule,
     BrowserAnimationsModule,
+    MatStepperModule,
+    MatSelectModule,
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},
       {path: 'menu', component: MenuPageComponent},

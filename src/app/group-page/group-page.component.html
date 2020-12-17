@@ -35,7 +35,7 @@
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
     </div><br>
     <div class='groupInfos-item'>
-        <label *ngIf="chosenGroupInfos.length == 0"><b>There seems to be no groupInfos for this group</b></label>
+        <label *ngIf="chosenGroupInfos.length == 0 && (amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no groupInfos for this group</b></label>
         <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
             <tr>
                 <th>Key</th>
@@ -52,10 +52,12 @@
                 </td>
             </tr>
             <tr *ngFor="let value of addedValues; let index = index">
-                <td><input id="newKey{{index}}" type="text" name="name{{index}}" (keyup.enter)='createNewGroupInfos()'></td>
-                <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keyup.enter)='createNewGroupInfos()'></td>
+                <td><input id="newKey{{index}}" type="text" name="name{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
+                <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
             </tr>
-        </table>
+            
+        </table><br>
+        <button *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0' (click)="createNewGroupInfos()">Apply</button>
     </div>
         <!--
          -->

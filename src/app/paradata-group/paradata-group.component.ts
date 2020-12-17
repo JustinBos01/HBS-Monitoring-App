@@ -114,9 +114,8 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
           this.paradata = data;
           this.paradata = this.paradata.receiptsPerDays;
           for (let element of this.paradata){
-            if (element.userName.includes(filterValue)){
+            if (element.userName.toLowerCase().includes(filterValue.toLowerCase())){
               this.filteredReceiptData.push(element)
-
             }
           }
           this.receiptDataSource = this.filteredReceiptData
@@ -124,6 +123,8 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
       } else {
         this.getAmountOfReceipts()
       }
+      this.receiptDataSource.sort = this.sort;
+      this.receiptDataSource.paginator = this.paginator;
     }
 
     if (selectedTable == 'Phones') {
@@ -133,7 +134,7 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
           this.phoneParadata = this.phoneParadata.receiptsPerPhones;
           
           for (let element of this.phoneParadata){
-            if (element.userName.includes(filterValue) || element.phoneType.includes(filterValue) || element.phoneManufacturer.includes(filterValue) || element.phoneModel.includes(filterValue)){
+            if (element.userName.toLowerCase().includes(filterValue.toLowerCase()) || element.phoneType.toLowerCase().includes(filterValue.toLowerCase()) || element.phoneManufacturer.toLowerCase().includes(filterValue.toLowerCase()) || element.phoneModel.toLowerCase().includes(filterValue.toLowerCase())){
               this.filteredPhoneData.push(element)
             }
           }
@@ -151,7 +152,7 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
           this.activityParadata = this.activityParadata.paradataDateTimes;
           
           for (let element of this.activityParadata){
-            if (element.userName.includes(filterValue) || element.objectName.includes(filterValue) || element.action.includes(filterValue)){
+            if (element.userName.toLowerCase().includes(filterValue.toLowerCase()) || element.objectName.toLowerCase().includes(filterValue.toLowerCase()) || element.action.toLowerCase().includes(filterValue.toLowerCase())){
               this.filteredActivityData.push(element)
             }
           }

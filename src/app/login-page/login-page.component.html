@@ -6,17 +6,17 @@
         <label for="name">
           Name
         </label>
-      <input id="name" type="text" formControlName="name">
+      <input id="name" type="text" formControlName="name" (keydown.enter)="onSubmit(loginForm.value)">
     </div>
     <br>
       <div>
         <label for="address">
           Password
         </label>
-        <input id="password" type="password" formControlName="password">
+        <input id="password" type="password" formControlName="password" (keydown.enter)="onSubmit(loginForm.value)">
       </div>
     <br>
-    <button id='loginBtn' type="button" (click)="onSubmit(loginForm.value)" [routerLink]="['menu']">Login</button>
+    <button id='loginBtn' type="button" (click)="onSubmit(loginForm.value)">Login</button>
             
   </form>
 </body>

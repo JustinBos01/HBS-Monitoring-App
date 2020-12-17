@@ -1,14 +1,68 @@
-<label *ngFor='let element of phoneData'>{{element.userName}}</label>
-<label *ngFor='let element of receiptsData'>{{element.phoneManufacturer}}</label>
-<label *ngFor='let element of activityData'>{{element.action}}</label>
+<div class="grid-container">
+    <div class="description-item">
+        <select #paradataSelection (change)="paradataSelection.value = paradataSelection.value">
+            <option value=""></option>
+            <option value="Devices">Devices</option>
+            <option value="Receipts">Receipts</option>
+            <option value="Status">Status (all groups)</option>
+        </select><br><br>
+        <select #deviceInfoTypeSelection  value="" (change)='deviceInfoTypeSelection.value = deviceInfoTypeSelection.value'>
+            <option value=''></option>
+            <option value='OS'>OS</option>
+            <option value='Phone Model'>Phone Model</option>
+        </select><br>
 
-<div>
-    <canvas baseChart 
-    [data]="pieChartData" 
-    [labels]="pieChartLabels" 
-    [chartType]="pieChartType"
-    [options]="pieChartOptions"
-    [plugins]="pieChartPlugins"
-    [legend]="pieChartLegend">
-    </canvas>
+        <label *ngIf="paradataSelection.value == 'Receipts'">
+            <!-- Floor: <input #floorInput type="number"  min="0" value='7' (change)="floorInput.value = floorInput.value" max="{{scopeMinInput.value}}"><br> -->
+            First limit: <input #scopeMinInput type="number"  min=0 value=7 (change)='scopeMinInput.value = scopeMinInput.value; getReceiptAmount(scopeMinInput.value, scopeMaxInput.value)' max={{scopeMaxInput.value}}><br>
+            Second limit: <input #scopeMaxInput type="number" min={{scopeMinInput.value}} value=14 (change)='scopeMaxInput.value = scopeMaxInput.value; getReceiptAmount(scopeMinInput.value, scopeMaxInput.value)'><br>
+            <!-- Roof: <input #roofInput type="number" min="{{scopeMaxInput.value}}" value='{{scopeMaxInput.value}}' (change)='roofInput.value = roofInput.value'><br> -->
+        </label><br>
+
+        <label #devicesDescription *ngIf="paradataSelection.value == 'Devices'">You have selected to view the paradata of <b>Devices</b></label>
+        <label #receiptsDescription *ngIf="paradataSelection.value == 'Receipts'">
+            You have selected to view the paradata of <b>Receipts</b>.<br>
+            The receipts are values uploaded by the users of the corresponding research which contain the data of their daily expenses. The data shown below are the receipts <b>per day</b>, but they are not specifically uploaded by one user.
+            One bar may therefore contain multiple days of one user (and ofcourse other users).<br><br>
+            Above are <b>two inputs</b>. The first input is meant for setting the <b>first limit of the bar chart</b>. The first limit of the bar chart contains the data where the first set of data will be devided from the second set of data.
+            The second input is meant for setting the <b>second limit of the bar chart</b>. The second limit of the bar chart contains the data where the second set of data gets devided from the third set of data.<br><br>
+            The first set of data contains the values which contain the amount users on each day where <b>the floor value is equal to zero</b> and <b>the maximum amount of receipts is equal to the first input</b>.<br>
+            The second set of data contains the values which contain the amount users on each day where <b>the floor value is equal to the first input</b> and <b>the maximum amount of receipts is equal to the second input</b>.<br>
+            The third set of data contains the values which contain the amount users on each day where <b>the floor value is equal to the second input</b> and <b>the maximum amount of receipts is non existent</b>.
+        </label>
+        <label #statusDescription *ngIf="paradataSelection.value == 'Status'">
+            You have selected to view the paradata of <b>Status</b>.<br>
+            Within this selection, the application will show you the spread for the overall amount of enabled groups and the overall amount of disabled groups. All groups are shown on the <b><a [routerLink]="['/overview']">Overview Page</a></b>, but you can enable/disable a group on the next corresponding page of that group by doubleclicking on that group and pressing the <b>Enable</b> or <b>Disable</b> button in the top box of that page.<br>
+            Now for the usabiltity of this information. The status of a group contains the information whether all users in the corresponding group are finished with the research or if they are still participating in one.
+        </label>
+    </div>
+    <div class="graph-item" *ngIf="paradataSelection.value != ''" style='text-align: center;'>
+        <br>
+        <canvas *ngIf='paradataSelection.value == "Devices" && deviceDifference.length != 0' baseChart 
+        [data]="deviceDoughnutChartData"
+        [labels]="deviceDoughnutChartLabels"
+        [chartType]="deviceDoughnutChartType">
+        </canvas>
+        
+        <canvas *ngIf='deviceInfoTypeSelection.value == "Phone Model" && phoneTypes.length != 0' baseChart 
+        [data]="phoneModelDoughnutChartData"
+        [labels]="phoneModelDoughnutChartLabels"
+        [chartType]="phoneModelDoughnutChartType">
+        </canvas>
+
+        <canvas *ngIf='paradataSelection.value == "Receipts" && receiptsSplit.length != 0' baseChart
+        [datasets]="receiptsBarChartData"
+        [labels]="receiptsBarChartLabels"
+        [options]="receiptsBarChartOptions"
+        [plugins]="receiptsBarChartPlugins"
+        [legend]="receiptsBarChartLegend"
+        [chartType]="receiptsBarChartType"></canvas>
+
+        <canvas *ngIf='paradataSelection.value == "Status"' baseChart 
+        [data]="statusDoughnutChartData"
+        [labels]="statusDoughnutChartLabels"
+        [chartType]="statusDoughnutChartType">
+        </canvas><br><label *ngIf='paradataSelection.value == "Status"'><b>{{enabledPercentage}}% is enabled</b></label>
+        <br>
+    </div>
 </div>

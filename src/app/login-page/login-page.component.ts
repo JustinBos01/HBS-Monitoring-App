@@ -4,6 +4,7 @@ import { UserPageService } from '../user-page/user-page.service'
 import { LoginPageService } from '../login-page/login-page.service'
 import { ConfigService } from '../config/config.service';
 import { TopBarService } from '../top-bar/top-bar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -25,6 +26,7 @@ export class LoginPageComponent implements OnInit {
     private formBuilder: FormBuilder,
     public configService: ConfigService,
     public navigation: TopBarService,
+    private router: Router,
   ) {
     this.loginForm = this.formBuilder.group({
       name: '',
@@ -48,5 +50,6 @@ export class LoginPageComponent implements OnInit {
     
     localStorage.setItem('superUserData.name', this.loginPageService.superUserData.name);
     localStorage.setItem('superUserData.password', this.loginPageService.superUserData.password);
+    this.router.navigate(['/menu'])
   }
 }

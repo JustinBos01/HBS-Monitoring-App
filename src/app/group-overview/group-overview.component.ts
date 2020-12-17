@@ -213,15 +213,15 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   filterEnabledQuery(element, index, array) {
-    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
 
   filterDisabledQuery(element, index, array) {
-    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
 
   filterEmptyQuery(element, index, array) {
-    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
 
   revertFilter(element, index, array) {
@@ -229,7 +229,7 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   filterNormal(element, index, array) {
-    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue')) || element.group.name.toUpperCase().includes(localStorage.getItem('filterValue'))
+    return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
   
   
