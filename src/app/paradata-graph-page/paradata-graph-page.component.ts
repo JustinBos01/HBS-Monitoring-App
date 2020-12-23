@@ -25,7 +25,9 @@ export class ParadataGraphPageComponent implements OnInit {
   enabledPercentage;
   statusDifference = [];
   newPhoneType = [];
-  phoneTypes = []
+  phoneModels = []
+  phoneModelsAmount = []
+  phoneModelName = []
   devicesConfirmation = false;
 
   receiptsBarChartOptions: ChartOptions = {
@@ -47,8 +49,8 @@ export class ParadataGraphPageComponent implements OnInit {
   statusDoughnutChartData: MultiDataSet = [this.statusDifference];
   statusDoughnutChartType: ChartType = 'doughnut';
 
-  phoneModelDoughnutChartLabels: Label[] = [this.newPhoneType];
-  phoneModelDoughnutChartData: MultiDataSet = [this.phoneTypes];
+  phoneModelDoughnutChartLabels: Label[] = this.phoneModelName;
+  phoneModelDoughnutChartData: MultiDataSet = [this.phoneModelsAmount];
   phoneModelDoughnutChartType: ChartType = 'doughnut';
 
   constructor(
@@ -87,14 +89,15 @@ export class ParadataGraphPageComponent implements OnInit {
       this.phoneData = this.phoneData.receiptsPerPhones;
       
       this.getModel(this.phoneData, newPhoneType)
-      this.phoneTypes.length = newPhoneType.length
+      this.phoneModels.length = 0
       var index = 0;
       for (let element of newPhoneType) {
-        localStorage.setItem('phoneModel', element)
-        this.getAmountPhoneModels(newPhoneType, this.phoneTypes[index])
+        localStorage.setItem('phoneModel', element.phoneModel)
+        this.phoneModelName.push(element.phoneModel)
+        this.phoneModels[index] = this.phoneData.filter(this.getAmountPhoneModels)
+        this.phoneModelsAmount.push(this.phoneModels[index].length)
         index +=1
       }
-      console.log(this.phoneTypes)
       this.iPhoneData = this.phoneData.filter(this.getIphones)
       this.androidData = this.phoneData.filter(this.getAndroid)
       this.deviceDifference.push(this.iPhoneData.length, this.androidData.length)
@@ -139,17 +142,13 @@ export class ParadataGraphPageComponent implements OnInit {
   }
 
   getAmountPhoneModels(element, index) {
-    for (let phone of element){
-      if (phone.phoneModel == localStorage.getItem('phoneModel')){
-        index += 1
-      }
-    }
+    return element.phoneModel == localStorage.getItem('phoneModel')
   }
 
   getModel(element, newPhoneType) {
     for (let phone of element){
       if (newPhoneType.includes(phone.phoneModel) == false){
-        newPhoneType.push(phone.phoneModel)
+        newPhoneType.push(phone)
       }
     }
   }

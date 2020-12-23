@@ -80,6 +80,7 @@ export class CreateUsersComponent implements OnInit {
     this.userName = ''
     this.userPassword = ''
     this.createUsersService.userString.length = 0;
+    this.userDataStringExcel = '';
     this.superUserDataString = '';
     this.unableAddition.length = 0;
 
@@ -146,7 +147,6 @@ export class CreateUsersComponent implements OnInit {
       } else {
         this.unableAdditionAmount += 1
       }
-      console.log(this.createUsersService.userString[0])
       i += 1;
     }
 
@@ -178,7 +178,6 @@ export class CreateUsersComponent implements OnInit {
           this.unableAdditionAmount -= 1;
           i+= 1
         }
-        console.log(this.userDataString)
         _i += 1
     }
     
@@ -195,6 +194,7 @@ export class CreateUsersComponent implements OnInit {
     this.userPassword = ''
     this.createUsersService.userString.length = 0;
     this.superUserDataString = '';
+    this.userDataStringExcel = '';
     this.unableAddition.length = 0;
     this.allUsernames = [];
     

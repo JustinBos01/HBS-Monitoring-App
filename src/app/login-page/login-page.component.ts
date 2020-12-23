@@ -50,6 +50,6 @@ export class LoginPageComponent implements OnInit {
     
     localStorage.setItem('superUserData.name', this.loginPageService.superUserData.name);
     localStorage.setItem('superUserData.password', this.loginPageService.superUserData.password);
-    this.router.navigate(['/menu'])
+    this.router.navigate(['/overview'])
   }
 }

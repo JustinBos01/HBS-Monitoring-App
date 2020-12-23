@@ -29,7 +29,8 @@ export class GroupOverviewComponent implements OnInit {
   isEmpty: boolean;
   alteredFilter = 'all';
   givenFilterValue;
-  
+  totalUsers;
+  allUsers;
 
   constructor(
     public navigation: TopBarService,
@@ -54,11 +55,12 @@ export class GroupOverviewComponent implements OnInit {
   ngOnInit(): void {
     //localStorage.setItem('chosenGroup', '')
     this.navigation.hide();
-    this.showGroupResponse()
+    this.showGroupResponse();
+    this.getAllUsers();
   }
 
   createGroup(userData) {
-    this.configService.createGroup(userData.groupName, userData.key, userData.value)
+    this.configService.createGroup(userData.groupName, "", "")
       .subscribe(groupdata => {
         this.groupData = groupdata;
         window.location.reload();
@@ -232,5 +234,13 @@ export class GroupOverviewComponent implements OnInit {
     return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
   
+  getAllUsers() {
+    this.configService.getAllUsers()
+    .subscribe(users => {
+        this.allUsers = users;
+        this.allUsers = this.allUsers.userNames.length
+      }
+    )
+  }
   
 }

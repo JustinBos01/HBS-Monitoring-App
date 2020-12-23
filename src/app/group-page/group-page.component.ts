@@ -8,6 +8,7 @@ import { GroupOverviewService } from '../group-overview/group-overview.service';
 import { TopBarService } from '../top-bar/top-bar.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-group-page',
   templateUrl: './group-page.component.html',
@@ -109,8 +110,6 @@ export class GroupPageComponent implements OnInit {
   }
   
   changeGroupInfos() {
-    this.keyChangeInfos = '';
-    this.valueChangeInfos = '';
     this.groupPageService.groupInfosString.length = 0;
     for (let group of this.groups){
       if (this.chosenGroup == group.group.name){
@@ -248,5 +247,20 @@ export class GroupPageComponent implements OnInit {
     localStorage.setItem('chosenUser', givenUserName)
     this.router.navigate(['/paradata-user', givenUserId])
     console.log(givenUserName, givenUserId)
+  }
+
+
+  filterOnUsers(filterValue) {
+    localStorage.setItem('filterValue', filterValue)
+    this.configService.getUsersOfGroup(this.chosenGroup)
+    .subscribe(users => {
+        this.user = users;
+        this.user = this.user.filter(this.filterUsers)
+      }
+    )
+  }
+
+  filterUsers(element, index, array) {
+    return element.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
 }

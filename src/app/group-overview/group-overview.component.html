@@ -32,24 +32,12 @@
             </label>
             <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="">
         </div>
-        <div>
-            <label for="key">
-            Key
-            </label>
-            <input id="key" formControlName="key">
-        </div>
-        <div>
-            <label for="value">
-            Value
-            </label>
-            <input id="value" formControlName="value">
-        </div>
         <p>
             <button *ngIf='newGroupNameTbx.value != ""' class="button" type="submit">Create Group</button>
             <button class="button" type="button" (click)="deleteGroups()">Delete empty groups</button>
             <label #warningLbl id='warningLbl' style="visibility: hidden;"></label><br><br>
             
-            
+            <label>Total users: {{allUsers}}</label>
         </p>
     </form>
     </div>
@@ -62,4 +50,4 @@
         <button *ngIf='this.statusFilter != "all"' (click)='this.statusFilter = "all"; filter("all", groupFilter.value)'>Show All</button>
     </div>
 </div>
-<button [routerLink]="['/menu']">Back</button>
+<button [routerLink]="['/']">Log out</button>

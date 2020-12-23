@@ -36,15 +36,15 @@
             Now for the usabiltity of this information. The status of a group contains the information whether all users in the corresponding group are finished with the research or if they are still participating in one.
         </label>
     </div>
-    <div class="graph-item" *ngIf="paradataSelection.value != ''" style='text-align: center;'>
+    <div class="graph-item" *ngIf="paradataSelection.value != ''" style='text-align: center;'>  
         <br>
-        <canvas *ngIf='paradataSelection.value == "Devices" && deviceDifference.length != 0' baseChart 
+        <canvas *ngIf='paradataSelection.value == "Devices" && deviceDifference.length != 0 && deviceInfoTypeSelection.value == ""' baseChart 
         [data]="deviceDoughnutChartData"
         [labels]="deviceDoughnutChartLabels"
         [chartType]="deviceDoughnutChartType">
         </canvas>
         
-        <canvas *ngIf='deviceInfoTypeSelection.value == "Phone Model" && phoneTypes.length != 0' baseChart 
+        <canvas *ngIf='deviceInfoTypeSelection.value == "Phone Model" && phoneModels.length != 0' baseChart 
         [data]="phoneModelDoughnutChartData"
         [labels]="phoneModelDoughnutChartLabels"
         [chartType]="phoneModelDoughnutChartType">
@@ -62,7 +62,21 @@
         [data]="statusDoughnutChartData"
         [labels]="statusDoughnutChartLabels"
         [chartType]="statusDoughnutChartType">
-        </canvas><br><label *ngIf='paradataSelection.value == "Status"'><b>{{enabledPercentage}}% is enabled</b></label>
+        </canvas>
+        <br><label *ngIf='paradataSelection.value == "Status"'><b>{{enabledPercentage}}% is enabled</b></label>
         <br>
     </div>
+    <div class='extra-information-item' *ngIf='paradataSelection.value == "Devices" && deviceInfoTypeSelection.value == "Phone Model"'>
+        <label><h1>Added information</h1></label><br>
+        <label><h3>Phone types:</h3></label><br>
+        <label *ngFor="let modelName of newPhoneType; index as modelNameId">
+            <label *ngFor="let element of phoneModels; index as elementId">
+                <label *ngIf='modelNameId == elementId'><b>{{modelName.phoneType}}</b> | <i>{{modelName.phoneModel}}</i>: </label>
+                <label *ngIf='modelNameId == elementId'>{{element.length}}<br></label>
+            </label>
+        </label>
+        <hr>
+    </div>
+
+    
 </div>
