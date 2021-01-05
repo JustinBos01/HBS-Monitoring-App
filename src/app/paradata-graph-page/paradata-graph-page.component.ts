@@ -29,7 +29,11 @@ export class ParadataGraphPageComponent implements OnInit {
   phoneModelsAmount = []
   phoneModelName = []
   devicesConfirmation = false;
-
+  showGraph = false;
+  showDeviceDoughnutGraph = false;
+  showPhoneModelDoughnutGraph = false;
+  chosenGroup;
+  
   receiptsBarChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -58,6 +62,7 @@ export class ParadataGraphPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.chosenGroup = localStorage.getItem("chosenGroup")
     this.getParadata()
     this.getDevicePercentage(this.newPhoneType)
     this.getGroupStatusDifference()
@@ -131,6 +136,23 @@ export class ParadataGraphPageComponent implements OnInit {
         console.log(this.statusDifference)
         this.enabledPercentage = (this.enabledGroups.length / (this.disabledGroups.length+this.enabledGroups.length)) * 100
       })
+  }
+
+  selectionChange(givenValue) {
+    this.showDeviceDoughnutGraph = false
+    this.showPhoneModelDoughnutGraph = false
+    console.log(givenValue)
+    if (givenValue != "") {
+      this.showGraph = true
+      if (givenValue == "OS") {
+        this.showDeviceDoughnutGraph = true
+      } else if (givenValue == "Phone Model") {
+        this.showPhoneModelDoughnutGraph = true
+      }
+    } else {
+      this.showGraph = false
+    }
+
   }
 
   getIphones(element) {

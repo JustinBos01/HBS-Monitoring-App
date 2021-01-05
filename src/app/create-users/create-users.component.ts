@@ -5,6 +5,7 @@ import { ConfigService } from '../config/config.service';
 import { CreateUsersService } from './create-users.service'
 import { newlyCreatedUsers } from '../users';
 import * as saveAs from 'file-saver';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-create-users',
@@ -36,7 +37,9 @@ export class CreateUsersComponent implements OnInit {
   unableAdditionAmount = 0;
   allUsernames = [];
   allUsers;
-
+  arrayBuffer:any;
+  file:File;
+  userImportAddition;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -79,10 +82,16 @@ export class CreateUsersComponent implements OnInit {
   createUsers() {
     this.userName = ''
     this.userPassword = ''
+    this.userDataString = '';
     this.createUsersService.userString.length = 0;
     this.userDataStringExcel = '';
     this.superUserDataString = '';
     this.unableAddition.length = 0;
+    this.allUsernames.length = 0;
+
+    for (let index of this.allUsers.userNames) {
+      this.allUsernames.push(index.name)
+    }
 
     for (let index of this.values) {
       this.userName = document.getElementById("name"+index);
@@ -90,7 +99,7 @@ export class CreateUsersComponent implements OnInit {
       this.userName = this.userName.value;
       this.userPassword = this.userPassword.value;
       
-      if (this.userName != '' && this.userPassword != '' && this.allUsernames.includes(this.userName) == false){
+      if (this.userName != '' && this.userPassword != '' && this.allUsernames.includes(this.userName) == false ){
         this.allUsernames.push(this.userName)
         this.createUsersService.userString.push({name : this.userName, password : this.userPassword })
         this.userDataString = this.userDataString + '' + String(this.createUsersService.userString[index].name) + ';' + String(this.createUsersService.userString[index].password) + ';\n'
@@ -101,8 +110,8 @@ export class CreateUsersComponent implements OnInit {
 
     this.configService.createMultipleUsers()
     .subscribe(_ => {
-      let file = new Blob(['username;', 'password;\n', this.userDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
-      if (this.userDataStringExcel != ''){
+        if (this.userDataString.length != 0){
+        let file = new Blob(['username;', 'password;\n', this.userDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
         saveAs(file, 'NewPasswords.csv');
       }
     })
@@ -117,6 +126,7 @@ export class CreateUsersComponent implements OnInit {
     this.unableAddition.length = 0;
     this.unableAdditionAmount = 0;
     var newMadeUID = []
+    this.allUsernames.length = 0;
     
     for (let index of this.allUsers.userNames) {
       this.allUsernames.push(index.name)
@@ -218,13 +228,55 @@ export class CreateUsersComponent implements OnInit {
     .subscribe(users => {
       this.users = users;
       let file = new Blob(['username;', 'password;\n', this.superUserDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
-      if (this.userDataStringExcel != ''){
-        saveAs(file, 'NewSuPasswords.csv')
-      }
+      saveAs(file, 'NewSuPasswords.csv')
     })
   }
 
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
   }
+
+  onFileChange(event: any) {
+    this.unableAddition.length = 0;
+    for (let index of this.allUsers.userNames) {
+      this.allUsernames.push(index.name)
+    }
+    this.createUsersService.userString.length = 0
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length !== 1) {
+      throw new Error('Cannot use multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.readAsBinaryString(target.files[0]);
+    reader.onload = (e: any) => {
+      /* create workbook */
+      const binarystr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
+
+      /* selected the first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* save data */
+      this.userString = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
+      console.log(this.userString);
+      for (let i of this.userString){
+        if (i.password[0] == '#') {
+          i.password = i.password.substring(1, i.password.length)
+        }
+        if (this.allUsernames.includes(i.username) == false){
+          this.createUsersService.userString.push({name: i.username, password: i.password})
+        } else {
+          this.unableAddition.push(i.username)
+        }
+      }
+      console.log(this.createUsersService.userString); // Data will be logged in array format containing objects
+    }
+  }
+
+  onSubmitted() {
+    this.configService.createMultipleUsers().subscribe()
+  }
+
 }

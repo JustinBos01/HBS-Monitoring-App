@@ -1,12 +1,12 @@
 <div class="grid-container">
     <div class="description-item">
-        <select #paradataSelection (change)="paradataSelection.value = paradataSelection.value">
+        <select #paradataSelection (change)="paradataSelection.value = paradataSelection.value; showGraph = false; showDeviceDoughnutGraph = false; showPhoneModelDoughnutGraph = false;">
             <option value=""></option>
             <option value="Devices">Devices</option>
             <option value="Receipts">Receipts</option>
             <option value="Status">Status (all groups)</option>
         </select><br><br>
-        <select #deviceInfoTypeSelection  value="" (change)='deviceInfoTypeSelection.value = deviceInfoTypeSelection.value'>
+        <select #deviceInfoTypeSelection *ngIf='paradataSelection.value == "Devices"' value="" (change)='deviceInfoTypeSelection.value = deviceInfoTypeSelection.value; selectionChange(deviceInfoTypeSelection.value)'>
             <option value=''></option>
             <option value='OS'>OS</option>
             <option value='Phone Model'>Phone Model</option>
@@ -36,21 +36,25 @@
             Now for the usabiltity of this information. The status of a group contains the information whether all users in the corresponding group are finished with the research or if they are still participating in one.
         </label>
     </div>
-    <div class="graph-item" *ngIf="paradataSelection.value != ''" style='text-align: center;'>  
-        <br>
-        <canvas *ngIf='paradataSelection.value == "Devices" && deviceDifference.length != 0 && deviceInfoTypeSelection.value == ""' baseChart 
+    <div class="graph-item" *ngIf="paradataSelection.value != ''" >
+        
+        
+        <label *ngIf='paradataSelection.value == "Devices" && !showGraph'>No charts selected</label>
+        <canvas *ngIf='paradataSelection.value == "Devices" && deviceDifference.length != 0 && showDeviceDoughnutGraph' height="94%" baseChart 
         [data]="deviceDoughnutChartData"
         [labels]="deviceDoughnutChartLabels"
         [chartType]="deviceDoughnutChartType">
         </canvas>
         
-        <canvas *ngIf='deviceInfoTypeSelection.value == "Phone Model" && phoneModels.length != 0' baseChart 
+        <canvas *ngIf='showPhoneModelDoughnutGraph && phoneModels.length != 0' height="94%"baseChart 
         [data]="phoneModelDoughnutChartData"
         [labels]="phoneModelDoughnutChartLabels"
         [chartType]="phoneModelDoughnutChartType">
         </canvas>
 
-        <canvas *ngIf='paradataSelection.value == "Receipts" && receiptsSplit.length != 0' baseChart
+        <canvas *ngIf='paradataSelection.value == "Receipts" && receiptsSplit.length != 0' 
+        height="94%"
+            baseChart
         [datasets]="receiptsBarChartData"
         [labels]="receiptsBarChartLabels"
         [options]="receiptsBarChartOptions"
@@ -58,23 +62,27 @@
         [legend]="receiptsBarChartLegend"
         [chartType]="receiptsBarChartType"></canvas>
 
-        <canvas *ngIf='paradataSelection.value == "Status"' baseChart 
+        <canvas *ngIf='paradataSelection.value == "Status"' height="94%" baseChart 
         [data]="statusDoughnutChartData"
         [labels]="statusDoughnutChartLabels"
         [chartType]="statusDoughnutChartType">
         </canvas>
-        <br><label *ngIf='paradataSelection.value == "Status"'><b>{{enabledPercentage}}% is enabled</b></label>
-        <br>
     </div>
-    <div class='extra-information-item' *ngIf='paradataSelection.value == "Devices" && deviceInfoTypeSelection.value == "Phone Model"'>
-        <label><h1>Added information</h1></label><br>
-        <label><h3>Phone types:</h3></label><br>
+
+    <div class='extra-information-item' *ngIf='(paradataSelection.value != "")'>
+        <label><h1>Added information</h1></label>
+        <label><h3>Phone types:</h3></label>
+
+        <label>| Group: {{chosenGroup}} |</label><br>
         <label *ngFor="let modelName of newPhoneType; index as modelNameId">
             <label *ngFor="let element of phoneModels; index as elementId">
                 <label *ngIf='modelNameId == elementId'><b>{{modelName.phoneType}}</b> | <i>{{modelName.phoneModel}}</i>: </label>
                 <label *ngIf='modelNameId == elementId'>{{element.length}}<br></label>
             </label>
         </label>
+        <hr>
+        <label><h1>Status</h1></label>
+        <label>{{enabledPercentage}}% of all groups are enabled</label>
         <hr>
     </div>
 

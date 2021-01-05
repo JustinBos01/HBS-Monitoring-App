@@ -31,6 +31,8 @@ export class GroupOverviewComponent implements OnInit {
   givenFilterValue;
   totalUsers;
   allUsers;
+  confirmationCheck = false;
+  singleConfirmationCheck = false;
 
   constructor(
     public navigation: TopBarService,
@@ -63,7 +65,7 @@ export class GroupOverviewComponent implements OnInit {
     this.configService.createGroup(userData.groupName, "", "")
       .subscribe(groupdata => {
         this.groupData = groupdata;
-        window.location.reload();
+        this.showGroupResponse()
       })
       
   }
@@ -80,7 +82,11 @@ export class GroupOverviewComponent implements OnInit {
   renameGroup(groupId, oldName) {
     this.newGroupName = document.getElementById('group'+groupId)
     this.configService.renameGroup(oldName, this.newGroupName.value)
-    .subscribe()
+    .subscribe(_ => 
+      {
+        this.showGroupResponse();
+      }
+    )
   }
 
   
@@ -109,10 +115,11 @@ export class GroupOverviewComponent implements OnInit {
     for (let empty of this.emptyGroups){
       this.configService.deleteGroupInfos(empty).subscribe(nv => 
         {
-          this.configService.deleteEmptyGroups(empty).subscribe(nv => 
+          this.configService.deleteEmptyGroups(empty).subscribe(nv =>
             {
               if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
-                window.location.reload()
+                //window.location.reload()
+                this.showGroupResponse()
               }
             }
           )
@@ -132,7 +139,7 @@ export class GroupOverviewComponent implements OnInit {
       {
         this.configService.deleteSingleEmptyGroup(groupName)
         .subscribe(nv => {
-          window.location.reload();
+            this.showGroupResponse()
           }
         )
       }
@@ -235,6 +242,7 @@ export class GroupOverviewComponent implements OnInit {
   }
   
   getAllUsers() {
+    
     this.configService.getAllUsers()
     .subscribe(users => {
         this.allUsers = users;
@@ -242,5 +250,7 @@ export class GroupOverviewComponent implements OnInit {
       }
     )
   }
+
+  
   
 }

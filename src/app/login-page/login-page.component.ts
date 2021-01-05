@@ -36,8 +36,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    localStorage.setItem('superUserData.name', '');
-    localStorage.setItem('superUserData.password', '');
+    localStorage.clear()
     this.items = this.userPageService.getItems();
     this.navigation.hide();
     

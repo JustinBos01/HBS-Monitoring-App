@@ -28,8 +28,10 @@
     </form>
     <div *ngIf='unableAddition.length != 0'>
         <label *ngIf='unableAddition.length != 0'>The following users could not be added: </label>
-        <label *ngFor='let index of unableAddition'><b>{{index}}, </b></label>
+        <label *ngFor='let index of unableAddition'><b>{{index}} <ng-container *ngIf='index != unableAddition[unableAddition.length-1]'>| </ng-container> <ng-container *ngIf='index == unableAddition[unableAddition.length-1]'>.</ng-container></b></label>
 
         <label *ngIf='unableAdditionAmount != 0'>{{unableAdditionAmount}}</label>
     </div>
+    <input type="file" style="display: inline-block;"  placeholder="Upload file" accept=".csv, .xlsx" (change)='onFileChange($event)'>
+    <button (click)="onSubmitted()">Submit the file</button>
 </div>

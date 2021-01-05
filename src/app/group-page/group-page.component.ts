@@ -46,6 +46,7 @@ export class GroupPageComponent implements OnInit {
     key: '',
     value: ''
   }]
+  allGroupNames = [];
 
   constructor(
     public configService: ConfigService,
@@ -69,7 +70,6 @@ export class GroupPageComponent implements OnInit {
     ;}
 
   ngOnInit(): void {
-    
     this.showGroupResponse()
     this.getUsersOfGroup()
     this.navigation.hide()
@@ -84,11 +84,17 @@ export class GroupPageComponent implements OnInit {
     )
   }
 
+  
+
   showGroupResponse() {
+    this.allGroupNames.length = 0;
     this.configService.getGroups()
       .subscribe(groups => {
         this.groups = groups;
         this.getGroupInfosAmount()
+        for (let group of this.groups){
+          this.allGroupNames.push(group.group.name)
+        }
       }
     )    
   }
@@ -173,11 +179,14 @@ export class GroupPageComponent implements OnInit {
   }
 
   regroupUsers(userId, correspondingUser) {
-    this.newGroup = document.getElementById('group'+userId)
-    this.configService.regroupUsers(correspondingUser, this.newGroup.value)
-    .subscribe(_ => {
-      window.location.reload()
-    })
+    if (this.newGroup != '') {
+      this.newGroup = document.getElementById('group'+userId)
+      this.configService.regroupUsers(correspondingUser, this.newGroup.value)
+      .subscribe(_ => {
+        this.getUsersOfGroup()
+      })
+    }
+    
   }
 
   regroupGroup(reGroupValue) {

@@ -34,8 +34,10 @@
         </div>
         <p>
             <button *ngIf='newGroupNameTbx.value != ""' class="button" type="submit">Create Group</button>
-            <button class="button" type="button" (click)="deleteGroups()">Delete empty groups</button>
-            <label #warningLbl id='warningLbl' style="visibility: hidden;"></label><br><br>
+            <button *ngIf='confirmationCheck == false' class="button" type="button" (click)="confirmationCheck = true">Delete empty groups</button>
+            <label *ngIf='confirmationCheck == true'><br>Are you sure you want to delete <b>all empty groups</b>?<br>
+            <button class='button' type='button' (click)="confirmationCheck = false; deleteGroups();">Yes</button> |
+            <button class='button' type='button' (click)="confirmationCheck = false">No</button></label><br><br>
             
             <label>Total users: {{allUsers}}</label>
         </p>

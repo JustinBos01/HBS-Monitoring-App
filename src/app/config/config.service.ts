@@ -162,6 +162,7 @@ export class ConfigService {
   }
 
   createMultipleUsers(): Observable<Users[]> {
+    console.log(this.createUsersService.userString)
     var configUrl = 'http://localhost:4200/budget/users/create';
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},

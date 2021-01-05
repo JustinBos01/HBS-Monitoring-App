@@ -1,3 +1,4 @@
+
 .graph-item {
     grid-area: graph;
     background-color: lightgray;
@@ -5,7 +6,13 @@
     font-size: 15px;
     overflow-x: hidden;
     overflow-y: auto;
+    
+    width: 1600px;
+    max-width: 1600px;
+    height: 500px;
 }
+
+
 
 .description-item {
     grid-area: desc;
@@ -23,6 +30,8 @@
     font-size: 15px;
     overflow-x: hidden;
     overflow-y: auto;
+    width: 270px;
+    text-align: center;
 }
 
 

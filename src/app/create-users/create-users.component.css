@@ -41,7 +41,6 @@ tr:nth-child(odd) {
 }
 
 .grid-container {
-    
     display: grid;
     grid-template-areas:
         'UAAmount'

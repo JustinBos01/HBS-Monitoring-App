@@ -22,7 +22,14 @@
             <tr *ngFor="let user of user; index as userId">
                 <td>{{user.name}}</td>
                 <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
-                <td><input id='group{{userId}}' value='{{chosenGroup}}' (keyup.enter)="regroupUsers(userId, user.name)"></td>
+                <td>
+                    <select #group{{userId}} id='group{{userId}}' (change)="regroupUsers(userId, user.name)">
+                        <option></option>
+                        <ng-container *ngFor='let groupName of allGroupNames'>
+                            <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
+                        </ng-container>
+                    </select>
+                </td>
             </tr>
         </table><br>
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
@@ -72,3 +79,4 @@
     
 </div>
 <button [routerLink]="['/overview']" class='back'>Back</button>
+
