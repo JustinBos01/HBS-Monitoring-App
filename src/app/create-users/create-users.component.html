@@ -1,12 +1,19 @@
 <div class="grid-container">
-    <form [formGroup]='createUsersForm'>
-        <div id='createUsersItem' name='createUsersItem' class="userAdditionAmount">
-            <label>Enter the amount of users that needs to be added: </label>
-            <input #amountInput id='amountInput' type="number" formControlName="userAmount" (change)='addvalue(amountInput.value)' min="0">
-        </div>
-    </form>
     <form [formGroup]='inputForm'>
-        <div class="userAddition">
+        <form [formGroup]='createUsersForm'>
+            <div id='createUsersItem' name='createUsersItem' class="userAdditionAmount">
+                <label>Enter the amount of users that needs to be added: </label>
+                <input #amountInput id='amountInput' type="number" formControlName="userAmount" (change)='addvalue(amountInput.value)' min="0"><br><br>
+                <button (click)="createSuperUsers()" type="button">Add To Superusers Group</button><br>
+                <button (click)='createUsers()' type="button" *ngIf='chosenGroup != "superuser"'>Add Users</button><br><br>
+                <label>Corresponding tag: </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' value="" (keyup)='tagTbx.value = tagTbx.value' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*">
+                <button *ngIf='tagTbx.value != ""' class="button" type="submit" (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br><br>
+                <label>Add users through an excel file: </label>
+                <input type="file" style="display: inline-block;"  placeholder="Upload file" accept=".csv, .xlsx" (change)='onFileChange($event)'> |
+                <button (click)="onSubmitted()">Submit file</button>
+            </div><br>
+        </form>
+        <div class="userAddition" *ngIf='amountInput.value > 0'>
             <table>
                 <tr>
                     <th>Username</th>
@@ -19,19 +26,13 @@
             </tr></table><br><br>
             
         </div>
-        <div>
-            <button (click)="createSuperUsers()" type="button">Add To Superusers Group</button><br>
-            <button (click)='createUsers()' type="button" *ngIf='chosenGroup != "superuser"'>Add Users</button><br>
-            <label>Corresponding tag: </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' value="" (keyup)='tagTbx.value = tagTbx.value' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*">
-            <button *ngIf='tagTbx.value != ""' class="button" type="submit" (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br>
-        </div>
+        
     </form>
     <div *ngIf='unableAddition.length != 0'>
         <label *ngIf='unableAddition.length != 0'>The following users could not be added: </label>
         <label *ngFor='let index of unableAddition'><b>{{index}} <ng-container *ngIf='index != unableAddition[unableAddition.length-1]'>| </ng-container> <ng-container *ngIf='index == unableAddition[unableAddition.length-1]'>.</ng-container></b></label>
 
         <label *ngIf='unableAdditionAmount != 0'>{{unableAdditionAmount}}</label>
-    </div>
-    <input type="file" style="display: inline-block;"  placeholder="Upload file" accept=".csv, .xlsx" (change)='onFileChange($event)'>
-    <button (click)="onSubmitted()">Submit the file</button>
+    </div><br>
+    
 </div>

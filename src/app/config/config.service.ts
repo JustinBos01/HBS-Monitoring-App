@@ -285,5 +285,15 @@ export class ConfigService {
         "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
         "group": {"name" : localStorage.getItem('chosenGroup')}
        });
-  } 
+  }
+
+  getUserReceiptPhotos(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/dashboard/userreceipts';
+    return this.http.post<Users[]>(
+      configUrl, {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+        "group" : {"name" : localStorage.getItem('chosenGroup')},
+        "user" : {"name" : localStorage.getItem('chosenUser')}
+       });
+  }
 }

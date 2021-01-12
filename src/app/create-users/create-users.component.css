@@ -37,7 +37,13 @@ tr:nth-child(odd) {
 
 .userAdditionAmount {
     grid-area: UAAmount;
-    max-height: 40%;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    max-height: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: left;
 }
 
 .grid-container {

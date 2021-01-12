@@ -1,4 +1,4 @@
-<span (click)='navigation.toggle()' style='cursor: pointer;'>&#9776; Navigation</span>
+
 <div class="grid-container">
     <div id='welcome-item' class="welcome-item">
         <label style="font-size: large;">Welcome to the <b> group overview page</b>. <br>On this page you are able to manage the existing groups for the HBS research.</label>
@@ -24,7 +24,7 @@
         </table>
     </div>
     <div class='create-group'>
-    <form [formGroup]="createGroupForm" (ngSubmit)="createGroup(createGroupForm.value)" >
+    <form [formGroup]="createGroupForm" >
         <br>
         <div>
             <label for="groupName">
@@ -33,7 +33,7 @@
             <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="">
         </div>
         <p>
-            <button *ngIf='newGroupNameTbx.value != ""' class="button" type="submit">Create Group</button>
+            <button *ngIf='newGroupNameTbx.value != ""' class="button" type="submit" (click)='createGroup(createGroupForm.value); groupFilter.value = ""; this.statusFilter = "all"; newGroupNameTbx.value = ""; filter("all", groupFilter.value)'>Create Group</button>
             <button *ngIf='confirmationCheck == false' class="button" type="button" (click)="confirmationCheck = true">Delete empty groups</button>
             <label *ngIf='confirmationCheck == true'><br>Are you sure you want to delete <b>all empty groups</b>?<br>
             <button class='button' type='button' (click)="confirmationCheck = false; deleteGroups();">Yes</button> |

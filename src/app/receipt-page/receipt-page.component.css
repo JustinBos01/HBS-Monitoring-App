@@ -1,0 +1,65 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    align-self: center;
+}
+
+th {
+    background-color: black;
+    color: white;
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+td {
+    text-align: center;
+    border: 1px solid gray;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+
+img {
+    height:40%;
+    width: 20%;
+}
+
+.receipt-photos-item {
+    grid-area: rpi;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+
+.receipt-product-item {
+    grid-area: rprodi;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'rpi'
+        'rprodi';
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.grid-container > div {
+    background-color: lightgray;
+    padding: 20px 0;
+    font-size: 15px;
+}

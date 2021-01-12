@@ -7,6 +7,7 @@ import { GroupPageService } from './group-page.service';
 import { GroupOverviewService } from '../group-overview/group-overview.service';
 import { TopBarService } from '../top-bar/top-bar.service';
 import { Router } from '@angular/router';
+import { basename } from 'path';
 
 
 @Component({
@@ -47,6 +48,9 @@ export class GroupPageComponent implements OnInit {
     value: ''
   }]
   allGroupNames = [];
+  userReceiptData;
+  userReceiptImg = [];
+  userReceiptProductsInfo = [];
 
   constructor(
     public configService: ConfigService,
@@ -271,5 +275,10 @@ export class GroupPageComponent implements OnInit {
 
   filterUsers(element, index, array) {
     return element.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
+  }
+
+  userClick(clickedUser) {
+    localStorage.setItem('chosenUser', clickedUser);
+    this.router.navigate(['/receipts', clickedUser]);
   }
 }

@@ -1,1 +1,40 @@
-<p>receipt-page works!</p>
+<div class="grid-container">
+    <div class='receipt-photos-item'>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Photo</th>
+            </tr>
+        
+            <tr *ngFor="let element of userReceiptImg; index as elementId">
+                <td>{{elementId}}</td>
+                <td><img [src]="'data:image/jpg;base64,'+element.base64Img" /></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class='receipt-product-item'>
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+            <tr *ngFor='let element of userReceiptProductsInfo'>
+                <td>
+                    <ng-container *ngFor="let productInReceipt of element.product">
+                        {{productInReceipt}}<br>
+                    </ng-container>
+                </td>
+                <td>
+                    <ng-container *ngFor="let categoryInReceipt of element.productCategory">
+                        {{categoryInReceipt}}<br>
+                    </ng-container>
+                </td>
+                <td>€{{element.price}}</td>
+                <td>{{element.productDate}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

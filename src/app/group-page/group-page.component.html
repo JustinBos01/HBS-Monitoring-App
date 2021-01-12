@@ -1,4 +1,4 @@
-<span (click)='navigation.toggle()' style='cursor: pointer;'>&#9776; Navigation</span>
+
 <div class="grid-container">
     <div class='management-item'>
         <label #statusLbl id='statusLbl'>Down below are the users in the group: <b>{{chosenGroup}}</b></label><br><br>
@@ -19,12 +19,12 @@
                 <th>Password</th>
                 <th>Group</th>
             </tr>
-            <tr *ngFor="let user of user; index as userId">
+            <tr *ngFor="let user of user; index as userId" (dblclick)="userClick(user.name)" style="cursor: pointer;">
                 <td>{{user.name}}</td>
                 <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
                 <td>
                     <select #group{{userId}} id='group{{userId}}' (change)="regroupUsers(userId, user.name)">
-                        <option></option>
+                        <option>{{chosenGroup}}</option>
                         <ng-container *ngFor='let groupName of allGroupNames'>
                             <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
                         </ng-container>
@@ -78,5 +78,9 @@
     </div>
     
 </div>
+<!-- <ng-container *ngFor='let element of userReceiptImg'>
+    <label>{{element.base64image}}</label>
+    <img [src]="'data:image/jpg;base64,'+element.base64Img" style="height: 20%; width: 20%;"/>
+</ng-container> -->
 <button [routerLink]="['/overview']" class='back'>Back</button>
 

@@ -1,11 +1,13 @@
 <div class="grid-container">
     <div class="description-item">
+        <label>Select a Paradata Set: </label>
         <select #paradataSelection (change)="paradataSelection.value = paradataSelection.value; showGraph = false; showDeviceDoughnutGraph = false; showPhoneModelDoughnutGraph = false;">
             <option value=""></option>
             <option value="Devices">Devices</option>
             <option value="Receipts">Receipts</option>
             <option value="Status">Status (all groups)</option>
         </select><br><br>
+        <label *ngIf='paradataSelection.value == "Devices"'>Select specific paradata: </label>
         <select #deviceInfoTypeSelection *ngIf='paradataSelection.value == "Devices"' value="" (change)='deviceInfoTypeSelection.value = deviceInfoTypeSelection.value; selectionChange(deviceInfoTypeSelection.value)'>
             <option value=''></option>
             <option value='OS'>OS</option>

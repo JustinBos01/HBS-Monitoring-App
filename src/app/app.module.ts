@@ -57,7 +57,7 @@ import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph
       {path: 'paradata-user/:userId', component: ParadataUserComponent},
       {path: 'graphs/:groupId', component: ParadataGraphPageComponent},
       {path: 'phone', component: PhonePageComponent},
-      {path: 'receipt', component: ReceiptPageComponent},
+      {path: 'receipts/:userId', component: ReceiptPageComponent},
       {path: 'createUsers', component: CreateUsersComponent}])
   ],
   declarations: [
