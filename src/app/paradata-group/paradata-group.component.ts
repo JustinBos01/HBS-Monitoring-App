@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfigService } from '../config/config.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./paradata-group.component.css']
 })
 
-export class ParadataGroupComponent implements AfterViewInit, OnInit {
+export class ParadataGroupComponent implements OnInit {
   paradata;
   phoneParadata;
   activityParadata;
@@ -44,9 +44,7 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
     this.getActivityParadata()
   }
 
-  ngAfterViewInit(): void {
-  }
-
+  //set paradata tables
   valuechange(selectedTable) {
     if (selectedTable == "") {
       this.availableFilters = '';
@@ -68,6 +66,7 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
     }
   }
 
+  //get all receipt paradata
   getAmountOfReceipts() {
     this.configService.getAmountOfReceipts().subscribe(data => {
       this.paradata = data;
@@ -75,10 +74,10 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
       this.receiptDataSource = new MatTableDataSource(this.paradata);
       this.receiptDataSource.sort = this.sort;
       this.receiptDataSource.paginator = this.paginator;
-      
     })
   }
 
+  //get all phone paradata
   getPhoneParadata() {
     this.configService.getPhoneParadata().subscribe(data => {
       this.phoneParadata = data;
@@ -89,6 +88,7 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
     })
   }
 
+  //get all event paradata
   getActivityParadata() {
     this.configService.getActivityParadata().subscribe(data => {
       this.activityParadata = data;
@@ -99,14 +99,15 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
     })
   }
 
+  //filter values, depends on selected paradata table
   filterChange(selectedTable, filterValue) {
-    this.filteredReceiptData.length = 0
-    this.receiptDataSource = []
-    this.filteredPhoneData.length = 0
-    this.phoneDataSource = []
-    this.receiptDataSource = []
-    this.filteredActivityData.length = 0
-    this.activityDataSource = []
+    this.filteredReceiptData.length = 0;
+    this.receiptDataSource = [];
+    this.filteredPhoneData.length = 0;
+    this.phoneDataSource = [];
+    this.receiptDataSource = [];
+    this.filteredActivityData.length = 0;
+    this.activityDataSource = [];
     
     if (selectedTable == 'Receipts') {
       if (filterValue != '') {
@@ -162,9 +163,9 @@ export class ParadataGroupComponent implements AfterViewInit, OnInit {
         this.getActivityParadata()
       }
     }
-    
   }
 
+  //go to graph page
   navigate() {
     console.log(localStorage.getItem("chosenGroupId"))
     this.router.navigate(['/graphs', localStorage.getItem('chosenGroupId')])

@@ -80,6 +80,7 @@ export class GroupPageComponent implements OnInit {
     this.chosenGroup = localStorage.getItem('chosenGroup')
   }
 
+  //get all users in the selected group
   getUsersOfGroup() {
     this.configService.getUsersOfGroup(this.chosenGroup)
     .subscribe(users => {
@@ -88,8 +89,7 @@ export class GroupPageComponent implements OnInit {
     )
   }
 
-  
-
+  //get all groups, also collects all group names for later functionalities
   showGroupResponse() {
     this.allGroupNames.length = 0;
     this.configService.getGroups()
@@ -100,9 +100,10 @@ export class GroupPageComponent implements OnInit {
           this.allGroupNames.push(group.group.name)
         }
       }
-    )    
+    )
   }
 
+  //enable selected group
   enableGroup() {
     this.configService.enableGroup()
       .subscribe(_ => {
@@ -111,6 +112,7 @@ export class GroupPageComponent implements OnInit {
     ) 
   }
 
+  //disable selected groups
   disableGroup() {
     this.configService.disableGroup()
       .subscribe(_ => {
@@ -119,30 +121,36 @@ export class GroupPageComponent implements OnInit {
     )
   }
   
+  //change group infos, still a bug somewhere in this function
   changeGroupInfos() {
     this.groupPageService.groupInfosString.length = 0;
     for (let group of this.groups){
       if (this.chosenGroup == group.group.name){
         for (var index in group.groupInfos){
+          //get all added key/value values
           this.keyChangeInfos = document.getElementById("key"+index);
           this.valueChangeInfos = document.getElementById("value"+index);
           this.keyChangeInfos = this.keyChangeInfos.value
           this.valueChangeInfos = this.valueChangeInfos.value
+          //adds key/value values to infos collection
           this.groupPageService.groupInfosString.push({key : this.keyChangeInfos, value : this.valueChangeInfos})
         }
       }
     }
     
+    //execute change for group infos, this function can mean adding, changing or deleting groupinfos
     this.configService.changeGroupInfos()
     .subscribe(_ => {
       window.location.reload()
     })
   }
   
+  //create new group infos, adds group infos to already existing group infos collection (which can be empty)
   createNewGroupInfos() {
     this.keyChangeInfos = '';
     this.valueChangeInfos = '';
     this.groupPageService.groupInfosString.length = 0;
+    //gets existing group infos
     for (let group of this.groups){
       if (this.chosenGroup == group.group.name){
         for (var index in group.groupInfos){
@@ -155,6 +163,7 @@ export class GroupPageComponent implements OnInit {
       }
     }
 
+    //gets new group infos
     for (var index in this.addedValues) {
       this.keyChangeInfos = document.getElementById("newKey"+index);
       this.valueChangeInfos = document.getElementById("newValue"+index);
@@ -169,19 +178,19 @@ export class GroupPageComponent implements OnInit {
     })
   }
   
-  
+  //change password of a user
   changePassword(userId, correspondingUser) {
     this.newPassword = document.getElementById('passwordValue'+userId)
     this.configService.changePassword(correspondingUser, this.newPassword.value)
     .subscribe()
     
-  
     this.configService.getUsersOfGroup(this.configService.chosenGroup)
     .subscribe(users => {
         this.user = users;
     })
   }
 
+  //regroup single user
   regroupUsers(userId, correspondingUser) {
     if (this.newGroup != '') {
       this.newGroup = document.getElementById('group'+userId)
@@ -190,9 +199,9 @@ export class GroupPageComponent implements OnInit {
         this.getUsersOfGroup()
       })
     }
-    
   }
 
+  //regroup entire group
   regroupGroup(reGroupValue) {
     this.configService.regroupGroup(this.configService.chosenGroup, reGroupValue)
     .subscribe(_ => {
@@ -200,6 +209,7 @@ export class GroupPageComponent implements OnInit {
     })
   }
 
+  //counts amount of new textboxes to create
   addvalue(amount) {
     this.values.length = 0;
     this.addedValues.length = 0;
@@ -212,10 +222,9 @@ export class GroupPageComponent implements OnInit {
     }
   }
 
+  //gets existing group infos amount
   getGroupInfosAmount() {
-    
     for (let group of this.groups) {
-      
       if (group.group.name == this.chosenGroup) {
         try {
           for (let index of group.groupInfos) {
@@ -229,14 +238,7 @@ export class GroupPageComponent implements OnInit {
     }
   }
 
-  changeLabelName(lbl, val) {
-    document.getElementById(lbl).innerHTML = val;
-  }
-
-  getRandomNumberBetween(min,max){
-    return Math.floor(Math.random()*(max-min+1)+min);
-  }
-
+  //duplicate group (doesn't copy users, does copy group infos)
   duplicateGroup(newGroupName) {
     this.chosenGroupInfos.length = 0;
     this.getGroupInfosAmount();
@@ -250,19 +252,14 @@ export class GroupPageComponent implements OnInit {
     })
   }
 
+  //delete all groupinfos of selected group
   deleteGroupInfos() {
     this.configService.deleteGroupInfos(localStorage.getItem('chosenGroup')).subscribe(_ => {
       window.location.reload()
     })
   }
 
-  goToParaDataPage(givenUserName, givenUserId, event) {
-    localStorage.setItem('chosenUser', givenUserName)
-    this.router.navigate(['/paradata-user', givenUserId])
-    console.log(givenUserName, givenUserId)
-  }
-
-
+  //filter users
   filterOnUsers(filterValue) {
     localStorage.setItem('filterValue', filterValue)
     this.configService.getUsersOfGroup(this.chosenGroup)
@@ -273,10 +270,12 @@ export class GroupPageComponent implements OnInit {
     )
   }
 
+  //filter on username
   filterUsers(element, index, array) {
     return element.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
 
+  //go to receipts page
   userClick(clickedUser) {
     localStorage.setItem('chosenUser', clickedUser);
     this.router.navigate(['/receipts', clickedUser]);

@@ -43,6 +43,7 @@ export class LoginPageComponent implements OnInit {
   }
 
 
+  //saves login data
   onSubmit(userData) {
     this.loginPageService.superUserData = userData;
     this.items = this.userPageService.clearItems();

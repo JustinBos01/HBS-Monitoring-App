@@ -7,6 +7,7 @@ import { ConfigService } from '../config/config.service';
   templateUrl: './receipt-page.component.html',
   styleUrls: ['./receipt-page.component.css']
 })
+
 export class ReceiptPageComponent implements OnInit {
 
   userReceiptProductsInfo = [];
@@ -16,8 +17,6 @@ export class ReceiptPageComponent implements OnInit {
   receiptCategory = [];
   dates = [];
   
-
-
   constructor(
     public configService: ConfigService
   ) {}
@@ -26,6 +25,7 @@ export class ReceiptPageComponent implements OnInit {
     this.getUserReceiptData();
   }
 
+  //get receipt data function
   getUserReceiptData() {
     this.receiptCategory = [];
     var boughtProduct = [];
@@ -33,6 +33,7 @@ export class ReceiptPageComponent implements OnInit {
     var productsOnReceipt = [];
 
     this.userReceiptProductsInfo.length = 0
+
     this.configService.getUserReceiptPhotos().subscribe(receiptData => {
         this.userReceiptData = receiptData;
         this.userReceiptData = this.userReceiptData.receiptsData
@@ -42,19 +43,22 @@ export class ReceiptPageComponent implements OnInit {
         var date;
 
         for (let receipt of this.userReceiptData) {
-          
+          //check if receipt is an img
           if (receipt.image.base64image != ""){
             this.userReceiptImg.push({store: receipt.transaction.store, storeType: receipt.transaction.storeType, receiptProductType: receipt.transaction.receiptProductType, base64Img: receipt.image.base64image})
           }
 
+          //check if receipt contains raw data
           if (receipt.products != null) {
             boughtProduct = [];
             category = [];
 
             for (let element of receipt.products) {
+              //get products and categories of products on receipt
               boughtProduct.push(element.product);
               category.push(element.productCategory);
             }
+            //get date value and format it
             date = receipt.products[0].productDate.substring(0, 4) + - + receipt.products[0].productDate.substring(4, 6) + - + receipt.products[0].productDate.substring(6)
 
             receiptCategory.push(category)

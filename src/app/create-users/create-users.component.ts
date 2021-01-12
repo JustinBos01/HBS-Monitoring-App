@@ -72,6 +72,7 @@ export class CreateUsersComponent implements OnInit {
     this.values.splice(i,1);
   }
 
+
   addvalue(amount) {
     this.values.length = 0
     for (var _i = 0; _i < amount; _i++) {
@@ -79,6 +80,7 @@ export class CreateUsersComponent implements OnInit {
     }
   }
 
+  //create users manually by entering a password/username for them
   createUsers() {
     this.userName = ''
     this.userPassword = ''
@@ -89,6 +91,7 @@ export class CreateUsersComponent implements OnInit {
     this.unableAddition.length = 0;
     this.allUsernames.length = 0;
 
+    //get all usernames
     for (let index of this.allUsers.userNames) {
       this.allUsernames.push(index.name)
     }
@@ -111,12 +114,14 @@ export class CreateUsersComponent implements OnInit {
     this.configService.createMultipleUsers()
     .subscribe(_ => {
         if (this.userDataString.length != 0){
+          //create excel file with new users
         let file = new Blob(['username;', 'password;\n', this.userDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
         saveAs(file, 'NewPasswords.csv');
       }
     })
   }
 
+  //create random users function
   createRandomUsers(tag) {
     this.createUsersService.userString.length = 0;
     this.idString = '';
@@ -128,9 +133,12 @@ export class CreateUsersComponent implements OnInit {
     var newMadeUID = []
     this.allUsernames.length = 0;
     
+    //get all usernames
     for (let index of this.allUsers.userNames) {
       this.allUsernames.push(index.name)
     }
+
+    //set index variable
     var i = 0;
     for (let index of this.values) {
       
@@ -164,6 +172,7 @@ export class CreateUsersComponent implements OnInit {
     var newMadeUID = []
     var _i = 0
 
+    //no duplicate names, this checks if a name has been entered in the db yet, will keep going until the entered amount has been added
     while (this.unableAdditionAmount != 0) {
         this.idString = '';
         this.passwordString = '';
@@ -199,6 +208,7 @@ export class CreateUsersComponent implements OnInit {
     })
   }
 
+  //create superuser function
   createSuperUsers(){
     this.userName = ''
     this.userPassword = ''
@@ -232,49 +242,57 @@ export class CreateUsersComponent implements OnInit {
     })
   }
 
+  //randomize numbers for password/username
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
+  //handle file import
   onFileChange(event: any) {
     this.unableAddition.length = 0;
     for (let index of this.allUsers.userNames) {
       this.allUsernames.push(index.name)
     }
     this.createUsersService.userString.length = 0
-    /* wire up file reader */
+
+    // wire up file reader
     const target: DataTransfer = <DataTransfer>(event.target);
     if (target.files.length !== 1) {
       throw new Error('Cannot use multiple files');
     }
+
     const reader: FileReader = new FileReader();
     reader.readAsBinaryString(target.files[0]);
+
     reader.onload = (e: any) => {
-      /* create workbook */
+      // create workbook
       const binarystr: string = e.target.result;
       const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
 
-      /* selected the first sheet */
+      // selected the first sheet
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
       /* save data */
-      this.userString = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
-      console.log(this.userString);
+      this.userString = XLSX.utils.sheet_to_json(ws);
+
       for (let i of this.userString){
+        //remove # if it is the first index of the password string
         if (i.password[0] == '#') {
           i.password = i.password.substring(1, i.password.length)
         }
+
+        //check for duplicate usernames
         if (this.allUsernames.includes(i.username) == false){
           this.createUsersService.userString.push({name: i.username, password: i.password})
         } else {
           this.unableAddition.push(i.username)
         }
       }
-      console.log(this.createUsersService.userString); // Data will be logged in array format containing objects
     }
   }
 
+  //uploads imported file
   onSubmitted() {
     this.configService.createMultipleUsers().subscribe()
   }

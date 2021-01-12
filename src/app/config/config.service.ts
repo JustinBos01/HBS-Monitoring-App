@@ -61,7 +61,7 @@ export class ConfigService {
       
     }
   
-  
+  //get all data functions
   getConfig() {
     var configUrl = 'http://localhost:4200/budget/users/list';
     return this.http.get<Users[]>(configUrl);

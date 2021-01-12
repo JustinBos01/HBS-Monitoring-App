@@ -70,6 +70,7 @@ export class ParadataGraphPageComponent implements OnInit {
     this.getReceiptAmount(7, 14)
   }
 
+  //get paradata
   getParadata() {
     this.configService.getAmountOfReceipts().subscribe(data => {
       this.receiptsData = data;
@@ -87,6 +88,7 @@ export class ParadataGraphPageComponent implements OnInit {
     })
   }
 
+  //get percentage of each device types
   getDevicePercentage(newPhoneType) {
     this.configService.getPhoneParadata().subscribe(data => {
       this.deviceDifference.length = 0
@@ -109,6 +111,7 @@ export class ParadataGraphPageComponent implements OnInit {
     })
   }
 
+  //get amount of receipts and split them in 3 categories
   getReceiptAmount(firstLimit, secondLimit) {
     this.configService.getAmountOfReceipts().subscribe(data => {
       this.receiptsSplit.length = 0;
@@ -125,6 +128,7 @@ export class ParadataGraphPageComponent implements OnInit {
     })
   }
 
+  //get enabled/disabled split in percentages
   getGroupStatusDifference() {
     this.configService.getGroups()
       .subscribe(groups => {
@@ -138,6 +142,7 @@ export class ParadataGraphPageComponent implements OnInit {
       })
   }
 
+  //show correct graphs
   selectionChange(givenValue) {
     this.showDeviceDoughnutGraph = false
     this.showPhoneModelDoughnutGraph = false
@@ -152,9 +157,9 @@ export class ParadataGraphPageComponent implements OnInit {
     } else {
       this.showGraph = false
     }
-
   }
 
+  //get paradata values
   getIphones(element) {
     return element.phoneType == 'IOS'
   }
@@ -175,6 +180,7 @@ export class ParadataGraphPageComponent implements OnInit {
     }
   }
 
+  //split paradata values for grouping of values
   splitReceiptsLow(element) {
     return element.receipts < Number(localStorage.getItem('firstLimit'))
   }
@@ -193,10 +199,5 @@ export class ParadataGraphPageComponent implements OnInit {
 
   getEnabledGroups(element) {
     return element.group.status == 'enabled'
-  }
-
-  confirmValue(variable) {
-    variable = true;
-    console.log(variable)
   }
 }

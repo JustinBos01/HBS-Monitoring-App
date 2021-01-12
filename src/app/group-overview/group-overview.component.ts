@@ -62,6 +62,7 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   createGroup(userData) {
+    //create empty group
     this.configService.createGroup(userData.groupName, "", "")
       .subscribe(groupdata => {
         this.groupData = groupdata;
@@ -70,6 +71,7 @@ export class GroupOverviewComponent implements OnInit {
       
   }
 
+  //get group data
   showGroupResponse() {
     this.configService.getGroups()
       .subscribe(groups => {
@@ -77,8 +79,7 @@ export class GroupOverviewComponent implements OnInit {
       })
     }
 
-  
-
+  //rename group
   renameGroup(groupId, oldName) {
     this.newGroupName = document.getElementById('group'+groupId)
     this.configService.renameGroup(oldName, this.newGroupName.value)
@@ -89,8 +90,7 @@ export class GroupOverviewComponent implements OnInit {
     )
   }
 
-  
-
+  //navigate to group page
   goToPage(givenGroupName, givenGroupId, event) {
     this.groupOverviewService.chosenGroup = givenGroupName;
     localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
@@ -98,6 +98,7 @@ export class GroupOverviewComponent implements OnInit {
     this.router.navigate(['/groups', givenGroupId])
   }
 
+  //go to paradata page
   goToParaDataPage(givenGroupName, givenGroupId, event) {
     this.groupOverviewService.chosenGroup = givenGroupName;
     localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
@@ -105,20 +106,24 @@ export class GroupOverviewComponent implements OnInit {
     this.router.navigate(['/paradata-group', givenGroupId])
   }
 
+  //delete all empty groups
   deleteGroups() {
+    //get all empty groups
     for (let group of this.groups) {
       if (group.group.users == 0){
         this.emptyGroups.push(group.group.name)
       } 
     }
 
+    //empty groupinfos for groups with no users
     for (let empty of this.emptyGroups){
       this.configService.deleteGroupInfos(empty).subscribe(nv => 
         {
+          //delete empty groups
           this.configService.deleteEmptyGroups(empty).subscribe(nv =>
             {
               if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
-                //window.location.reload()
+                //refresh data
                 this.showGroupResponse()
               }
             }
@@ -129,7 +134,7 @@ export class GroupOverviewComponent implements OnInit {
   }
 
  
-
+  //reload page
   reload() {
     window.location.reload();
   }
