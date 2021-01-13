@@ -10,6 +10,7 @@ import { ConfigService } from '../config/config.service';
 
 export class ReceiptPageComponent implements OnInit {
 
+  chosenGroup = localStorage.getItem('chosenGroup');
   userReceiptProductsInfo = [];
   userReceiptData;
   userReceiptImg = [];

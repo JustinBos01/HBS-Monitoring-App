@@ -1,6 +1,7 @@
+<button routerLink='/overview'>Home</button>
 <div class="grid-container">
     <div class='receipt-photos-item'>
-        <table>
+        <table *ngIf='userReceiptImg.length != 0'>
             <tr>
                 <th>Id</th>
                 <th>Photo</th>
@@ -11,9 +12,11 @@
                 <td><img [src]="'data:image/jpg;base64,'+element.base64Img" /></td>
             </tr>
         </table>
+
+        <label *ngIf='userReceiptImg.length == 0'><b>This user has not uploaded any receipts or photos of receipts</b></label>
     </div>
 
-    <div class='receipt-product-item'>
+    <div class='receipt-product-item' *ngIf='userReceiptImg.length != 0'>
         <table>
             <tr>
                 <th>Product</th>
@@ -38,3 +41,4 @@
         </table>
     </div>
 </div>
+<button routerLink='/groups/{{chosenGroup}}'>Back</button>

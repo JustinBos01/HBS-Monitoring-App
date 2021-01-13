@@ -137,7 +137,6 @@ export class ParadataGraphPageComponent implements OnInit {
         this.disabledGroups = this.groups.filter(this.getDisabledGroups)
         this.enabledGroups = this.groups.filter(this.getEnabledGroups)
         this.statusDifference.push(this.disabledGroups.length, this.enabledGroups.length)
-        console.log(this.statusDifference)
         this.enabledPercentage = (this.enabledGroups.length / (this.disabledGroups.length+this.enabledGroups.length)) * 100
       })
   }
@@ -146,7 +145,6 @@ export class ParadataGraphPageComponent implements OnInit {
   selectionChange(givenValue) {
     this.showDeviceDoughnutGraph = false
     this.showPhoneModelDoughnutGraph = false
-    console.log(givenValue)
     if (givenValue != "") {
       this.showGraph = true
       if (givenValue == "OS") {

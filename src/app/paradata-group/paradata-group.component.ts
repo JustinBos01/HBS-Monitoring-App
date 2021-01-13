@@ -167,7 +167,6 @@ export class ParadataGroupComponent implements OnInit {
 
   //go to graph page
   navigate() {
-    console.log(localStorage.getItem("chosenGroupId"))
     this.router.navigate(['/graphs', localStorage.getItem('chosenGroupId')])
   }
 }
