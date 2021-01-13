@@ -121,7 +121,7 @@ export class GroupPageComponent implements OnInit {
     )
   }
   
-  //change group infos, still a bug somewhere in this function
+  //change group infos
   changeGroupInfos() {
     this.groupPageService.groupInfosString.length = 0;
     for (let group of this.groups){
@@ -150,23 +150,33 @@ export class GroupPageComponent implements OnInit {
     this.keyChangeInfos = '';
     this.valueChangeInfos = '';
     this.groupPageService.groupInfosString.length = 0;
+    var index = 0
     //gets existing group infos
     for (let group of this.groups){
       if (this.chosenGroup == group.group.name){
-        for (var index in group.groupInfos){
-          this.keyChangeInfos = document.getElementById("key"+index);
-          this.valueChangeInfos = document.getElementById("value"+index);
-          this.keyChangeInfos = this.keyChangeInfos.value
-          this.valueChangeInfos = this.valueChangeInfos.value
-          this.groupPageService.groupInfosString.push({key : this.keyChangeInfos, value : this.valueChangeInfos})
+        
+        if (group.groupInfos != null) {
+          for (var infos of group.groupInfos){
+            if (infos.key != '' && infos.value != ''){
+              this.keyChangeInfos = document.getElementById("key"+index);
+              this.valueChangeInfos = document.getElementById("value"+index);
+              this.keyChangeInfos = this.keyChangeInfos.value
+              this.valueChangeInfos = this.valueChangeInfos.value
+              
+              if (this.keyChangeInfos != "" && this.valueChangeInfos != ""){
+                this.groupPageService.groupInfosString.push({key : this.keyChangeInfos, value : this.valueChangeInfos})
+              }
+              index += 1;
+            }
+          }
         }
       }
     }
 
     //gets new group infos
-    for (var index in this.addedValues) {
-      this.keyChangeInfos = document.getElementById("newKey"+index);
-      this.valueChangeInfos = document.getElementById("newValue"+index);
+    for (var selectedIndex in this.addedValues) {
+      this.keyChangeInfos = document.getElementById("newKey"+selectedIndex);
+      this.valueChangeInfos = document.getElementById("newValue"+selectedIndex);
       this.keyChangeInfos = this.keyChangeInfos.value
       this.valueChangeInfos = this.valueChangeInfos.value
       this.groupPageService.groupInfosString.push({key : this.keyChangeInfos, value : this.valueChangeInfos})
@@ -224,6 +234,7 @@ export class GroupPageComponent implements OnInit {
 
   //gets existing group infos amount
   getGroupInfosAmount() {
+    this.chosenGroupInfos.length = 0
     for (let group of this.groups) {
       if (group.group.name == this.chosenGroup) {
         try {
@@ -240,7 +251,6 @@ export class GroupPageComponent implements OnInit {
 
   //duplicate group (doesn't copy users, does copy group infos)
   duplicateGroup(newGroupName) {
-    this.chosenGroupInfos.length = 0;
     this.getGroupInfosAmount();
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
