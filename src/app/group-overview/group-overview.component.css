@@ -30,8 +30,8 @@ tr:nth-child(odd) {
     grid-area: tbl;
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
-    max-height: 500px;
-    height: 500px;
+    max-height: 99%;
+    height: 99%;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: left;
@@ -69,7 +69,6 @@ tr:nth-child(odd) {
 }
 
 .grid-container > div {
-    
     background-color: lightgray;
     padding: 20px 0;
     font-size: 15px;

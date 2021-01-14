@@ -13,6 +13,13 @@
 }
 
 
+.header-item {
+    grid-area: HI;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    text-align: center;
+}
 
 .description-item {
     grid-area: desc;
@@ -38,6 +45,7 @@
 .grid-container {
     display: grid;
     grid-template-areas:
+        'HI HI HI HI HI HI'
         'desc desc desc desc desc desc'
         'graph graph graph graph graph eii';
     grid-gap: 10px;

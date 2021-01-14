@@ -32,7 +32,6 @@
     <div *ngIf='unableAddition.length != 0'>
         <label *ngIf='unableAddition.length != 0'>The following users could not be added: </label>
         <label *ngFor='let index of unableAddition'><b>{{index}} <ng-container *ngIf='index != unableAddition[unableAddition.length-1]'>| </ng-container> <ng-container *ngIf='index == unableAddition[unableAddition.length-1]'>.</ng-container></b></label>
-
         <label *ngIf='unableAdditionAmount != 0'>{{unableAdditionAmount}}</label>
     </div><br>
 </div>

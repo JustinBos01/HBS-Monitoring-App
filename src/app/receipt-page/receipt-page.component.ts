@@ -17,6 +17,8 @@ export class ReceiptPageComponent implements OnInit {
   category = [];
   receiptCategory = [];
   dates = [];
+  prices = [];
+  chosenUser = localStorage.getItem('chosenUser')
   
   constructor(
     public configService: ConfigService
@@ -42,6 +44,8 @@ export class ReceiptPageComponent implements OnInit {
         var receiptCategory = [];
         var index = 0;
         var date;
+        var price;
+        this.prices = []
 
         for (let receipt of this.userReceiptData) {
           //check if receipt is an img
@@ -53,18 +57,21 @@ export class ReceiptPageComponent implements OnInit {
           if (receipt.products != null) {
             boughtProduct = [];
             category = [];
+            price = []
 
             for (let element of receipt.products) {
               //get products and categories of products on receipt
               boughtProduct.push(element.product);
               category.push(element.productCategory);
+              price.push(element.price)
             }
+            this.prices.push(price)
             //get date value and format it
             date = receipt.products[0].productDate.substring(0, 4) + - + receipt.products[0].productDate.substring(4, 6) + - + receipt.products[0].productDate.substring(6)
 
             receiptCategory.push(category)
             productsOnReceipt.push(boughtProduct)
-            this.userReceiptProductsInfo.push({product: productsOnReceipt[index], productCategory: receiptCategory[index], price: receipt.transaction.totalPrice, productDate: date})
+            this.userReceiptProductsInfo.push({product: productsOnReceipt[index], productCategory: receiptCategory[index], individualPrice: this.prices[index], price: receipt.transaction.totalPrice, productDate: date})
             console.log(this.userReceiptProductsInfo)
             index += 1;
           }

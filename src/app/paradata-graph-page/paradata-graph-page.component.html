@@ -1,5 +1,8 @@
 <button routerLink='/overview'>Home</button>
 <div class="grid-container">
+    <div class='header-item'>
+        You are now viewing the paradata of group: <b>{{chosenGroup}}</b>
+    </div>
     <div class="description-item">
         <label>Select a Paradata Set: </label>
         <select #paradataSelection (change)="paradataSelection.value = paradataSelection.value; showGraph = false; showDeviceDoughnutGraph = false; showPhoneModelDoughnutGraph = false;">
@@ -65,7 +68,7 @@
         [legend]="receiptsBarChartLegend"
         [chartType]="receiptsBarChartType"></canvas>
 
-        <canvas *ngIf='paradataSelection.value == "Status"' height="94%" baseChart 
+        <canvas *ngIf='paradataSelection.value == "Status"' height="94%" baseChart
         [data]="statusDoughnutChartData"
         [labels]="statusDoughnutChartLabels"
         [chartType]="statusDoughnutChartType">

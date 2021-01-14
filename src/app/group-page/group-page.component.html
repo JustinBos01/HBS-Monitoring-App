@@ -66,11 +66,25 @@
         <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br>
             There is also an option to duplicate a group, including its <b>Group Infos</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br>
             Finally, the <b>Group Infos</b> can be deleted by pressing <b><i>Delete Group Infos</i></b>.</label><br>
+
+        <select #regroupGroupDdl id='regroupGroupDdl'>
+            <option>{{chosenGroup}}</option>
+            <ng-container *ngFor='let groupName of allGroupNames'>
+                <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
+            </ng-container>
+        </select>
+        <button (click)="regroupGroup(regroupGroupDdl.value)">Regroup</button><br>
+
         <input #regroupGroupTbx id='regroupGroupTbx'>
-        <button (click)="regroupGroup(regroupGroupTbx.value)">Regroup</button>
-        <button (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button>
-        <button (click)="deleteGroupInfos()">Delete Group Infos</button>
+        <button (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button><br><br>
         
+        
+        <button *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Group Infos</button>
+        <ng-container *ngIf="confirmationCheck">
+            <label #confirmationLbl>Confirm?</label><br>
+            <button #confirmationYes (click)='deleteGroupInfos(); confirmationCheck = false'>Yes</button> |
+            <button #confirmationNo (click)='confirmationCheck = false'>No</button>
+        </ng-container>
         <br><br>        
         <label>Down below, you are able to add groupInfos to the table above.</label><br>
         <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">

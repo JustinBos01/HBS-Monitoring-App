@@ -139,11 +139,12 @@ export class GroupOverviewComponent implements OnInit {
     window.location.reload();
   }
 
+  //delete a single empty group (on interaction)
   deleteSingleEmptyGroup(groupName) {
     this.configService.deleteGroupInfos(groupName).subscribe(nv => 
       {
         this.configService.deleteSingleEmptyGroup(groupName)
-        .subscribe(nv => {
+        .subscribe(_ => {
             this.showGroupResponse()
           }
         )
@@ -151,11 +152,13 @@ export class GroupOverviewComponent implements OnInit {
     )
   }
 
+  //filter groups
   filter(functionType, filterValue) {
     localStorage.setItem('filterValue', filterValue)
     this.alteredFilter = functionType
     this.configService.getGroups()
       .subscribe(groups => {
+        //get filter values
         if (this.alteredFilter == 'enabled' && filterValue != '') {
           functionType = 'enabled + filter'
         } else 
@@ -180,6 +183,7 @@ export class GroupOverviewComponent implements OnInit {
         }
 
         this.groups = groups;
+        //decides what filter function to use, checks for filter type above for front-end, below for back-end
         if (functionType == 'enabled'){
           this.alteredFilter = 'enabled';
           this.groups = this.groups.filter(this.filterEnabled)
@@ -214,6 +218,7 @@ export class GroupOverviewComponent implements OnInit {
       })
     }
 
+  //all filter functions
   filterEnabled(element, index, array) {
     return element.group.status == "enabled"
   }
@@ -246,8 +251,8 @@ export class GroupOverviewComponent implements OnInit {
     return element.group.name.toLowerCase().includes(localStorage.getItem('filterValue').toLowerCase())
   }
   
+  //get users of ALL groups
   getAllUsers() {
-    
     this.configService.getAllUsers()
     .subscribe(users => {
         this.allUsers = users;
@@ -256,6 +261,5 @@ export class GroupOverviewComponent implements OnInit {
     )
   }
 
-  
   
 }

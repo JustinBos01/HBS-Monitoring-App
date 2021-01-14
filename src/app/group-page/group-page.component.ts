@@ -51,6 +51,7 @@ export class GroupPageComponent implements OnInit {
   userReceiptData;
   userReceiptImg = [];
   userReceiptProductsInfo = [];
+  confirmationCheck = false;
 
   constructor(
     public configService: ConfigService,
@@ -78,6 +79,7 @@ export class GroupPageComponent implements OnInit {
     this.getUsersOfGroup()
     this.navigation.hide()
     this.chosenGroup = localStorage.getItem('chosenGroup')
+    console.log(this.confirmationCheck)
   }
 
   //get all users in the selected group

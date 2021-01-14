@@ -1,5 +1,12 @@
 <button routerLink='/overview'>Home</button>
+
 <div class="grid-container">
+    <div class="description-item">
+        <label>
+            Welcome to the Receipt Page.<br>
+            On this page you are able to view the uploaded receipts of <b><i>{{chosenUser}}</i></b>
+        </label>
+    </div>
     <div class='receipt-photos-item'>
         <table *ngIf='userReceiptImg.length != 0'>
             <tr>
@@ -35,7 +42,13 @@
                         {{categoryInReceipt}}<br>
                     </ng-container>
                 </td>
-                <td>€{{element.price}}</td>
+                <td>
+                    <ng-container *ngFor='let priceValue of element.individualPrice'>
+                        {{priceValue}}<br>
+                    </ng-container>
+                    <hr>
+                    Total: €{{element.price}}
+                </td>
                 <td>{{element.productDate}}</td>
             </tr>
         </table>
