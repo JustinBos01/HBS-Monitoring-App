@@ -296,4 +296,13 @@ export class ConfigService {
         "user" : {"name" : localStorage.getItem('chosenUser')}
        });
   }
+
+  getReceiptsPerUser(): Observable<any> {
+    var configUrl = 'http://localhost:4200/budget/dashboard/receiptsperuser';
+    return this.http.post<any>(
+      configUrl, {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+        "group" : {"name" : localStorage.getItem('chosenGroup')}
+       });
+  }
 }

@@ -14,3 +14,7 @@ html {
 button {
     cursor: pointer;
 }
+
+label {
+    cursor:text;
+}

@@ -57,5 +57,5 @@
         <button *ngIf='this.statusFilter != "empty"' (click)='this.statusFilter = "empty"; filter("empty", groupFilter.value); status = "Empty"'>Empty Groups</button><br><br>
         <button *ngIf='this.statusFilter != "all"' (click)='this.statusFilter = "all"; filter("all", groupFilter.value)'>Show All</button>
     </div>
-</div>
+</div><br><br>
 <button [routerLink]="['/']">Log out</button>
