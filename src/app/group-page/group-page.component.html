@@ -1,16 +1,7 @@
 <button routerLink='/overview'>Home</button>
 <div class="grid-container">
-    <div class='management-item'>
-        <label #statusLbl id='statusLbl'>Down below are the users in the group: <b>{{chosenGroup}}</b></label><br><br>
-        <label>To add a user to this group, click this button | </label>
-        <button [routerLink]="['/createUsers']">Add users</button><br><br>
-        <span *ngFor="let group of groups">
-            <div *ngIf="chosenGroup == group.group.name">
-                <label>This group is currently: <b> {{group.group.status}}</b></label><br>
-                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)">Enable Group</button>
-                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)">Disable Group</button>
-            </div>
-        </span>
+    <div class='header-item'>
+        <h1 id='statusLbl'>Userpage: <b>{{chosenGroup}}</b></h1>
     </div>
     <div class='table-item'>
         <table *ngIf='user'>
@@ -35,7 +26,7 @@
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
     </div><br>
     <div class='groupInfos-item'>
-        <label *ngIf="chosenGroupInfos.length == 0 && (amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no groupInfos for this group</b></label>
+        <label *ngIf="chosenGroupInfos.length == 0 && (amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no properties for this group</b></label>
         <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
             <tr>
                 <th>Key</th>
@@ -59,38 +50,53 @@
         </table><br>
         <button *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0' (click)="createNewGroupInfos()">Apply</button>
     </div>
-        <!--
-         -->
-    <div id='regroupGroup' class='regroup-item'>
-        <label>Username Filter: <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)"></label><br><br>
-        <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br>
-            There is also an option to duplicate a group, including its <b>Group Infos</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br>
-            Finally, the <b>Group Infos</b> can be deleted by pressing <b><i>Delete Group Infos</i></b>.</label><br>
 
-        <select #regroupGroupDdl id='regroupGroupDdl'>
+    <div id='usersFunctionalitiesDiv' class='users-functionalities-item'>
+        <h1>Users Functionalities</h1><hr><br>
+
+        <label>To add a user to this group, click this button | </label>
+        <button [routerLink]="['/createUsers']">Add users</button><br><br>
+        <hr><br>
+        <label>Username Filter: <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)"></label><br><br>
+    </div>
+
+    <div id='groupFunctionalitiesDiv' class='group-functionalities-item'>
+        <h1>Group Functionalities</h1><hr><br>
+        
+        <span *ngFor="let group of groups">
+            <div *ngIf="chosenGroup == group.group.name">
+                <label>This group is currently: <b> {{group.group.status}}</b></label><br>
+                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)">Enable Group</button>
+                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)">Disable Group</button>
+            </div>
+        </span><br><hr><br>
+
+        <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br></label>
+        <select #regroupGroupDdl id='regroupGroupDdl' (change)='this.value = this.value'>
             <option>{{chosenGroup}}</option>
             <ng-container *ngFor='let groupName of allGroupNames'>
                 <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
             </ng-container>
         </select>
-        <button (click)="regroupGroup(regroupGroupDdl.value)">Regroup</button><br>
+        <button [disabled]='regroupGroupDdl.value == chosenGroup' (click)="regroupGroup(regroupGroupDdl.value)">Regroup</button><br><br><hr><br>
 
-        <input #regroupGroupTbx id='regroupGroupTbx'>
-        <button (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button><br><br>
-        
-        
-        <button *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Group Infos</button>
+        <label>There is also an option to duplicate a group, including its <b>properties</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br></label>
+        <input #regroupGroupTbx id='regroupGroupTbx' (change)='this.value = this.value'>
+        <button [disabled]='regroupGroupTbx.value == ""' (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button><br><br>
+    </div>
+
+    <div id='groupInfosFunctionalitiesDiv' class='group-infos-functionalities-item'>
+        <h1>Properties Functionalities</h1><hr><br>
+        <label>Down below, you are able to delete all properties for this group (this will clear all in app settings for the research application)</label><br><br>
+        <button *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Properties</button>
         <ng-container *ngIf="confirmationCheck">
             <label #confirmationLbl>Confirm?</label><br>
             <button #confirmationYes (click)='deleteGroupInfos(); confirmationCheck = false'>Yes</button> |
             <button #confirmationNo (click)='confirmationCheck = false'>No</button>
-        </ng-container>
-        <br><br>        
-        <label>Down below, you are able to add groupInfos to the table above.</label><br>
+        </ng-container><br><br><hr><br>
+        <label>You are able to add properties to the table to the left by entering an amount below.</label><br>
         <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
-        
     </div>
-    
 </div>
 
 

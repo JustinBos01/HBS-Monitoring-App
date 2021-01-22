@@ -2,7 +2,7 @@
 <body>
     <div class="grid-container">
         <div class='header-item'>
-            You are now viewing the paradata of group: <b>{{chosenGroup}}</b>
+            <h1>Paradata page: <b>{{chosenGroup}}</b></h1>
         </div>
         <div class="project-selection-item">
             <label>Select the project you want the data from:
@@ -13,7 +13,7 @@
             </select><br></label>
 
             <label>To select the paradata that you want to see, open this list: 
-                <select #paradataSelection (change)='paradataSelection.value = paradataSelection.value; valuechange(paradataSelection.value)'>
+                <select #paradataSelection (change)='paradataSelection.value = paradataSelection.value; valuechange(paradataSelection.value)' [disabled]='projectSelection.value == ""'>
                     <option value=''></option>
 
                     <option *ngIf='projectSelection.value == "HBS"' value='Receipts'>Receipts</option>
@@ -24,7 +24,7 @@
                     <option *ngIf='projectSelection.value == "TBO"' value="test2">test2</option>
                 </select><br>
             </label><br>
-            <label>Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value; filterChange(paradataSelection.value, filterInput.value)'><br><br></label>
+            <label>Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value; filterChange(paradataSelection.value, filterInput.value)' [disabled]='projectSelection.value == "" || paradataSelection.value == ""'><br><br></label>
             <label *ngIf="availableFilters != ''" style="color: rgb(102, 102, 102);">Current available filters: {{availableFilters}}</label>
         </div>
 

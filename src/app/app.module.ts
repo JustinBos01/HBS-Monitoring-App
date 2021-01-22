@@ -32,6 +32,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatStepperModule} from '@angular/material/stepper'
 import { MatSelectModule } from "@angular/material/select";
 import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component'
+import { CommonModule } from "@angular/common";
 
 @NgModule({
   
@@ -47,6 +48,7 @@ import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph
     BrowserAnimationsModule,
     MatStepperModule,
     MatSelectModule,
+    CommonModule,
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},
       {path: 'menu', component: MenuPageComponent},

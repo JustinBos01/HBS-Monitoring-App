@@ -80,7 +80,6 @@ export class GroupPageComponent implements OnInit {
     this.getUsersOfGroup()
     this.navigation.hide()
     this.chosenGroup = localStorage.getItem('chosenGroup')
-    console.log(this.confirmationCheck)
     this.getUserReceiptData()
   }
 

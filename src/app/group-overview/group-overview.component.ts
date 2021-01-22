@@ -33,6 +33,7 @@ export class GroupOverviewComponent implements OnInit {
   allUsers;
   confirmationCheck = false;
   singleConfirmationCheck = false;
+  isDisabled: boolean;
 
   constructor(
     public navigation: TopBarService,

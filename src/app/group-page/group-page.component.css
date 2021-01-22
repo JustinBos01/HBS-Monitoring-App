@@ -23,8 +23,22 @@ tr:nth-child(odd) {
     background-color: #dddddd;
 }
 
-.regroup-item {
-    grid-area: rg;
+.group-functionalities-item {
+    grid-area: gfi;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);    
+    text-align: center;
+}
+
+.users-functionalities-item {
+    grid-area: ufi;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);    
+    text-align: center;
+}
+
+.group-infos-functionalities-item {
+    grid-area: gifi;
     background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);    
     text-align: center;
@@ -41,10 +55,11 @@ tr:nth-child(odd) {
     text-align: center;
 }
 
-.management-item {
-    grid-area: MI;
+.header-item {
+    grid-area: HI;
     background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
     font-size: 15px;
 }
 
@@ -71,10 +86,10 @@ tr:nth-child(odd) {
 .grid-container {
     display: grid;
     grid-template-areas:
-        'MI MI'
-        'tbl tbl'
-        'gIi gIi'
-        'rg rg';
+        'HI HI HI HI HI'
+        'tbl tbl tbl tbl ufi'
+        'tbl tbl tbl tbl gfi'
+        'gIi gIi gIi gIi gifi';
     grid-gap: 10px;
     padding: 10px;
 }
