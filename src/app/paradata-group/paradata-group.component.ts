@@ -28,7 +28,7 @@ export class ParadataGroupComponent implements OnInit {
   filteredReceiptData = [];
   filteredPhoneData = [];
   filteredActivityData = [];
-  availableFilters = '';
+  availableFilters = [];
   
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -46,23 +46,24 @@ export class ParadataGroupComponent implements OnInit {
 
   //set paradata tables
   valuechange(selectedTable) {
+    this.availableFilters = [];
     if (selectedTable == "") {
-      this.availableFilters = '';
+      this.availableFilters.push('');
     }
     
     if (selectedTable == 'Receipts') {
       this.getAmountOfReceipts()
-      this.availableFilters = 'Username'
+      this.availableFilters.push('Username')
     }
 
     if (selectedTable == 'Phones') {
       this.getPhoneParadata()
-      this.availableFilters = 'Username, Phone Types, Phone Manufacturers, Phone Models'
+      this.availableFilters.push("Username", "Phone Types", "Phone Manufacturers", "Phone Models")
     }
 
     if (selectedTable == 'Activities') {
       this.getActivityParadata()
-      this.availableFilters = 'Username, Page, Action'
+      this.availableFilters.push("Username", "Page", "Action")
     }
   }
 
