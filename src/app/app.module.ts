@@ -30,6 +30,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator'
 import {MatSortModule} from '@angular/material/sort';
 import {MatStepperModule} from '@angular/material/stepper'
+import {MatCheckboxModule} from '@angular/material/checkbox'
 import { MatSelectModule } from "@angular/material/select";
 import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component'
 import { CommonModule } from "@angular/common";
@@ -48,6 +49,7 @@ import { CommonModule } from "@angular/common";
     BrowserAnimationsModule,
     MatStepperModule,
     MatSelectModule,
+    MatCheckboxModule,
     CommonModule,
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},

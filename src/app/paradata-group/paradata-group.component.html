@@ -6,7 +6,7 @@
         </div>
         <div class="project-selection-item" style="padding-left: 1.5em;">
             <label>Select the project you want the data from:
-            <select #projectSelection (change)='projectSelection.value = projectSelection.value; paradataSelection.value = ""; availableFilters = ""'>
+            <select #projectSelection (change)='projectSelection.value = projectSelection.value; paradataSelection.value = ""; availableFilters.length = 0'>
                 <option value=''></option>
                 <option value='HBS'>HBS</option>
                 <option value='TBO'>TBO</option>
@@ -25,7 +25,14 @@
                 </select><br>
             </label><br>
             <label>Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value; filterChange(paradataSelection.value, filterInput.value)' [disabled]='projectSelection.value == "" || paradataSelection.value == ""'><br><br></label>
-            <label *ngIf="availableFilters != ''" style="color: rgb(102, 102, 102);">Current available filters: {{availableFilters}}</label>
+            <label style="color: rgb(102, 102, 102);" *ngIf='availableFilters.length != 0'>
+                Available filters: <br>
+                <ng-container *ngFor='let filterValue of availableFilters'>
+                    <input #filterCbx{{filterValue}} id='filterCbx{{filterValue}}' type='checkbox' [checked]=true (change)='checked = false; filterChange(paradataSelection.value, filterInput.value)'>
+                    {{filterValue}}<br>
+                </ng-container>
+            </label>
+
         </div>
 
         <div class="table-item" *ngIf='paradataSelection.value != ""'>

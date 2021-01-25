@@ -42,6 +42,7 @@ export class ParadataGroupComponent implements OnInit {
     this.getAmountOfReceipts()
     this.getPhoneParadata()
     this.getActivityParadata()
+    
   }
 
   //set paradata tables
@@ -115,9 +116,14 @@ export class ParadataGroupComponent implements OnInit {
         this.configService.getAmountOfReceipts().subscribe(data => {
           this.paradata = data;
           this.paradata = this.paradata.receiptsPerDays;
+          var filterUsernameCbxValueReceipts = <HTMLInputElement>document.getElementById('filterCbxUsername')
           for (let element of this.paradata){
-            if (element.userName.toLowerCase().includes(filterValue.toLowerCase())){
-              this.filteredReceiptData.push(element)
+            if (filterUsernameCbxValueReceipts.checked) {
+              if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredReceiptData.includes(element) == false){
+                  this.filteredReceiptData.push(element)
+                }
+              }
             }
           }
           this.receiptDataSource = this.filteredReceiptData
@@ -134,10 +140,42 @@ export class ParadataGroupComponent implements OnInit {
         this.configService.getPhoneParadata().subscribe(data => {
           this.phoneParadata = data;
           this.phoneParadata = this.phoneParadata.receiptsPerPhones;
+          var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById("filterCbxUsername")
+          var filterPhoneTypesCbxValue = <HTMLInputElement>document.getElementById("filterCbxPhone Types")
+          var filterPhoneManufacturersCbxValue = <HTMLInputElement>document.getElementById("filterCbxPhone Manufacturers")
+          var filterPhoneModelssCbxValue = <HTMLInputElement>document.getElementById("filterCbxPhone Models")
           
           for (let element of this.phoneParadata){
-            if (element.userName.toLowerCase().includes(filterValue.toLowerCase()) || element.phoneType.toLowerCase().includes(filterValue.toLowerCase()) || element.phoneManufacturer.toLowerCase().includes(filterValue.toLowerCase()) || element.phoneModel.toLowerCase().includes(filterValue.toLowerCase())){
-              this.filteredPhoneData.push(element)
+            if (filterUsernameCbxValuePhones.checked) {
+              if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredPhoneData.includes(element) == false){
+                  this.filteredPhoneData.push(element)
+                }
+              }
+            }
+            
+            if (filterPhoneTypesCbxValue.checked) {
+              if (element.phoneType.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredPhoneData.includes(element) == false){
+                  this.filteredPhoneData.push(element)
+                }
+              }
+            }
+
+            if (filterPhoneManufacturersCbxValue.checked) {
+              if (element.phoneManufacturer.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredPhoneData.includes(element) == false){
+                  this.filteredPhoneData.push(element)
+                }
+              }
+            }
+
+            if (filterPhoneModelssCbxValue.checked) {
+              if (element.phoneModel.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredPhoneData.includes(element) == false){
+                  this.filteredPhoneData.push(element)
+                }
+              }
             }
           }
           this.phoneDataSource = this.filteredPhoneData
@@ -152,10 +190,33 @@ export class ParadataGroupComponent implements OnInit {
         this.configService.getActivityParadata().subscribe(data => {
           this.activityParadata = data;
           this.activityParadata = this.activityParadata.paradataDateTimes;
+          var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
+          var filterPageCbxValue = <HTMLInputElement>document.getElementById('filterCbxPage')
+          var filterActionCbxValue = <HTMLInputElement>document.getElementById('filterCbxAction')
           
           for (let element of this.activityParadata){
-            if (element.userName.toLowerCase().includes(filterValue.toLowerCase()) || element.objectName.toLowerCase().includes(filterValue.toLowerCase()) || element.action.toLowerCase().includes(filterValue.toLowerCase())){
-              this.filteredActivityData.push(element)
+            if (filterUsernameCbxValuePhones.checked) {
+              if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredActivityData.includes(element) == false){
+                  this.filteredActivityData.push(element)
+                }
+              }
+            }
+
+            if (filterPageCbxValue.checked) {
+              if (element.objectName.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredActivityData.includes(element) == false){
+                  this.filteredActivityData.push(element)
+                }
+              }
+            }
+
+            if (filterActionCbxValue.checked) {
+              if (element.action.toLowerCase().includes(filterValue.toLowerCase())) {
+                if (this.filteredActivityData.includes(element) == false){
+                  this.filteredActivityData.push(element)
+                }
+              }
             }
           }
           this.activityDataSource = this.filteredActivityData
