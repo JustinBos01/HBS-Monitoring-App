@@ -33,6 +33,7 @@ export class ParadataGraphPageComponent implements OnInit {
   showDeviceDoughnutGraph = false;
   showPhoneModelDoughnutGraph = false;
   chosenGroup;
+  allPhoneTypes = [];
   
   receiptsBarChartOptions: ChartOptions = {
     responsive: true,
@@ -99,6 +100,7 @@ export class ParadataGraphPageComponent implements OnInit {
       this.phoneModels.length = 0
       var index = 0;
       for (let element of newPhoneType) {
+        console.log(element)
         localStorage.setItem('phoneModel', element.phoneModel)
         this.phoneModelName.push(element.phoneModel)
         this.phoneModels[index] = this.phoneData.filter(this.getAmountPhoneModels)
@@ -173,6 +175,7 @@ export class ParadataGraphPageComponent implements OnInit {
   getModel(element, newPhoneType) {
     for (let phone of element){
       if (newPhoneType.includes(phone.phoneModel) == false){
+        console.log(phone)
         newPhoneType.push(phone)
       }
     }

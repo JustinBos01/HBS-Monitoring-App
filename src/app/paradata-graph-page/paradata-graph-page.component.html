@@ -1,9 +1,9 @@
-<button routerLink='/overview'>Home</button>
 <div class="grid-container">
     <div class='header-item'>
-        <h1>Graph Page: {{chosenGroup}}</h1>
+        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
+        <h1>Graphs: {{chosenGroup}}</h1>
     </div>
-    <div class="description-item">
+    <div class="project-selection-item">
         <label>Select a Paradata Set: </label>
         <select #paradataSelection (change)="paradataSelection.value = paradataSelection.value; showGraph = false; showDeviceDoughnutGraph = false; showPhoneModelDoughnutGraph = false;">
             <option value=""></option>
@@ -17,7 +17,8 @@
             <option value='OS'>OS</option>
             <option value='Phone Model'>Phone Model</option>
         </select><br>
-
+    </div>
+    <div class="description-item">
         <label *ngIf="paradataSelection.value == 'Receipts'">
             <!-- Floor: <input #floorInput type="number"  min="0" value='7' (change)="floorInput.value = floorInput.value" max="{{scopeMinInput.value}}"><br> -->
             First limit: <input #scopeMinInput type="number"  min=0 value=7 (change)='scopeMinInput.value = scopeMinInput.value; getReceiptAmount(scopeMinInput.value, scopeMaxInput.value)' max={{scopeMaxInput.value}}><br>
@@ -42,37 +43,49 @@
             Now for the usabiltity of this information. The status of a group contains the information whether all users in the corresponding group are finished with the research or if they are still participating in one.
         </label>
     </div>
-    <div class="graph-item" *ngIf="paradataSelection.value != ''" >
+    <div class="graph-item" *ngIf="paradataSelection.value != ''">
         
-        
-        <label *ngIf='paradataSelection.value == "Devices" && !showGraph'>No charts selected</label>
-        <canvas *ngIf='paradataSelection.value == "Devices" && deviceDifference.length != 0 && showDeviceDoughnutGraph' height="94%" baseChart 
-        [data]="deviceDoughnutChartData"
-        [labels]="deviceDoughnutChartLabels"
-        [chartType]="deviceDoughnutChartType">
-        </canvas>
-        
-        <canvas *ngIf='showPhoneModelDoughnutGraph && phoneModels.length != 0' height="94%"baseChart 
-        [data]="phoneModelDoughnutChartData"
-        [labels]="phoneModelDoughnutChartLabels"
-        [chartType]="phoneModelDoughnutChartType">
-        </canvas>
+        <ng-container *ngIf='paradataSelection.value == "Devices"'>
+            <label *ngIf='!showGraph'>No charts selected</label>
+            <ng-container *ngIf='deviceDifference.length != 0 && showDeviceDoughnutGraph'>
+                <h2>Operating System</h2><br><hr>
+                <canvas  height="94%" baseChart 
+                [data]="deviceDoughnutChartData"
+                [labels]="deviceDoughnutChartLabels"
+                [chartType]="deviceDoughnutChartType">
+                </canvas>
+            </ng-container>
+            <ng-container *ngIf='showPhoneModelDoughnutGraph && phoneModels.length != 0'>
+                <h2>Phone Models</h2><br><hr>
+                <canvas height="94%"baseChart 
+                [data]="phoneModelDoughnutChartData"
+                [labels]="phoneModelDoughnutChartLabels"
+                [chartType]="phoneModelDoughnutChartType">
+                </canvas>
+            </ng-container> 
+        </ng-container>
 
-        <canvas *ngIf='paradataSelection.value == "Receipts" && receiptsSplit.length != 0' 
-        height="94%"
+        <ng-container *ngIf='paradataSelection.value == "Receipts" && receiptsSplit.length != 0'>
+            <h2>Receipts</h2><br><hr>
+            <canvas  
+            height="94%"
             baseChart
-        [datasets]="receiptsBarChartData"
-        [labels]="receiptsBarChartLabels"
-        [options]="receiptsBarChartOptions"
-        [plugins]="receiptsBarChartPlugins"
-        [legend]="receiptsBarChartLegend"
-        [chartType]="receiptsBarChartType"></canvas>
+            [datasets]="receiptsBarChartData"
+            [labels]="receiptsBarChartLabels"
+            [options]="receiptsBarChartOptions"
+            [plugins]="receiptsBarChartPlugins"
+            [legend]="receiptsBarChartLegend"
+            [chartType]="receiptsBarChartType"></canvas>
+        </ng-container>
 
-        <canvas *ngIf='paradataSelection.value == "Status"' height="94%" baseChart
-        [data]="statusDoughnutChartData"
-        [labels]="statusDoughnutChartLabels"
-        [chartType]="statusDoughnutChartType">
-        </canvas>
+        <ng-container *ngIf='paradataSelection.value == "Status"'>
+            <h2>Status</h2><br><hr>
+            <canvas height="94%" baseChart
+            [data]="statusDoughnutChartData"
+            [labels]="statusDoughnutChartLabels"
+            [chartType]="statusDoughnutChartType">
+            </canvas>
+        </ng-container>
     </div>
 
     <div class='extra-information-item' *ngIf='(paradataSelection.value != "")'>
@@ -92,4 +105,4 @@
         <hr>
     </div>
 </div>
-<button routerLink='/paradata-group/{{chosenGroup}}'>Back</button>
+<img src='https://www.svgrepo.com/show/67631/back-arrow.svg' style="height: 25px; width: 25px; cursor: pointer;" routerLink='/paradata-group/{{chosenGroup}}'>

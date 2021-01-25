@@ -6,10 +6,20 @@
     font-size: 15px;
     overflow-x: hidden;
     overflow-y: auto;
+    text-align: center;
     
     /* width: 1600px;
     max-width: 1600px;
     height: 500px; */
+}
+
+.project-selection-item {
+    grid-area: proj;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 
@@ -28,6 +38,7 @@
     font-size: 15px;
     overflow-x: hidden;
     overflow-y: auto;
+    padding-left: 1,5px;
 }
 
 .extra-information-item {
@@ -46,7 +57,7 @@
     display: grid;
     grid-template-areas:
         'HI HI HI HI HI HI'
-        'desc desc desc desc desc desc'
+        'proj desc desc desc desc desc'
         'graph graph graph graph graph eii';
     grid-gap: 10px;
     padding: 10px;

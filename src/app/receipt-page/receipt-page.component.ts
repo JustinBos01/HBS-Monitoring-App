@@ -50,7 +50,8 @@ export class ReceiptPageComponent implements OnInit {
         for (let receipt of this.userReceiptData) {
           //check if receipt is an img
           if (receipt.image.base64image != ""){
-            this.userReceiptImg.push({store: receipt.transaction.store, storeType: receipt.transaction.storeType, receiptProductType: receipt.transaction.receiptProductType, base64Img: receipt.image.base64image})
+            date = String(receipt.transaction.date).substring(0,4) + - + String(receipt.transaction.date).substring(4,6) + - + String(receipt.transaction.date).substring(6)
+            this.userReceiptImg.push({totalPrice: receipt.transaction.totalPrice, date: date, receiptProductType: receipt.transaction.receiptProductType, base64Img: receipt.image.base64image})
           }
 
           //check if receipt contains raw data

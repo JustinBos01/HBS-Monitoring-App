@@ -42,6 +42,9 @@ tr:nth-child(odd) {
     background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);    
     text-align: center;
+    max-height: 245px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .table-item {
@@ -49,7 +52,7 @@ tr:nth-child(odd) {
     background-color: lightgray;
     border: 1px solid rgba(0, 0, 0, 0.8);
     font-size: 15px;
-    max-height: 500px;
+    max-height: 625px;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: center;

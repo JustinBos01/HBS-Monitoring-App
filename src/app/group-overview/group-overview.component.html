@@ -1,6 +1,7 @@
 
 <div class="grid-container">
     <div id='welcome-item' class="welcome-item">
+        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100">
         <label style="font-size: large;"><h1><b> Group Overview Page</b></h1> <br>On this page you are able to manage the existing groups for the HBS research.</label>
     </div>
     <div class="table">
@@ -37,7 +38,7 @@
             <label for="groupName">
             Group Name
             </label>
-            <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="" (change)='isDisabled = true'>
+            <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="" (change)="isDisabled = true">
         </div>
         <p>
             <button [disabled]='newGroupNameTbx.value == ""'   class="button" type="submit" (click)='createGroup(createGroupForm.value); groupFilter.value = ""; this.statusFilter = "all"; newGroupNameTbx.value = ""; filter("all", groupFilter.value)'>Create Group</button>

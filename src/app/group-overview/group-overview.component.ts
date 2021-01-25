@@ -33,7 +33,8 @@ export class GroupOverviewComponent implements OnInit {
   allUsers;
   confirmationCheck = false;
   singleConfirmationCheck = false;
-  isDisabled: boolean;
+  isDisabled = false;
+  allGroupNames = [];
 
   constructor(
     public navigation: TopBarService,
@@ -60,15 +61,24 @@ export class GroupOverviewComponent implements OnInit {
     this.navigation.hide();
     this.showGroupResponse();
     this.getAllUsers();
+    this.getAllGroupNames();
+    console.log(this.allGroupNames)
   }
 
   createGroup(userData) {
     //create empty group
-    this.configService.createGroup(userData.groupName, "", "")
-      .subscribe(groupdata => {
-        this.groupData = groupdata;
-        this.showGroupResponse()
-      })
+    if(this.allGroupNames.includes(userData.groupName)){
+      alert("The group: " + userData.groupName + " could not be added,\n Group already exists")
+    } else {
+      
+      this.configService.createGroup(userData.groupName, "", "")
+        .subscribe(groupdata => {
+          this.groupData = groupdata;
+          this.showGroupResponse()
+          alert("The group: " + userData.groupName + " has been added")
+        }
+      )
+    }
       
   }
 
@@ -77,6 +87,16 @@ export class GroupOverviewComponent implements OnInit {
     this.configService.getGroups()
       .subscribe(groups => {
         this.groups = groups;
+      })
+    }
+
+  getAllGroupNames() {
+    this.configService.getGroups()
+      .subscribe(groups => {
+        this.groups = groups;
+        for(let groupName of this.groups) {
+          this.allGroupNames.push(groupName.group.name)
+        }
       })
     }
 

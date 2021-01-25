@@ -23,10 +23,6 @@ tr:nth-child(odd) {
     background-color: #dddddd;
 }
 
-img {
-    height:40%;
-    width: 20%;
-}
 
 .description-item {
     grid-area: desc;
@@ -37,6 +33,7 @@ img {
     overflow-y: auto;
     text-align: center;
 }
+
 
 .receipt-photos-item {
     grid-area: rpi;
@@ -73,4 +70,13 @@ img {
     background-color: lightgray;
     padding: 20px 0;
     font-size: 15px;
+}
+
+.back {
+    text-align: center;
+    margin: 0;
+    position: fixed;
+    bottom: 1%;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5),
+            inset 2px 2px 8px rgba(0,0,0,0.5);
 }

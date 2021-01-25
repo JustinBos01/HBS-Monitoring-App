@@ -1,22 +1,27 @@
-<button routerLink='/overview'>Home</button>
 
 <div class="grid-container">
     <div class="description-item">
-        <label>
-            Welcome to the Receipt Page.<br>
-            On this page you are able to view the uploaded receipts of <b><i>{{chosenUser}}</i></b>
-        </label>
+        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
+        
+        
+        <h1>
+            {{chosenUser}}'s receipts
+        </h1>
     </div>
     <div class='receipt-photos-item'>
         <table *ngIf='userReceiptImg.length != 0'>
             <tr>
                 <th>Id</th>
+                <th>Price</th>
+                <th>Date</th>
                 <th>Photo</th>
             </tr>
         
             <tr *ngFor="let element of userReceiptImg; index as elementId">
                 <td>{{elementId}}</td>
-                <td><img [src]="'data:image/jpg;base64,'+element.base64Img" /></td>
+                <td>{{element.totalPrice}}</td>
+                <td>{{element.date}}</td>
+                <td><img [src]="'data:image/jpg;base64,'+element.base64Img" style="height:40%; width: 20%;" /></td>
             </tr>
         </table>
 
@@ -29,24 +34,29 @@
                 <th>Product</th>
                 <th>Category</th>
                 <th>Price</th>
+                <th>Total Price</th>
                 <th>Date</th>
             </tr>
             <tr *ngFor='let element of userReceiptProductsInfo'>
                 <td>
-                    <ng-container *ngFor="let productInReceipt of element.product">
-                        {{productInReceipt}}<br>
-                    </ng-container>
-                </td>
-                <td>
-                    <ng-container *ngFor="let categoryInReceipt of element.productCategory">
-                        {{categoryInReceipt}}<br>
-                    </ng-container>
-                </td>
-                <td>
-                    <ng-container *ngFor='let priceValue of element.individualPrice'>
-                        {{priceValue}}<br>
-                    </ng-container>
                     <hr>
+                    <ng-container *ngFor="let productInReceipt of element.product; index as receiptId">
+                        {{productInReceipt}}<br><hr *ngIf='productInReceipt != productInReceipt[productInReceipt.length-1]'>
+                    </ng-container>
+                </td>
+                <td>
+                    <hr>
+                    <ng-container *ngFor="let categoryInReceipt of element.productCategory">
+                        {{categoryInReceipt}}<br><hr>
+                    </ng-container>
+                </td>
+                <td>
+                    <hr>
+                    <ng-container *ngFor='let priceValue of element.individualPrice'>
+                        {{priceValue}}<br><hr>
+                    </ng-container>
+                </td>
+                <td>
                     Total: €{{element.price}}
                 </td>
                 <td>{{element.productDate}}</td>
@@ -54,4 +64,4 @@
         </table>
     </div>
 </div>
-<button routerLink='/groups/{{chosenGroup}}'>Back</button>
+<img src='https://www.svgrepo.com/show/67631/back-arrow.svg' style="height: 25px; width: 25px; cursor: pointer;" routerLink='/groups/{{chosenGroup}}'>

@@ -1,10 +1,12 @@
-<button routerLink='/overview'>Home</button>
 <div class="grid-container">
     <div class='header-item'>
-        <h1 id='statusLbl'>Userpage: <b>{{chosenGroup}}</b></h1>
+        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
+        <h1 id='statusLbl'>Group: <b>{{chosenGroup}}</b></h1>
     </div>
     <div class='table-item'>
+        <label style="font-size: large;"><b>Users</b></label><br><br>
         <table *ngIf='user'>
+            
             <tr>
                 <th>Name</th>
                 <th>Password</th>
@@ -26,7 +28,9 @@
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
     </div><br>
     <div class='groupInfos-item'>
+        <label style="font-size: large;"><b>Properties</b></label><br><br><br>
         <label *ngIf="chosenGroupInfos.length == 0 && (amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no properties for this group</b></label>
+        
         <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
             <tr>
                 <th>Key</th>
@@ -52,7 +56,7 @@
     </div>
 
     <div id='usersFunctionalitiesDiv' class='users-functionalities-item'>
-        <h1>Users Functionalities</h1><hr><br>
+        <h1>Manage Users</h1><hr><br>
 
         <label>To add a user to this group, click this button | </label>
         <button [routerLink]="['/createUsers']">Add users</button><br><br>
@@ -61,11 +65,11 @@
     </div>
 
     <div id='groupFunctionalitiesDiv' class='group-functionalities-item'>
-        <h1>Group Functionalities</h1><hr><br>
+        <h1>Manage Groups</h1><hr><br>
         
         <span *ngFor="let group of groups">
             <div *ngIf="chosenGroup == group.group.name">
-                <label>This group is currently: <b> {{group.group.status}}</b></label><br>
+                <label>This group is currently: <b> {{group.group.status}}</b></label><br><br>
                 <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)">Enable Group</button>
                 <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)">Disable Group</button>
             </div>
@@ -86,7 +90,7 @@
     </div>
 
     <div id='groupInfosFunctionalitiesDiv' class='group-infos-functionalities-item'>
-        <h1>Properties Functionalities</h1><hr><br>
+        <h1>Manage Properties</h1><hr><br>
         <label>Down below, you are able to delete all properties for this group (this will clear all in app settings for the research application)</label><br><br>
         <button *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Properties</button>
         <ng-container *ngIf="confirmationCheck">

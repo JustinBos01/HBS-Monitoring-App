@@ -24,6 +24,14 @@ tr:nth-child(odd) {
     background-color: #dddddd;
 }
 
+.header-item {
+    grid-area: HI;
+    background-color: lightgray;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    font-size: 15px;
+}
+
 .userAddition {
     grid-area: UA;
     background-color: lightgray;
@@ -49,6 +57,7 @@ tr:nth-child(odd) {
 .grid-container {
     display: grid;
     grid-template-areas:
+        "HI"
         'UAAmount'
         'UA';
     grid-gap: 10px;
