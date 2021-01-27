@@ -1,4 +1,3 @@
-<button routerLink='/overview'>Home</button>
 <div class="grid-container" >
     <div class='header-item'>
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
@@ -10,8 +9,8 @@
                 <br>
                 <label>Enter the amount of users that needs to be added: </label>
                 <input #amountInput id='amountInput' type="number" formControlName="userAmount" (change)='addvalue(amountInput.value)' min="0"><br>
-                <label>Corresponding tag (only for randomized users): </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' value="" (keyup)='tagTbx.value = tagTbx.value' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*">
-                <button *ngIf='tagTbx.value != ""' class="button" type="submit" (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br><br>
+                <label>Corresponding tag (only for randomized users): </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' value="" (keyup)='tagTbx.value = tagTbx.value' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*"> |
+                <button [disabled]='tagTbx.value == ""' class="button" type="submit" (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br><br>
 
                 <button (click)="createSuperUsers()" type="button">Add To Superusers Group</button><br>
                 <button (click)='createUsers()' type="button" *ngIf='chosenGroup != "superuser"'>Add Users</button><br><br>
