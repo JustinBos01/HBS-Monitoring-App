@@ -4,18 +4,29 @@
         <h1>Graphs: {{chosenGroup}}</h1>
     </div>
     <div class="project-selection-item">
+
         <label>Select a Paradata Set: </label>
         <select #paradataSelection (change)="paradataSelection.value = paradataSelection.value; showGraph = false; showDeviceDoughnutGraph = false; showPhoneModelDoughnutGraph = false;">
             <option value=""></option>
             <option value="Devices">Devices</option>
             <option value="Receipts">Receipts</option>
             <option value="Status">Status (all groups)</option>
+            <option value="Events">Events</option>
         </select><br><br>
+
         <label *ngIf='paradataSelection.value == "Devices"'>Select specific paradata: </label>
         <select #deviceInfoTypeSelection *ngIf='paradataSelection.value == "Devices"' value="" (change)='deviceInfoTypeSelection.value = deviceInfoTypeSelection.value; selectionChange(deviceInfoTypeSelection.value)'>
             <option value=''></option>
             <option value='OS'>OS</option>
             <option value='Phone Model'>Phone Model</option>
+        </select><br>
+
+        <label *ngIf='paradataSelection.value == "Events"'>Select a user</label>
+        <select #userTimeSelection *ngIf='paradataSelection.value == "Events"' value="" (change)='userTimeSelection.value = userTimeSelection.value; selectionChange(userTimeSelection.value); getScreenTimeUser(screenTimeUserParadata, userTimeSelection.value)'>
+            <option value=''></option>
+            <ng-container *ngFor="let user of allUsernames">
+                <option value='{{user}}'>{{user}}</option>
+            </ng-container>
         </select><br>
     </div>
     <div class="description-item">
@@ -85,6 +96,28 @@
             [labels]="statusDoughnutChartLabels"
             [chartType]="statusDoughnutChartType">
             </canvas>
+        </ng-container>
+
+        <ng-container *ngIf='paradataSelection.value == "Events"'>
+            <h2>Events</h2><br><hr><br>
+            <h3>Group Average</h3><hr>
+            <canvas  
+            height="47%"
+            baseChart
+            [data]="screenTimeParadataTime"
+            [labels]="screenTimeParadataPages"
+            [chartType]="phoneModelDoughnutChartType"></canvas><br>
+
+            <ng-container *ngIf="userScreenTimeShow">
+                <hr><br>
+                <h3>User</h3><hr>
+                <canvas  
+                height="47%"
+                baseChart
+                [data]="screenTimeUserParadataTime"
+                [labels]="screenTimeUserParadataPages"
+                [chartType]="phoneModelDoughnutChartType"></canvas>
+            </ng-container>
         </ng-container>
     </div>
 

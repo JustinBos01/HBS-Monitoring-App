@@ -110,6 +110,7 @@ export class ParadataGroupComponent implements OnInit {
     this.receiptDataSource = [];
     this.filteredActivityData.length = 0;
     this.activityDataSource = [];
+    var filterNoRadio = <HTMLInputElement>document.getElementById("noneFilterRadio")
     
     if (selectedTable == 'Receipts') {
       if (filterValue != '') {
@@ -144,9 +145,14 @@ export class ParadataGroupComponent implements OnInit {
           var filterPhoneTypesCbxValue = <HTMLInputElement>document.getElementById("filterCbxPhone Types")
           var filterPhoneManufacturersCbxValue = <HTMLInputElement>document.getElementById("filterCbxPhone Manufacturers")
           var filterPhoneModelssCbxValue = <HTMLInputElement>document.getElementById("filterCbxPhone Models")
+          var filterUsernameRadioCbxValuePhones = <HTMLInputElement>document.getElementById("onlyFilterUsernameRadio")
+          var filterPhoneTypesRadioCbxValue = <HTMLInputElement>document.getElementById("onlyFilterPhone TypesRadio")
+          var filterPhoneManufacturersRadioCbxValue = <HTMLInputElement>document.getElementById("onlyFilterPhone ManufacturersRadio")
+          var filterPhoneModelssRadioCbxValue = <HTMLInputElement>document.getElementById("onlyFilterPhone ModelsRadio")
+          
           
           for (let element of this.phoneParadata){
-            if (filterUsernameCbxValuePhones.checked) {
+            if ((filterUsernameCbxValuePhones.checked || filterUsernameRadioCbxValuePhones.checked) && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
               if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
                 if (this.filteredPhoneData.includes(element) == false){
                   this.filteredPhoneData.push(element)
@@ -154,7 +160,7 @@ export class ParadataGroupComponent implements OnInit {
               }
             }
             
-            if (filterPhoneTypesCbxValue.checked) {
+            if ((filterPhoneTypesCbxValue.checked || filterPhoneTypesRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
               if (element.phoneType.toLowerCase().includes(filterValue.toLowerCase())) {
                 if (this.filteredPhoneData.includes(element) == false){
                   this.filteredPhoneData.push(element)
@@ -162,7 +168,7 @@ export class ParadataGroupComponent implements OnInit {
               }
             }
 
-            if (filterPhoneManufacturersCbxValue.checked) {
+            if ((filterPhoneManufacturersCbxValue.checked || filterPhoneManufacturersRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
               if (element.phoneManufacturer.toLowerCase().includes(filterValue.toLowerCase())) {
                 if (this.filteredPhoneData.includes(element) == false){
                   this.filteredPhoneData.push(element)
@@ -170,7 +176,7 @@ export class ParadataGroupComponent implements OnInit {
               }
             }
 
-            if (filterPhoneModelssCbxValue.checked) {
+            if ((filterPhoneModelssCbxValue.checked || filterPhoneModelssRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false) {
               if (element.phoneModel.toLowerCase().includes(filterValue.toLowerCase())) {
                 if (this.filteredPhoneData.includes(element) == false){
                   this.filteredPhoneData.push(element)
@@ -193,9 +199,12 @@ export class ParadataGroupComponent implements OnInit {
           var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
           var filterPageCbxValue = <HTMLInputElement>document.getElementById('filterCbxPage')
           var filterActionCbxValue = <HTMLInputElement>document.getElementById('filterCbxAction')
+          var filterUsernameRadioCbxValuePhones = <HTMLInputElement>document.getElementById('onlyFilterUsernameRadio')
+          var filterPageRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterPageRadio')
+          var filterActionRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterActionRadio')
           
           for (let element of this.activityParadata){
-            if (filterUsernameCbxValuePhones.checked) {
+            if ((filterUsernameCbxValuePhones.checked || filterUsernameRadioCbxValuePhones.checked) && filterPageRadioCbxValue.checked == false && filterActionRadioCbxValue.checked == false) {
               if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
                 if (this.filteredActivityData.includes(element) == false){
                   this.filteredActivityData.push(element)
@@ -203,7 +212,7 @@ export class ParadataGroupComponent implements OnInit {
               }
             }
 
-            if (filterPageCbxValue.checked) {
+            if ((filterPageCbxValue.checked || filterPageRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterActionRadioCbxValue.checked == false) {
               if (element.objectName.toLowerCase().includes(filterValue.toLowerCase())) {
                 if (this.filteredActivityData.includes(element) == false){
                   this.filteredActivityData.push(element)
@@ -211,7 +220,7 @@ export class ParadataGroupComponent implements OnInit {
               }
             }
 
-            if (filterActionCbxValue.checked) {
+            if ((filterActionCbxValue.checked || filterActionRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPageRadioCbxValue.checked == false) {
               if (element.action.toLowerCase().includes(filterValue.toLowerCase())) {
                 if (this.filteredActivityData.includes(element) == false){
                   this.filteredActivityData.push(element)

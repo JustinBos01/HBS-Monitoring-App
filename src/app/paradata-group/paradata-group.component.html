@@ -28,11 +28,11 @@
             <label style="color: rgb(102, 102, 102);" *ngIf='availableFilters.length != 0'>
                 Available filters: <br>
                 <ng-container *ngFor='let filterValue of availableFilters'>
-                    <input #filterCbx{{filterValue}} id='filterCbx{{filterValue}}' type='checkbox' [checked]=true (change)='checked = false; filterChange(paradataSelection.value, filterInput.value)'>
+                    <input id="onlyFilter{{filterValue}}Radio" type="radio" name='filter' (change)='filterChange(paradataSelection.value, filterInput.value)'>|<input #filterCbx{{filterValue}} id='filterCbx{{filterValue}}' type='checkbox' [checked]=true (change)='filterChange(paradataSelection.value, filterInput.value)'>
                     {{filterValue}}<br>
                 </ng-container>
+                <input id="noneFilterRadio" type="radio" name='filter' checked='true' (change)='filterChange(paradataSelection.value, filterInput.value)'> None
             </label>
-
         </div>
 
         <div class="table-item" *ngIf='paradataSelection.value != ""'>
@@ -164,5 +164,5 @@
         </div>
     </div>
 </body>
-<button mat-button (click)='navigate()'>Graphs</button>`
+<button mat-button (click)='navigate()'>Graphs</button>
 

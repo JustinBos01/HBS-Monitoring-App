@@ -287,6 +287,16 @@ export class ConfigService {
        });
   }
 
+  getUserActivityParadata(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/dashboard/paradatadatetime';
+    return this.http.post<Users[]>(
+      configUrl, {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+        "group": {"name" : localStorage.getItem('chosenGroup')},
+        "user": {"name" : localStorage.getItem('chosenUser')}
+       });
+  }
+
   getUserReceiptPhotos(): Observable<Users[]> {
     var configUrl = 'http://localhost:4200/budget/dashboard/userreceipts';
     return this.http.post<Users[]>(
@@ -299,6 +309,15 @@ export class ConfigService {
 
   getReceiptsPerUser(): Observable<any> {
     var configUrl = 'http://localhost:4200/budget/dashboard/receiptsperuser';
+    return this.http.post<any>(
+      configUrl, {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+        "group" : {"name" : localStorage.getItem('chosenGroup')}
+       });
+  }
+
+  getParadataScreenTime(): Observable<any> {
+    var configUrl = 'http://localhost:4200/budget/dashboard/paradatascreentime';
     return this.http.post<any>(
       configUrl, {
         "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},

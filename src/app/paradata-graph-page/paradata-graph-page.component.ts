@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../config/config.service'
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, MultiDataSet, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-paradata-graph-page',
@@ -33,7 +34,25 @@ export class ParadataGraphPageComponent implements OnInit {
   showDeviceDoughnutGraph = false;
   showPhoneModelDoughnutGraph = false;
   chosenGroup;
-  allPhoneTypes = [];
+  allPhoneOS = [];
+  screenTimeParadata = [];
+  screenTimeParadataPages = [];
+  screenTimeParadataTime = [];
+  screenTimeParadataContent = [{
+    Page: String,
+    Time: Number
+  }]
+  screenTimeUserParadata = [];
+  screenTimeUserParadataPages = [];
+  screenTimeUserParadataTime = [];
+  screenTimeUserParadataContent = [{
+    Page: String,
+    Time: Number
+  }]
+  
+  allUsernames = [];
+  allUsers;
+  userScreenTimeShow = false;
   
   receiptsBarChartOptions: ChartOptions = {
     responsive: true,
@@ -49,6 +68,14 @@ export class ParadataGraphPageComponent implements OnInit {
   deviceDoughnutChartLabels: Label[] = ['IOS', 'Android'];
   deviceDoughnutChartData: MultiDataSet = [this.deviceDifference];
   deviceDoughnutChartType: ChartType = 'doughnut';
+
+  screenTimeDoughnutChartLabels: Label[] = [this.screenTimeParadataPages];
+  screenTimeDoughnutChartData: MultiDataSet = [this.screenTimeParadataTime];
+  screenTimeDoughnutChartType: ChartType = 'doughnut';
+
+  screenTimeUserDoughnutChartLabels: Label[] = [this.screenTimeUserParadataPages];
+  screenTimeUserDoughnutChartData: MultiDataSet = [this.screenTimeUserParadataTime];
+  screenTimeUserDoughnutChartType: ChartType = 'doughnut';
 
   statusDoughnutChartLabels: Label[] = ['Disabled', 'Enabled'];
   statusDoughnutChartData: MultiDataSet = [this.statusDifference];
@@ -67,8 +94,21 @@ export class ParadataGraphPageComponent implements OnInit {
     this.getParadata()
     this.getDevicePercentage(this.newPhoneType)
     this.getGroupStatusDifference()
+    this.getAllUsers(this.allUsernames)
+    this.getScreenTimeGroup(this.screenTimeParadata)
     
     this.getReceiptAmount(7, 14)
+  }
+
+  getAllUsers(allUsernames) {
+    this.configService.getUsersOfGroup(this.chosenGroup)
+    .subscribe(users => {
+        this.allUsers = users;
+        for (let index of this.allUsers) {
+          allUsernames.push(index.name)
+        }
+      }
+    )
   }
 
   //get paradata
@@ -100,7 +140,6 @@ export class ParadataGraphPageComponent implements OnInit {
       this.phoneModels.length = 0
       var index = 0;
       for (let element of newPhoneType) {
-        console.log(element)
         localStorage.setItem('phoneModel', element.phoneModel)
         this.phoneModelName.push(element.phoneModel)
         this.phoneModels[index] = this.phoneData.filter(this.getAmountPhoneModels)
@@ -143,6 +182,54 @@ export class ParadataGraphPageComponent implements OnInit {
       })
   }
 
+  getScreenTimeGroup(paradataPlaceholder) {
+    this.screenTimeParadataContent.length = 0;
+    this.screenTimeParadataPages.length = 0;
+    this.screenTimeParadataTime.length = 0;
+    this.configService.getParadataScreenTime().subscribe(screenTimeParadataValues => {
+      paradataPlaceholder = screenTimeParadataValues;
+      for (let screenTime of paradataPlaceholder.paradataScreenTimes) {
+        if (this.screenTimeParadataContent.includes(screenTime.objectName) == false){
+          this.screenTimeParadataContent.push({Page: screenTime.objectName, Time: screenTime.screenTime})
+        } else {
+          const foundIndex = (element) => element == screenTime.objectName
+          this.screenTimeParadataContent[this.screenTimeParadataContent.findIndex(foundIndex)].Time += screenTime.screenTime
+        }
+      }
+      for (let element of this.screenTimeParadataContent) {
+        this.screenTimeParadataPages.push(element.Page)
+        this.screenTimeParadataTime.push(element.Time)
+      }
+    })
+  }
+
+  getScreenTimeUser(paradataPlaceholder, corUser) {
+    this.screenTimeUserParadataContent.length = 0;
+    this.screenTimeUserParadataPages.length = 0;
+    this.screenTimeUserParadataTime.length = 0;
+
+    this.configService.getParadataScreenTime().subscribe(screenTimeParadataValues => {
+      paradataPlaceholder = screenTimeParadataValues;
+      for (let screenTime of paradataPlaceholder.paradataScreenTimes) {
+        if (screenTime.userName == corUser && corUser != ""){
+          this.userScreenTimeShow = true;
+          if (this.screenTimeUserParadataContent.includes(screenTime.objectName) == false){
+            this.screenTimeUserParadataContent.push({Page: screenTime.objectName, Time: screenTime.screenTime})
+          } else {
+            const foundIndex = (element) => element == screenTime.objectName
+            this.screenTimeUserParadataContent[this.screenTimeParadataContent.findIndex(foundIndex)].Time += screenTime.screenTime
+          }
+        } else {
+          this.userScreenTimeShow = false;
+        }
+      }
+      for (let element of this.screenTimeParadataContent) {
+        this.screenTimeUserParadataPages.push(element.Page)
+        this.screenTimeUserParadataTime.push(element.Time)
+      }
+    })
+  }
+
   //show correct graphs
   selectionChange(givenValue) {
     this.showDeviceDoughnutGraph = false
@@ -175,8 +262,10 @@ export class ParadataGraphPageComponent implements OnInit {
   getModel(element, newPhoneType) {
     for (let phone of element){
       if (newPhoneType.includes(phone.phoneModel) == false){
-        console.log(phone)
         newPhoneType.push(phone)
+      }
+      if (this.allPhoneOS.includes(phone.phoneType) == false){
+        this.allPhoneOS
       }
     }
   }

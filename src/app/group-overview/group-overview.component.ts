@@ -57,12 +57,12 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //localStorage.setItem('chosenGroup', '')
+    localStorage.setItem('chosenGroup', '')
+    localStorage.setItem('chosenUser', '')
     this.navigation.hide();
     this.showGroupResponse();
     this.getAllUsers();
     this.getAllGroupNames();
-    console.log(this.allGroupNames)
   }
 
   createGroup(userData) {
