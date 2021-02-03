@@ -7,6 +7,7 @@ import { GroupPageService } from '../group-page/group-page.service';
 import { GroupOverviewService } from './group-overview.service'
 import { Router } from '@angular/router';
 import { TopBarService } from '../top-bar/top-bar.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-overview',
@@ -70,14 +71,12 @@ export class GroupOverviewComponent implements OnInit {
     if(this.allGroupNames.includes(userData.groupName)){
       alert("The group: " + userData.groupName + " could not be added,\n Group already exists")
     } else {
-      
       this.configService.createGroup(userData.groupName, "", "")
         .subscribe(groupdata => {
           this.groupData = groupdata;
           this.showGroupResponse()
           alert("The group: " + userData.groupName + " has been added")
-        }
-      )
+        })
     }
       
   }

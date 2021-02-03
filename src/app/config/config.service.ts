@@ -324,4 +324,13 @@ export class ConfigService {
         "group" : {"name" : localStorage.getItem('chosenGroup')}
        });
   }
+
+  getParadataClick(): Observable<any> {
+    var configUrl = 'http://localhost:4200/budget/dashboard/paradataclick';
+    return this.http.post<any>(
+      configUrl, {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+        "group" : {"name" : localStorage.getItem('chosenGroup')}
+       });
+  }
 }

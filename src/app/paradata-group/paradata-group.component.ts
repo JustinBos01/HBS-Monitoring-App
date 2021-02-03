@@ -3,8 +3,9 @@ import { ConfigService } from '../config/config.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import { filter } from 'rxjs/operators';
+import { catchError, filter } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -17,9 +18,11 @@ export class ParadataGroupComponent implements OnInit {
   paradata;
   phoneParadata;
   activityParadata;
+  clicksData;
   receiptParadataColumns: string[] = ['userName', 'date', 'receipts'];
   phoneParadataColumns: string[] = ['userName', 'phoneName', 'phoneType', 'phoneManufacturer', 'phoneModel', 'receipts', 'products', 'photos'];
   activityParadataColumns: string[] = ['date', 'time', 'userName', 'objectName', 'action'];
+  clicksDataColumns: string[] = ['userName', 'action', 'objectName', 'clicks'];
   chosenGroup = localStorage.getItem('chosenGroup');
   receiptDataSource;
   phoneDataSource;
@@ -28,7 +31,10 @@ export class ParadataGroupComponent implements OnInit {
   filteredReceiptData = [];
   filteredPhoneData = [];
   filteredActivityData = [];
+  filteredClicksData = [];
   availableFilters = [];
+  
+  clicksDataScource;
   
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -42,7 +48,7 @@ export class ParadataGroupComponent implements OnInit {
     this.getAmountOfReceipts()
     this.getPhoneParadata()
     this.getActivityParadata()
-    
+    this.getEventClicks()
   }
 
   //set paradata tables
@@ -66,28 +72,62 @@ export class ParadataGroupComponent implements OnInit {
       this.getActivityParadata()
       this.availableFilters.push("Username", "Page", "Action")
     }
+
+    if (selectedTable == 'Clicks') {
+      this.getEventClicks()
+      this.availableFilters.push('Username', 'Action', 'Page')
+    }
   }
 
   //get all receipt paradata
-  getAmountOfReceipts() {
-    this.configService.getAmountOfReceipts().subscribe(data => {
-      this.paradata = data;
-      this.paradata = this.paradata.receiptsPerDays;
-      this.receiptDataSource = new MatTableDataSource(this.paradata);
-      this.receiptDataSource.sort = this.sort;
-      this.receiptDataSource.paginator = this.paginator;
+  getEventClicks() {
+    this.configService.getParadataClick().subscribe(data => {
+      this.clicksData = data;
+      this.clicksData = this.clicksData.paradataClicks;
+      this.clicksDataScource = new MatTableDataSource(this.clicksData);
+      this.clicksDataScource.sort = this.sort;
+      this.clicksDataScource.paginator = this.paginator;
     })
+  }
+
+  getAmountOfReceipts() {
+    try {
+      this.configService.getAmountOfReceipts().subscribe(data => {
+        this.paradata = data;
+        this.paradata = this.paradata.receiptsPerDays;
+        this.receiptDataSource = new MatTableDataSource(this.paradata);
+        this.receiptDataSource.sort = this.sort;
+        this.receiptDataSource.paginator = this.paginator;
+      })
+    }
+    catch(error) {
+      alert("No receipt data")
+    }
   }
 
   //get all phone paradata
   getPhoneParadata() {
-    this.configService.getPhoneParadata().subscribe(data => {
-      this.phoneParadata = data;
-      this.phoneParadata = this.phoneParadata.receiptsPerPhones;
-      this.phoneDataSource = new MatTableDataSource(this.phoneParadata);
-      this.phoneDataSource.sort = this.sort;
-      this.phoneDataSource.paginator = this.paginator;
-    })
+    this.configService.getPhoneParadata()
+      .pipe(
+        catchError(err => {
+          alert('No phone data available')
+          console.log('No phone data available')
+          return err;
+        })
+      )
+
+      .subscribe(
+        data => {
+          this.phoneParadata = data;
+          this.phoneParadata = this.phoneParadata.receiptsPerPhones;
+          this.phoneDataSource = new MatTableDataSource(this.phoneParadata);
+          this.phoneDataSource.sort = this.sort;
+          this.phoneDataSource.paginator = this.paginator;
+          res => console.log('HTTP response', res);
+          err => console.log('HTTP Error', err);
+          () => console.log('test')
+      }
+      )
   }
 
   //get all event paradata
@@ -107,9 +147,10 @@ export class ParadataGroupComponent implements OnInit {
     this.receiptDataSource = [];
     this.filteredPhoneData.length = 0;
     this.phoneDataSource = [];
-    this.receiptDataSource = [];
     this.filteredActivityData.length = 0;
     this.activityDataSource = [];
+    this.filteredClicksData.length = 0;
+    this.clicksDataScource = [];
     var filterNoRadio = <HTMLInputElement>document.getElementById("noneFilterRadio")
     
     if (selectedTable == 'Receipts') {
@@ -132,8 +173,6 @@ export class ParadataGroupComponent implements OnInit {
       } else {
         this.getAmountOfReceipts()
       }
-      this.receiptDataSource.sort = this.sort;
-      this.receiptDataSource.paginator = this.paginator;
     }
 
     if (selectedTable == 'Phones') {
@@ -232,6 +271,59 @@ export class ParadataGroupComponent implements OnInit {
         })
       } else {
         this.getActivityParadata()
+      }
+    }
+
+    if (selectedTable == 'Clicks') {
+      if (filterValue != '') {
+        try {
+          this.configService.getParadataClick().subscribe(data => {
+            this.clicksData = data;
+            this.clicksData = this.clicksData.paradataClicks;
+            
+            var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
+            var filterActionCbxValue = <HTMLInputElement>document.getElementById('filterCbxAction')
+            var filterPageCbxValue = <HTMLInputElement>document.getElementById('filterCbxPage')
+            var filterUsernameRadioCbxValuePhones = <HTMLInputElement>document.getElementById('onlyFilterUsernameRadio')
+            var filterActionRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterActionRadio')
+            var filterPageRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterPageRadio')
+            
+            
+            for (let element of this.clicksData){
+              if ((filterUsernameCbxValuePhones.checked || filterUsernameRadioCbxValuePhones.checked) && filterPageRadioCbxValue.checked == false && filterActionRadioCbxValue.checked == false) {
+                if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredClicksData.includes(element) == false){
+                    this.filteredClicksData.push(element)
+                  }
+                }
+              }
+
+              if ((filterPageCbxValue.checked || filterPageRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterActionRadioCbxValue.checked == false) {
+                if (element.objectName.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredClicksData.includes(element) == false){
+                    this.filteredClicksData.push(element)
+                  }
+                }
+              }
+
+              if ((filterActionCbxValue.checked || filterActionRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPageRadioCbxValue.checked == false) {
+                if (element.action.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredClicksData.includes(element) == false){
+                    this.filteredClicksData.push(element)
+                  }
+                }
+              }
+            }
+            this.clicksData = this.filteredClicksData
+            this.clicksDataScource = this.filteredClicksData
+          })
+        }
+        catch(error) {
+          alert("An error has occured")
+        }
+      } else {
+        console.log( 'werkt niet')
+        this.getEventClicks()
       }
     }
   }
