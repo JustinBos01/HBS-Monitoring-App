@@ -16,8 +16,6 @@ export class LoginPageComponent implements OnInit {
   items;
   loginForm;
   superUserData;
-  name;
-  password;
   superUsers;
 
   constructor(
@@ -37,7 +35,6 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
     localStorage.clear()
-    this.items = this.userPageService.getItems();
     this.navigation.hide();
     
   }
@@ -46,7 +43,6 @@ export class LoginPageComponent implements OnInit {
   //saves login data
   onSubmit(userData) {
     this.loginPageService.superUserData = userData;
-    this.items = this.userPageService.clearItems();
     
     localStorage.setItem('superUserData.name', this.loginPageService.superUserData.name);
     localStorage.setItem('superUserData.password', this.loginPageService.superUserData.password);
