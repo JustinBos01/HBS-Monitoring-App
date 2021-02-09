@@ -3,9 +3,11 @@ import { ConfigService } from '../config/config.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import { catchError, filter } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
 
 
 @Component({
@@ -81,18 +83,44 @@ export class ParadataGroupComponent implements OnInit {
 
   //get all receipt paradata
   getEventClicks() {
-    this.configService.getParadataClick().subscribe(data => {
-      this.clicksData = data;
-      this.clicksData = this.clicksData.paradataClicks;
-      this.clicksDataScource = new MatTableDataSource(this.clicksData);
-      this.clicksDataScource.sort = this.sort;
-      this.clicksDataScource.paginator = this.paginator;
-    })
+    this.configService.getParadataClick()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for gathering the data for the screen clicks has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for gathering the data for the screen clicks has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(data => {
+        this.clicksData = data;
+        this.clicksData = this.clicksData.paradataClicks;
+        this.clicksDataScource = new MatTableDataSource(this.clicksData);
+        this.clicksDataScource.sort = this.sort;
+        this.clicksDataScource.paginator = this.paginator;
+      })
   }
 
   getAmountOfReceipts() {
     try {
-      this.configService.getAmountOfReceipts().subscribe(data => {
+      this.configService.getAmountOfReceipts()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for gathering the data for the amount of receipts has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for gathering the data for the amount of receipts has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(data => {
         this.paradata = data;
         this.paradata = this.paradata.receiptsPerDays;
         this.receiptDataSource = new MatTableDataSource(this.paradata);
@@ -108,14 +136,18 @@ export class ParadataGroupComponent implements OnInit {
   //get all phone paradata
   getPhoneParadata() {
     this.configService.getPhoneParadata()
-      .pipe(
-        catchError(err => {
-          alert('No phone data available')
-          console.log('No phone data available')
-          return err;
-        })
-      )
-
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for gathering the data for phones has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for gathering the data for phones has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(
         data => {
           this.phoneParadata = data;
@@ -132,13 +164,26 @@ export class ParadataGroupComponent implements OnInit {
 
   //get all event paradata
   getActivityParadata() {
-    this.configService.getActivityParadata().subscribe(data => {
-      this.activityParadata = data;
-      this.activityParadata = this.activityParadata.paradataDateTimes;
-      this.activityDataSource = new MatTableDataSource(this.activityParadata);
-      this.activityDataSource.sort = this.sort;
-      this.activityDataSource.paginator = this.paginator;
-    })
+    this.configService.getActivityParadata()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for gathering the data for activities has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for gathering the data for activities has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(data => {
+        this.activityParadata = data;
+        this.activityParadata = this.activityParadata.paradataDateTimes;
+        this.activityDataSource = new MatTableDataSource(this.activityParadata);
+        this.activityDataSource.sort = this.sort;
+        this.activityDataSource.paginator = this.paginator;
+      })
   }
 
   //filter values, depends on selected paradata table
@@ -155,21 +200,34 @@ export class ParadataGroupComponent implements OnInit {
     
     if (selectedTable == 'Receipts') {
       if (filterValue != '') {
-        this.configService.getAmountOfReceipts().subscribe(data => {
-          this.paradata = data;
-          this.paradata = this.paradata.receiptsPerDays;
-          var filterUsernameCbxValueReceipts = <HTMLInputElement>document.getElementById('filterCbxUsername')
-          for (let element of this.paradata){
-            if (filterUsernameCbxValueReceipts.checked) {
-              if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
-                if (this.filteredReceiptData.includes(element) == false){
-                  this.filteredReceiptData.push(element)
+        this.configService.getAmountOfReceipts()
+          .pipe(catchError((error: HttpErrorResponse) => {
+            let errorMessage = '';
+            if (error.error instanceof ErrorEvent) {
+              errorMessage = `Error: ${error.error.message}.\n
+              An error for filtering the receipts has occurred`;
+            } else {
+              errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+              An error for filtering the receipts has occurred`;
+            }
+            window.alert(errorMessage);
+            return throwError(error)
+          }))
+          .subscribe(data => {
+            this.paradata = data;
+            this.paradata = this.paradata.receiptsPerDays;
+            var filterUsernameCbxValueReceipts = <HTMLInputElement>document.getElementById('filterCbxUsername')
+            for (let element of this.paradata){
+              if (filterUsernameCbxValueReceipts.checked) {
+                if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredReceiptData.includes(element) == false){
+                    this.filteredReceiptData.push(element)
+                  }
                 }
               }
             }
-          }
-          this.receiptDataSource = this.filteredReceiptData
-        })
+            this.receiptDataSource = this.filteredReceiptData
+          })
       } else {
         this.getAmountOfReceipts()
       }
@@ -177,7 +235,20 @@ export class ParadataGroupComponent implements OnInit {
 
     if (selectedTable == 'Phones') {
       if (filterValue != '') {
-        this.configService.getPhoneParadata().subscribe(data => {
+        this.configService.getPhoneParadata()
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}.\n
+            An error for filtering the phones has occurred`;
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+            An error for filtering the phones has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(data => {
           this.phoneParadata = data;
           this.phoneParadata = this.phoneParadata.receiptsPerPhones;
           var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById("filterCbxUsername")
@@ -232,7 +303,20 @@ export class ParadataGroupComponent implements OnInit {
 
     if (selectedTable == 'Activities') {
       if (filterValue != '') {
-        this.configService.getActivityParadata().subscribe(data => {
+        this.configService.getActivityParadata()
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}.\n
+            An error for filtering the activities has occurred`;
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+            An error for filtering the activities has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(data => {
           this.activityParadata = data;
           this.activityParadata = this.activityParadata.paradataDateTimes;
           var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
@@ -277,46 +361,59 @@ export class ParadataGroupComponent implements OnInit {
     if (selectedTable == 'Clicks') {
       if (filterValue != '') {
         try {
-          this.configService.getParadataClick().subscribe(data => {
-            this.clicksData = data;
-            this.clicksData = this.clicksData.paradataClicks;
-            
-            var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
-            var filterActionCbxValue = <HTMLInputElement>document.getElementById('filterCbxAction')
-            var filterPageCbxValue = <HTMLInputElement>document.getElementById('filterCbxPage')
-            var filterUsernameRadioCbxValuePhones = <HTMLInputElement>document.getElementById('onlyFilterUsernameRadio')
-            var filterActionRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterActionRadio')
-            var filterPageRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterPageRadio')
-            
-            
-            for (let element of this.clicksData){
-              if ((filterUsernameCbxValuePhones.checked || filterUsernameRadioCbxValuePhones.checked) && filterPageRadioCbxValue.checked == false && filterActionRadioCbxValue.checked == false) {
-                if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
-                  if (this.filteredClicksData.includes(element) == false){
-                    this.filteredClicksData.push(element)
+          this.configService.getParadataClick()
+            .pipe(catchError((error: HttpErrorResponse) => {
+              let errorMessage = '';
+              if (error.error instanceof ErrorEvent) {
+                errorMessage = `Error: ${error.error.message}.\n
+                An error for filtering the click activities has occurred`;
+              } else {
+                errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+                An error for filtering the click activities has occurred`;
+              }
+              window.alert(errorMessage);
+              return throwError(error)
+            }))
+            .subscribe(data => {
+              this.clicksData = data;
+              this.clicksData = this.clicksData.paradataClicks;
+              
+              var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
+              var filterActionCbxValue = <HTMLInputElement>document.getElementById('filterCbxAction')
+              var filterPageCbxValue = <HTMLInputElement>document.getElementById('filterCbxPage')
+              var filterUsernameRadioCbxValuePhones = <HTMLInputElement>document.getElementById('onlyFilterUsernameRadio')
+              var filterActionRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterActionRadio')
+              var filterPageRadioCbxValue = <HTMLInputElement>document.getElementById('onlyFilterPageRadio')
+              
+              
+              for (let element of this.clicksData){
+                if ((filterUsernameCbxValuePhones.checked || filterUsernameRadioCbxValuePhones.checked) && filterPageRadioCbxValue.checked == false && filterActionRadioCbxValue.checked == false) {
+                  if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
+                    if (this.filteredClicksData.includes(element) == false){
+                      this.filteredClicksData.push(element)
+                    }
                   }
                 }
-              }
 
-              if ((filterPageCbxValue.checked || filterPageRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterActionRadioCbxValue.checked == false) {
-                if (element.objectName.toLowerCase().includes(filterValue.toLowerCase())) {
-                  if (this.filteredClicksData.includes(element) == false){
-                    this.filteredClicksData.push(element)
+                if ((filterPageCbxValue.checked || filterPageRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterActionRadioCbxValue.checked == false) {
+                  if (element.objectName.toLowerCase().includes(filterValue.toLowerCase())) {
+                    if (this.filteredClicksData.includes(element) == false){
+                      this.filteredClicksData.push(element)
+                    }
                   }
                 }
-              }
 
-              if ((filterActionCbxValue.checked || filterActionRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPageRadioCbxValue.checked == false) {
-                if (element.action.toLowerCase().includes(filterValue.toLowerCase())) {
-                  if (this.filteredClicksData.includes(element) == false){
-                    this.filteredClicksData.push(element)
+                if ((filterActionCbxValue.checked || filterActionRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPageRadioCbxValue.checked == false) {
+                  if (element.action.toLowerCase().includes(filterValue.toLowerCase())) {
+                    if (this.filteredClicksData.includes(element) == false){
+                      this.filteredClicksData.push(element)
+                    }
                   }
                 }
               }
-            }
-            this.clicksData = this.filteredClicksData
-            this.clicksDataScource = this.filteredClicksData
-          })
+              this.clicksData = this.filteredClicksData
+              this.clicksDataScource = this.filteredClicksData
+            })
         }
         catch(error) {
           alert("An error has occured")

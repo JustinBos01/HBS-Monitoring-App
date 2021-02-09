@@ -7,7 +7,9 @@ import { GroupPageService } from '../group-page/group-page.service';
 import { GroupOverviewService } from './group-overview.service'
 import { Router } from '@angular/router';
 import { TopBarService } from '../top-bar/top-bar.service';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-group-overview',
@@ -68,22 +70,43 @@ export class GroupOverviewComponent implements OnInit {
 
   createGroup(userData) {
     //create empty group
-    if(this.allGroupNames.includes(userData.groupName)){
-      alert("The group: " + userData.groupName + " could not be added,\n Group already exists")
-    } else {
-      this.configService.createGroup(userData.groupName, "", "")
-        .subscribe(groupdata => {
-          this.groupData = groupdata;
-          this.showGroupResponse()
-          alert("The group: " + userData.groupName + " has been added")
-        })
-    }
+    
+    this.configService.createGroup(userData.groupName, "", "")
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for creating a new group has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for creating a new group has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(groupdata => {
+        this.groupData = groupdata;
+        this.showGroupResponse()
+        alert("The group: " + userData.groupName + " has been added")
+      })
       
   }
 
   //get group data
   showGroupResponse() {
     this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all groups has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all groups has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(groups => {
         this.groups = groups;
       })
@@ -91,6 +114,18 @@ export class GroupOverviewComponent implements OnInit {
 
   getAllGroupNames() {
     this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all group names has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all group names has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(groups => {
         this.groups = groups;
         for(let groupName of this.groups) {
@@ -103,6 +138,18 @@ export class GroupOverviewComponent implements OnInit {
   renameGroup(groupId, oldName) {
     this.newGroupName = document.getElementById('group'+groupId)
     this.configService.renameGroup(oldName, this.newGroupName.value)
+    .pipe(catchError((error: HttpErrorResponse) => {
+      let errorMessage = '';
+      if (error.error instanceof ErrorEvent) {
+        errorMessage = `Error: ${error.error.message}.\n
+        An error for renaming a group has occurred`;
+      } else {
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+        An error for renaming a group has occurred`;
+      }
+      window.alert(errorMessage);
+      return throwError(error)
+    }))
     .subscribe(_ => 
       {
         this.showGroupResponse();
@@ -130,26 +177,52 @@ export class GroupOverviewComponent implements OnInit {
   deleteGroups() {
     //get all empty groups
     for (let group of this.groups) {
-      if (group.group.users == 0){
+      if (group.group.users == 0) {
         this.emptyGroups.push(group.group.name)
       } 
     }
 
     //empty groupinfos for groups with no users
     for (let empty of this.emptyGroups){
-      this.configService.deleteGroupInfos(empty).subscribe(nv => 
-        {
-          //delete empty groups
-          this.configService.deleteEmptyGroups(empty).subscribe(nv =>
-            {
-              if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
-                //refresh data
-                this.showGroupResponse()
-              }
-            }
-          )
-        }
-      )
+      this.configService.deleteGroupInfos(empty)
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}.\n
+            An error for deleting a group's has occurred`;
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+            An error for deleting a group's settings has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(nv => 
+          {
+            //delete empty groups
+            this.configService.deleteEmptyGroups(empty)
+              .pipe(catchError((error: HttpErrorResponse) => {
+                let errorMessage = '';
+                if (error.error instanceof ErrorEvent) {
+                  errorMessage = `Error: ${error.error.message}.\n
+                  An error for deleting a group has occurred`;
+                } else {
+                  errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+                  An error for deleting a group has occurred`;
+                }
+                window.alert(errorMessage);
+                return throwError(error)
+              }))
+              .subscribe(nv =>
+                {
+                  if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
+                    //refresh data
+                    this.showGroupResponse()
+                  }
+                }
+              )
+          }
+        )
     }
   }
 
@@ -161,15 +234,28 @@ export class GroupOverviewComponent implements OnInit {
 
   //delete a single empty group (on interaction)
   deleteSingleEmptyGroup(groupName) {
-    this.configService.deleteGroupInfos(groupName).subscribe(nv => 
-      {
-        this.configService.deleteSingleEmptyGroup(groupName)
-        .subscribe(_ => {
-            this.showGroupResponse()
-          }
-        )
-      }
-    )
+    this.configService.deleteGroupInfos(groupName)
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for deleting groups has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for deleting groups has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(nv => 
+        {
+          this.configService.deleteSingleEmptyGroup(groupName)
+          .subscribe(_ => {
+              this.showGroupResponse()
+            }
+          )
+        }
+      )
   }
 
   //filter groups
@@ -177,6 +263,18 @@ export class GroupOverviewComponent implements OnInit {
     localStorage.setItem('filterValue', filterValue)
     this.alteredFilter = functionType
     this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for filtering has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for filtering has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(groups => {
         //get filter values
         if (this.alteredFilter == 'enabled' && filterValue != '') {
@@ -274,6 +372,18 @@ export class GroupOverviewComponent implements OnInit {
   //get users of ALL groups
   getAllUsers() {
     this.configService.getAllUsers()
+    .pipe(catchError((error: HttpErrorResponse) => {
+      let errorMessage = '';
+      if (error.error instanceof ErrorEvent) {
+        errorMessage = `Error: ${error.error.message}.\n
+        An error for retrieving all users has occurred`;
+      } else {
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+        An error for retrieving all users has occurred`;
+      }
+      window.alert(errorMessage);
+      return throwError(error)
+    }))
     .subscribe(users => {
         this.allUsers = users;
         this.allUsers = this.allUsers.userNames.length

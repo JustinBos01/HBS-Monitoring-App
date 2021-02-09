@@ -8,6 +8,9 @@ import { GroupOverviewService } from '../group-overview/group-overview.service';
 import { TopBarService } from '../top-bar/top-bar.service';
 import { Router } from '@angular/router';
 import { basename } from 'path';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
 
 
 @Component({
@@ -96,6 +99,18 @@ export class GroupPageComponent implements OnInit {
   showGroupResponse() {
     this.allGroupNames.length = 0;
     this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all groups has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all groups has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(groups => {
         this.groups = groups;
         this.getGroupInfosAmount()
@@ -109,6 +124,18 @@ export class GroupPageComponent implements OnInit {
   //enable selected group
   enableGroup() {
     this.configService.enableGroup()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for enabling a group has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for enabling a group has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(_ => {
         window.location.reload()
       }
@@ -118,6 +145,18 @@ export class GroupPageComponent implements OnInit {
   //disable selected groups
   disableGroup() {
     this.configService.disableGroup()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for disabling a group has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for disabling a group has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(_ => {
         window.location.reload()
       }
@@ -143,9 +182,21 @@ export class GroupPageComponent implements OnInit {
     
     //execute change for group infos, this function can mean adding, changing or deleting groupinfos
     this.configService.changeGroupInfos()
-    .subscribe(_ => {
-      window.location.reload()
-    })
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for changing the group settings has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for changing the group settings has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(_ => {
+        window.location.reload()
+      })
   }
   
   //create new group infos, adds group infos to already existing group infos collection (which can be empty)
@@ -186,9 +237,21 @@ export class GroupPageComponent implements OnInit {
     }
     
     this.configService.changeGroupInfos()
-    .subscribe(_ => {
-      window.location.reload();
-    })
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for changing group settings has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for changing group settings has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(_ => {
+        window.location.reload();
+      })
   }
   
   //change password of a user
@@ -198,9 +261,21 @@ export class GroupPageComponent implements OnInit {
     .subscribe()
     
     this.configService.getUsersOfGroup(this.configService.chosenGroup)
-    .subscribe(users => {
-        this.user = users;
-    })
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for changing a password has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for changing a password has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(users => {
+          this.user = users;
+      })
   }
 
   //regroup single user
@@ -208,18 +283,42 @@ export class GroupPageComponent implements OnInit {
     if (this.newGroup != '') {
       this.newGroup = document.getElementById('group'+userId)
       this.configService.regroupUsers(correspondingUser, this.newGroup.value)
-      .subscribe(_ => {
-        this.getUsersOfGroup()
-      })
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}.\n
+            An error for regrouping a user has occurred`;
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+            An error for regrouping a user has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(_ => {
+          this.getUsersOfGroup()
+        })
     }
   }
 
   //regroup entire group
   regroupGroup(reGroupValue) {
     this.configService.regroupGroup(this.configService.chosenGroup, reGroupValue)
-    .subscribe(_ => {
-      this.router.navigate(['/overview'])
-    })
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for regrouping all users in a group has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for regrouping all users in a group has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(_ => {
+        this.router.navigate(['/overview'])
+      })
   }
 
   //counts amount of new textboxes to create
@@ -260,22 +359,60 @@ export class GroupPageComponent implements OnInit {
       "group": {"name" : newGroupName},
       "groupInfos"  : this.chosenGroupInfos
       }
-    this.configService.duplicateGroup(this.JsonString).subscribe(_ => {
-      this.router.navigate(['/overview'])
-    })
+    this.configService.duplicateGroup(this.JsonString)
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for duplicating a group has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for duplicating a group has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(_ => {
+        this.router.navigate(['/overview'])
+      })
   }
 
   //delete all groupinfos of selected group
   deleteGroupInfos() {
-    this.configService.deleteGroupInfos(localStorage.getItem('chosenGroup')).subscribe(_ => {
-      window.location.reload()
-    })
+    this.configService.deleteGroupInfos(localStorage.getItem('chosenGroup'))
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for delete a group's settings has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for delete a group's settings has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(_ => {
+        window.location.reload()
+      })
   }
 
   //filter users
   filterOnUsers(filterValue) {
     localStorage.setItem('filterValue', filterValue)
     this.configService.getUsersOfGroup(this.chosenGroup)
+    .pipe(catchError((error: HttpErrorResponse) => {
+      let errorMessage = '';
+      if (error.error instanceof ErrorEvent) {
+        errorMessage = `Error: ${error.error.message}.\n
+        An error for filtering users has occurred`;
+      } else {
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+        An error for filtering users has occurred`;
+      }
+      window.alert(errorMessage);
+      return throwError(error)
+    }))
     .subscribe(users => {
         this.user = users;
         this.user = this.user.filter(this.filterUsers)
@@ -295,8 +432,19 @@ export class GroupPageComponent implements OnInit {
   }
 
   getUserReceiptData() {
-    
     this.configService.getReceiptsPerUser()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving the user's receipts has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving the user's receipts has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
       .subscribe(groups => {
         this.receiptData = groups.receiptsPerUsers
         console.log(this.receiptData)

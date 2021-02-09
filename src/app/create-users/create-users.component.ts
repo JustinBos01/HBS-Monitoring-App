@@ -6,6 +6,9 @@ import { CreateUsersService } from './create-users.service'
 import { newlyCreatedUsers } from '../users';
 import * as saveAs from 'file-saver';
 import * as XLSX from 'xlsx';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-create-users',
@@ -62,10 +65,22 @@ export class CreateUsersComponent implements OnInit {
 
   getAllUsers() {
     this.configService.getAllUsers()
-    .subscribe(users => {
-        this.allUsers = users;
-      }
-    )
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all users has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all users has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(users => {
+          this.allUsers = users;
+        }
+      )
   }
 
   removevalue(i){
@@ -112,13 +127,25 @@ export class CreateUsersComponent implements OnInit {
     }
 
     this.configService.createMultipleUsers()
-    .subscribe(_ => {
-        if (this.userDataString.length != 0){
-          //create excel file with new users
-        let file = new Blob(['username;', 'password;\n', this.userDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
-        saveAs(file, 'NewPasswords.csv');
-      }
-    })
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for creating users has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for creating users has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(_ => {
+          if (this.userDataString.length != 0){
+            //create excel file with new users
+          let file = new Blob(['username;', 'password;\n', this.userDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
+          saveAs(file, 'NewPasswords.csv');
+        }
+      })
   }
 
   //create random users function
@@ -201,11 +228,23 @@ export class CreateUsersComponent implements OnInit {
     }
     
     this.configService.createMultipleUsers()
-    .subscribe(users => {
-      this.users = users;
-      let file = new Blob(['username;', 'password;', 'Remove the "#" for your password;\n', this.userDataStringExcel, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
-      saveAs(file, 'NewPasswords.csv')
-    })
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for creating users has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for creating users has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(users => {
+        this.users = users;
+        let file = new Blob(['username;', 'password;', 'Remove the "#" for your password;\n', this.userDataStringExcel, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
+        saveAs(file, 'NewPasswords.csv')
+      })
   }
 
   //create superuser function
@@ -235,11 +274,23 @@ export class CreateUsersComponent implements OnInit {
     }
 
     this.configService.createSuperUser()
-    .subscribe(users => {
-      this.users = users;
-      let file = new Blob(['username;', 'password;\n', this.superUserDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
-      saveAs(file, 'NewSuPasswords.csv')
-    })
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for creating users through randomization has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for creating users through randomization has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(users => {
+        this.users = users;
+        let file = new Blob(['username;', 'password;\n', this.superUserDataString, 'Added to:;', localStorage.getItem('chosenGroup')], { type: 'text/csv;charset=utf-8' });
+        saveAs(file, 'NewSuPasswords.csv')
+      })
   }
 
   //randomize numbers for password/username
@@ -294,7 +345,20 @@ export class CreateUsersComponent implements OnInit {
 
   //uploads imported file
   onSubmitted() {
-    this.configService.createMultipleUsers().subscribe()
+    this.configService.createMultipleUsers()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for creating users through an import has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for creating users through an import has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe()
   }
 
 }
