@@ -12,7 +12,6 @@ import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, Http
 })
 
 export class ReceiptPageComponent implements OnInit {
-
   chosenGroup = localStorage.getItem('chosenGroup');
   userReceiptProductsInfo = [];
   userReceiptData;

@@ -29,7 +29,8 @@
                 </tr>
             
                 <tr id='inputItem' name='inputItem' *ngFor="let value of values; let index = index">
-                    <td><input id="name{{index}}" type="text" name="name{{index}}" (keyup.enter)='createUsers()'></td>
+                    <td><input id="name{{index}}" 
+                        type="text" name="name{{index}}" (keyup.enter)='createUsers()'></td>
                     <td><input id="password{{index}}" type="text" name="password{{index}}" (keyup.enter)='createUsers()'></td>
                 </tr>
             </table><br><br>
