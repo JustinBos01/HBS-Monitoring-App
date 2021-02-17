@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GroupOverviewComponent } from './group-overview.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 describe('GroupOverviewComponent', () => {
   let component: GroupOverviewComponent;

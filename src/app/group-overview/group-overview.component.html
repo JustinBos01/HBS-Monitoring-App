@@ -1,24 +1,56 @@
 
 <div class="grid-container">
-    <div id='welcome-item' class="welcome-item">
+    <div id='welcome-item' class="welcome-item" style='
+    vertical-align: middle;'>
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100">
-        <label style="font-size: large;"><h1><b> Group Overview Page</b></h1> <br>On this page you are able to manage the existing groups for the HBS research.</label>
+        <label style="font-size: large;"><h1><b> Group Overview Page</b></h1></label>
     </div>
     <div class="table">
+        <div class='wrapper'>
+            <div id='create-group'>
+                <form [formGroup]="createGroupForm">
+                    <h1><b>Manage groups</b></h1>
+                    <br>
+                    <div>
+                        <label for="groupName">
+                        Group Name
+                        </label>
+                        <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="" (change)="isDisabled = true">
+                        <br><br>
+                    </div>
+                    <p>
+                        <button [disabled]='newGroupNameTbx.value == ""'   class="button" type="submit" (click)='filter("all", ""); createGroup(createGroupForm.value); statusFilter = "all"; groupFilter.value = ""; newGroupNameTbx.value = "";'>Create Group</button>
+                        <button *ngIf='confirmationCheck == false' class="button" type="button" (click)="openDialog(); confirmationCheck = true">Delete empty groups</button>
+                        <label *ngIf='confirmationCheck == true'><br>Are you sure you want to delete <b>all empty groups</b>?<br>
+                        <button class='button' type='button' (click)="confirmationCheck = false; deleteGroups();">Yes</button> |
+                        <button class='button' type='button' (click)="confirmationCheck = false">No</button></label><br><br>
+                        
+                        <label>Total users: {{allUsers}}</label>
+                    </p>
+                </form>
+            </div>
+            <div id="filter-item">
+                <h1><b>Search</b></h1>
+                <br>
+                
+                <label>Search for group names: <input #groupFilter (keyup)="groupFilter.value = groupFilter.value; filter(alteredFilter, groupFilter.value)"></label><br>
+            </div><br>
+        </div><br>
         <table>
             <tr>
-                <th>Group Name</th>
-                <th>Group Status</th>
-                <th>Amount of Users</th>
-                <th>Delete</th>
-                <th>Paradata</th>
+                <th style="padding-left: 20px;"><b>Group Name</b></th>
+                <th style="padding-left: 20px;"><b>Research Status</b></th>
+                <th style="padding-left: 20px;"><b>Amount of Users</b></th>
+                <th style="padding-left: 20px;"><b>Delete</b></th>
+                <th style="padding-left: 20px;"><b>Paradata</b></th>
             </tr>
 
             <tr *ngFor="let group of groups; index as groupId" style='cursor: pointer;' (dblclick)="goToPage(group.group.name, group.group.id)">
                 <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
                 <td>{{group.group.status}}</td>
                 <td>{{group.group.users}}</td>
-                <td><button *ngIf="group.group.users == 0 && !singleConfirmationCheck" (click)='chosenGroup = group.group.name; singleConfirmationCheck = true'>Delete</button>
+                <td>
+                    <button *ngIf="group.group.users == 0 && !singleConfirmationCheck" (click)='chosenGroup = group.group.name; singleConfirmationCheck = true'>Delete</button>
                     <ng-container *ngIf="singleConfirmationCheck && chosenGroup == group.group.name">
                         <label #confirmationLbl{{groupId}}>Confirm?</label><br>
                         <button #confirmationYes{{groupId}} (click)='deleteSingleEmptyGroup(group.group.name); singleConfirmationCheck = false'>Yes</button> |
@@ -26,41 +58,10 @@
                     </ng-container>
                 </td>
                 <td><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
-                
             </tr>
         </table>
     </div>
-    <div class='create-group'>
-    <form [formGroup]="createGroupForm" >
-        <h1>Manage groups</h1>
-        <br>
-        <div>
-            <label for="groupName">
-            Group Name
-            </label>
-            <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="" (change)="isDisabled = true">
-        </div>
-        <p>
-            <button [disabled]='newGroupNameTbx.value == ""'   class="button" type="submit" (click)='createGroup(createGroupForm.value); groupFilter.value = ""; this.statusFilter = "all"; newGroupNameTbx.value = ""; filter("all", groupFilter.value)'>Create Group</button>
-            <button *ngIf='confirmationCheck == false' class="button" type="button" (click)="confirmationCheck = true">Delete empty groups</button>
-            <label *ngIf='confirmationCheck == true'><br>Are you sure you want to delete <b>all empty groups</b>?<br>
-            <button class='button' type='button' (click)="confirmationCheck = false; deleteGroups();">Yes</button> |
-            <button class='button' type='button' (click)="confirmationCheck = false">No</button></label><br><br>
-            
-            <label>Total users: {{allUsers}}</label>
-        </p>
-    </form>
-    </div>
-    <div class="filter-item">
-        <h1>Filter</h1>
-        <br>
-        
-        <label>Filter on group names: <input #groupFilter (keyup)="groupFilter.value = groupFilter.value; filter(alteredFilter, groupFilter.value)"></label><br>
-        <button [disabled]='this.statusFilter == "enabled"' (click)='this.statusFilter = "enabled"; filter("enabled", groupFilter.value)'>Show enabled</button><br>
-        <button [disabled]='this.statusFilter == "disabled"' (click)='this.statusFilter = "disabled"; filter("disabled", groupFilter.value)'>Show disabled</button>
-        <br>
-        <button [disabled]='this.statusFilter == "empty"' (click)='this.statusFilter = "empty"; filter("empty", groupFilter.value)'>Show Empty</button><br><br>
-        <button [disabled]='this.statusFilter == "all"' (click)='this.statusFilter = "all"; filter("all", groupFilter.value)'>Show All</button><br><br>
-    </div>
+    
+    
 </div><br><br>
 <button [routerLink]="['/']">Log out</button>

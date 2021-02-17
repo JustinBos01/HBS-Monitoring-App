@@ -5,6 +5,20 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator'
+import {MatSortModule} from '@angular/material/sort';
+import {MatStepperModule} from '@angular/material/stepper'
+import {MatCheckboxModule} from '@angular/material/checkbox'
+import {MatDialogModule} from '@angular/material/dialog'
+import {MatFormFieldModule } from '@angular/material/form-field'
+import { MatSelectModule } from "@angular/material/select";
+import { CommonModule } from "@angular/common";
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {MatNativeDateModule} from '@angular/material/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+
 
 
 import { AppComponent } from './app.component';
@@ -22,22 +36,15 @@ import { ReceiptPageComponent } from './receipt-page/receipt-page.component';
 import { GroupPageComponent } from './group-page/group-page.component';
 import { CreateUsersComponent } from './create-users/create-users.component';
 import { GroupOverviewComponent } from './group-overview/group-overview.component';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ParadataGroupComponent } from './paradata-group/paradata-group.component';
 import { ParadataUserComponent } from './paradata-user/paradata-user.component';
 import { ModalComponent } from './modal/modal.component';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator'
-import {MatSortModule} from '@angular/material/sort';
-import {MatStepperModule} from '@angular/material/stepper'
-import {MatCheckboxModule} from '@angular/material/checkbox'
-import { MatSelectModule } from "@angular/material/select";
 import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component'
-import { CommonModule } from "@angular/common";
 
 @NgModule({
   
   imports: [
+    MatFormFieldModule,
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
@@ -51,6 +58,9 @@ import { CommonModule } from "@angular/common";
     MatSelectModule,
     MatCheckboxModule,
     CommonModule,
+    MatDialogModule,
+    FormsModule,
+    MatNativeDateModule,
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},
       {path: 'menu', component: MenuPageComponent},
@@ -84,6 +94,7 @@ import { CommonModule } from "@angular/common";
     ModalComponent,
     ParadataGraphPageComponent,
   ],
+  entryComponents: [],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })

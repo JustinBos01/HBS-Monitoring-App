@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { ConfigService } from '../config/config.service';
 import { FormBuilder, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +10,13 @@ import { TopBarService } from '../top-bar/top-bar.service';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-group-overview',
@@ -39,6 +46,10 @@ export class GroupOverviewComponent implements OnInit {
   isDisabled = false;
   allGroupNames = [];
 
+  
+  animal: string;
+  name: string;
+
   constructor(
     public navigation: TopBarService,
     public configService: ConfigService,
@@ -48,6 +59,7 @@ export class GroupOverviewComponent implements OnInit {
     private groupPageService: GroupPageService,
     private router: Router,
     private groupOverviewService: GroupOverviewService,
+    public dialog: MatDialog,
   ) {
     this.createGroupForm = this.formBuilder.group({
       groupName: '',
@@ -66,6 +78,19 @@ export class GroupOverviewComponent implements OnInit {
     this.showGroupResponse();
     this.getAllUsers();
     this.getAllGroupNames();
+    this.groupOverviewService.showGroupResponse();
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
+      width: '250px',
+      data: {name: this.name, animal: this.animal}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
   }
 
   createGroup(userData) {
@@ -390,6 +415,124 @@ export class GroupOverviewComponent implements OnInit {
       }
     )
   }
+}
 
+
+@Component({
+  selector: 'app-create-group-dialog',
+  templateUrl: './create-group-dialog.html',
+  styleUrls: ['./group-overview.component.css']
+})
+export class CreateGroupDialogComponent implements OnInit {
+  groups;
+  emptyGroups = [];
+
+  constructor(
+    public dialogRef: MatDialogRef<CreateGroupDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    public groupOverviewService: GroupOverviewService,
+    public configService: ConfigService
+    ) {}
+
+    ngOnInit() {
+      this.showGroupResponse();
+    }
+
+    showGroupResponse() {
+      this.configService.getGroups()
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}.\n
+            An error for retrieving all groups has occurred`;
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+            An error for retrieving all groups has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(groups => {
+          this.groups = groups;
+          console.log(this.groups)
+        })
+      }
   
+    //delete all empty groups
+    deleteGroups() {
+      this.configService.getGroups()
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}.\n
+            An error for retrieving all groups has occurred`;
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+            An error for retrieving all groups has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(groups => {
+          this.groups = groups;
+          for (let group of this.groups) {
+            if (group.group.users == 0) {
+              console.log(this.groups)
+              this.emptyGroups.push(group.group.name)
+            } 
+          }
+      
+          //empty groupinfos for groups with no users
+          for (let empty of this.emptyGroups){
+            this.configService.deleteGroupInfos(empty)
+              .pipe(catchError((error: HttpErrorResponse) => {
+                let errorMessage = '';
+                if (error.error instanceof ErrorEvent) {
+                  errorMessage = `Error: ${error.error.message}.\n
+                  An error for deleting a group's has occurred`;
+                } else {
+                  errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+                  An error for deleting a group's settings has occurred`;
+                }
+                window.alert(errorMessage);
+                return throwError(error)
+              }))
+              .subscribe(nv => 
+                {
+                  //delete empty groups
+                  this.configService.deleteEmptyGroups(empty)
+                    .pipe(catchError((error: HttpErrorResponse) => {
+                      let errorMessage = '';
+                      if (error.error instanceof ErrorEvent) {
+                        errorMessage = `Error: ${error.error.message}.\n
+                        An error for deleting a group has occurred`;
+                      } else {
+                        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+                        An error for deleting a group has occurred`;
+                      }
+                      window.alert(errorMessage);
+                      return throwError(error)
+                    }))
+                    .subscribe(nv =>
+                      {
+                        if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
+                          //refresh data
+                          this.showGroupResponse()
+                          this.dialogRef.close();
+                          window.location.reload();
+                        }
+                      }
+                    )
+                }
+              )
+          }
+        })
+      }
+      
+    
+  onDeleteClick(): void {
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
