@@ -30,7 +30,6 @@ tr:nth-child(odd) {
 
 .table {
     grid-area: tbl;
-    text-align: center;
     max-height: 99%;
     height: 99%;
     overflow-x: hidden;
@@ -41,7 +40,20 @@ tr:nth-child(odd) {
 .welcome-item {
     grid-area: wi;
     float:left;
-    vertical-align: middle;
+}
+
+.md-form.mt-0{
+    width:500px;
+    display:flex;
+    align-items: center;  
+}
+
+.material-icons.mdc-button__icon{
+    position:absolute;
+}
+
+.mdc-button__icon + input{
+    padding-left: 25px;
 }
 
 #filter-item {

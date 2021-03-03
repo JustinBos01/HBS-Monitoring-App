@@ -12,27 +12,24 @@ table {
 }
 
 th {
-    background-color: black;
-    color: white;
-    text-align: center;
-    border: 1px solid #dddddd;
+    background-color: white;
+    color: rgb(2, 189, 202);
+    text-align: left;
     padding: 8px;
 }
 
 td {
-    text-align: center;
-    border: 1px solid gray;
+    text-align: left;
     padding: 8px;
 }
 
 tr:nth-child(odd) {
-    background-color: #dddddd;
+    background-color: #eefeff;
 }
 
 .table-item {
     grid-area: tbl;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: white;
     font-size: 15px;
     max-height: 650px;
     overflow-x: hidden;
@@ -41,8 +38,7 @@ tr:nth-child(odd) {
 
 .project-selection-item {
     grid-area: psi;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: white;
     font-size: 15px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -51,8 +47,7 @@ tr:nth-child(odd) {
 
 .header-item {
     grid-area: HI;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: white;
     font-size: 15px;
     text-align: center;
 }
@@ -68,7 +63,7 @@ tr:nth-child(odd) {
 }
 
 .grid-container > div {
-    background-color: lightgray;
+    background-color: white;
     padding: 20px 0;
     font-size: 15px;
 }

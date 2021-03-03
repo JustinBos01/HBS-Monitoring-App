@@ -1,4 +1,10 @@
+{% comment %} filter values {% endcomment %}
 <button [disabled]='statusFilter == "enabled"' (click)='statusFilter = "enabled"; filter("enabled", groupFilter.value)'>Show enabled</button><br>
-                <button [disabled]='statusFilter == "disabled"' (click)='statusFilter = "disabled"; filter("disabled", groupFilter.value)'>Show disabled</button><br>
-                <button [disabled]='statusFilter == "empty"' (click)='statusFilter = "empty"; filter("empty", groupFilter.value)'>Show Empty</button><br>
-                <button [disabled]='statusFilter == "all"' (click)='statusFilter = "all"; filter("all", groupFilter.value)'>Show All</button><br><br><br>
+<button [disabled]='statusFilter == "disabled"' (click)='statusFilter = "disabled"; filter("disabled", groupFilter.value)'>Show disabled</button><br>
+<button [disabled]='statusFilter == "empty"' (click)='statusFilter = "empty"; filter("empty", groupFilter.value)'>Show Empty</button><br>
+<button [disabled]='statusFilter == "all"' (click)='statusFilter = "all"; filter("all", groupFilter.value)'>Show All</button><br><br><br>
+
+{% comment %} Delete all group confirmation {% endcomment %}
+<label *ngIf='confirmationCheck == true'><br>Are you sure you want to delete <b>all empty groups</b>?<br>
+<button class='button' type='button' (click)="confirmationCheck = false; deleteGroups();">Yes</button> |
+<button class='button' type='button' (click)="confirmationCheck = false">No</button></label><br><br>

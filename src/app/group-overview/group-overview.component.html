@@ -5,7 +5,7 @@
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100">
         <label style="font-size: large;"><h1><b> Group Overview Page</b></h1></label>
     </div>
-    <div class="table">
+    <div class="table" style="padding-left: 20px; padding-right: 20px;">
         <div class='wrapper'>
             <div id='create-group'>
                 <form [formGroup]="createGroupForm">
@@ -20,10 +20,7 @@
                     </div>
                     <p>
                         <button [disabled]='newGroupNameTbx.value == ""'   class="button" type="submit" (click)='filter("all", ""); createGroup(createGroupForm.value); statusFilter = "all"; groupFilter.value = ""; newGroupNameTbx.value = "";'>Create Group</button>
-                        <button *ngIf='confirmationCheck == false' class="button" type="button" (click)="openDialog(); confirmationCheck = true">Delete empty groups</button>
-                        <label *ngIf='confirmationCheck == true'><br>Are you sure you want to delete <b>all empty groups</b>?<br>
-                        <button class='button' type='button' (click)="confirmationCheck = false; deleteGroups();">Yes</button> |
-                        <button class='button' type='button' (click)="confirmationCheck = false">No</button></label><br><br>
+                        <button class="button" type="button" (click)="openDialog(); confirmationCheck = true">Delete empty groups</button><br><br> 
                         
                         <label>Total users: {{allUsers}}</label>
                     </p>
@@ -35,14 +32,14 @@
                 
                 <label>Search for group names: <input #groupFilter (keyup)="groupFilter.value = groupFilter.value; filter(alteredFilter, groupFilter.value)"></label><br>
             </div><br>
-        </div><br>
+        </div><br><hr><br>
         <table>
             <tr>
-                <th style="padding-left: 20px;"><b>Group Name</b></th>
-                <th style="padding-left: 20px;"><b>Research Status</b></th>
-                <th style="padding-left: 20px;"><b>Amount of Users</b></th>
-                <th style="padding-left: 20px;"><b>Delete</b></th>
-                <th style="padding-left: 20px;"><b>Paradata</b></th>
+                <th><b>Group Name</b></th>
+                <th><b>Research Status</b></th>
+                <th><b>Amount of Users</b></th>
+                <th><b>Delete</b></th>
+                <th><b>Paradata</b></th>
             </tr>
 
             <tr *ngFor="let group of groups; index as groupId" style='cursor: pointer;' (dblclick)="goToPage(group.group.name, group.group.id)">

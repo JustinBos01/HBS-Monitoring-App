@@ -6,51 +6,57 @@ table {
 }
 
 th {
-    background-color: black;
-    color: white;
-    text-align: center;
-    border: 1px solid #dddddd;
+    background-color: white;
+    color: rgb(2, 189, 202);
+    text-align: left;
     padding: 8px;
 }
 
 td {
-    text-align: center;
-    border: 1px solid gray;
+    text-align: left;
     padding: 8px;
 }
 
+
 tr:nth-child(odd) {
-    background-color: #dddddd;
+    background-color: #eefeff;
 }
 
-.group-functionalities-item {
+.wrapper {
+    overflow: auto;
+}
+
+#group-functionalities-item {
     grid-area: gfi;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);    
-    text-align: center;
+    background-color: white;
+    text-align: left;
+    float: left;
+    padding-left: 50px;
+    padding-top: 30px;
 }
 
-.users-functionalities-item {
+#users-functionalities-item {
     grid-area: ufi;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);    
-    text-align: center;
+    background-color: white;
+    text-align: left;
+    float: left;
+    width: 50%;
+    padding-left: 50px;
+    padding-top: 30px;
 }
 
-.group-infos-functionalities-item {
+#group-infos-functionalities-item {
     grid-area: gifi;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);    
-    text-align: center;
+    background-color: white;
+    text-align: left;
     max-height: 245px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    padding-left: 50px;
+    padding-top: 30px;
 }
 
 .table-item {
     grid-area: tbl;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: white;
     font-size: 15px;
     max-height: 625px;
     overflow-x: hidden;
@@ -60,16 +66,14 @@ tr:nth-child(odd) {
 
 .header-item {
     grid-area: HI;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: white;
     text-align: center;
     font-size: 15px;
 }
 
 .groupInfos-item {
     grid-area: gIi;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: white;
     font-size: 15px;
     text-align: center;
     max-height: 500px;
@@ -78,27 +82,20 @@ tr:nth-child(odd) {
     text-align: center;
 }
 
-.change {
-    grid-area: b;
-    background-color: lightgray;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    text-align: center;
-}
-
 
 .grid-container {
     display: grid;
     grid-template-areas:
-        'HI HI HI HI HI'
-        'tbl tbl tbl tbl ufi'
-        'tbl tbl tbl tbl gfi'
-        'gIi gIi gIi gIi gifi';
+        'HI HI HI HI'
+        'tbl tbl tbl tbl'
+        'tbl tbl tbl tbl'
+        'gIi gIi gIi gIi';
     grid-gap: 10px;
     padding: 10px;
 }
 
 .grid-container > div {
-    background-color: lightgray;
+    background-color: white;
     padding: 20px 0;
     font-size: 15px;
 }

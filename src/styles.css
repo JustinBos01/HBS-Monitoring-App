@@ -17,4 +17,17 @@ button {
 
 label {
     cursor:text;
+    font-family: 'SohoPro';
+    font-weight: normal;
+    font-style: normal;
+}
+
+h1 {
+    font-family: 'AkkoPro';
+    font-weight: normal;
+    font-style: normal;
+}
+
+div {
+  border-radius: 25px;
 }

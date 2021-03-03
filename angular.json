@@ -25,7 +25,9 @@
             ],
             "styles": [
               "src/custom-theme.scss",
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/scss/modules/_fonts.scss"
+              
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.js",
@@ -93,7 +95,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/scss/modules/_fonts.scss"
             ],
             "scripts": []
           }
