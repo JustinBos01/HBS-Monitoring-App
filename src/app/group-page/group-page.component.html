@@ -3,112 +3,126 @@
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
         <h1 id='statusLbl'>Group: <b>{{chosenGroup}}</b></h1>
     </div>
-    <div class='table-item' style="padding-left: 20px; padding-right: 20px;">
-        <div class="wrapper">
-            <div id='users-functionalities-item' class='users-functionalities-item'>
-                <h1>Manage Users</h1><br>
+    <div style="width: 1850px">
+        <mat-tab-group>
+            <mat-tab label="Users">
+                <div class='table-item' style="padding-left: 20px; padding-right: 20px;">
+                    <div class="wrapper">
+                        <div id='users-functionalities-item' class='users-functionalities-item'>
+                            <h1>Manage Users</h1><br>
 
-                <label>To add a user to this group, click this button | </label>
-                <button [routerLink]="['/createUsers']">Add users</button><br><br>
-                <br>
-                <label>Username Filter: <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)"></label><br><br>
-            </div>
+                            <label>To add a user to this group, click this button | </label>
+                            <button [routerLink]="['/createUsers']">Add users</button><br><br>
+                            <br>
+                            <label>Username Filter: <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)"></label><br><br>
+                        </div>
 
-            <div id='group-functionalities-item' class='group-functionalities-item'>
-                <h1>Manage Groups</h1><br>
-                
-                <ng-container *ngFor="let group of groups">
-                    <div *ngIf="chosenGroup == group.group.name">
-                        <label>This group is currently: <b> {{group.group.status}}</b> | </label>
-                        <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)">Enable Group</button>
-                        <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)">Disable Group</button>
+                        <div id='group-functionalities-item' class='group-functionalities-item'>
+                            <h1>Manage Groups</h1><br>
+                            
+                            <ng-container *ngFor="let group of groups">
+                                <div *ngIf="chosenGroup == group.group.name">
+                                    <label>This group is currently: <b> {{group.group.status}}</b> | </label>
+                                    <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)">Enable Group</button>
+                                    <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)">Disable Group</button>
+                                </div>
+                            </ng-container><br><br>
+
+                            
+                            
+
+                            <label>There is also an option to duplicate a group, including its <b>properties</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br></label>
+                            <input #regroupGroupTbx id='regroupGroupTbx' (change)='this.value = this.value'>
+                            <button [disabled]='regroupGroupTbx.value == ""' (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button><br><br>
+                        </div>
                     </div>
-                </ng-container><br><br>
 
+                    <div style="text-align: left;">
+                        <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br></label>
+                                <select #regroupGroupDdl id='regroupGroupDdl' (change)='this.value = this.value'>
+                                    <option>{{chosenGroup}}</option>
+                                    <ng-container *ngFor='let groupName of allGroupNames'>
+                                        <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
+                                    </ng-container>
+                                </select>
+                            <button [disabled]='regroupGroupDdl.value == chosenGroup' (click)="regroupGroup(regroupGroupDdl.value)">Regroup</button><br><br><br>
+                    </div>
+
+                    <label style="font-size: large;"><b>Users</b></label><br><br>
+                    <table *ngIf='user'  style="padding-left: 20px; padding-right: 20px;">
+                        
+                        <tr>
+                            <th>Name</th>
+                            <th>Password</th>
+                            <th>Group</th>
+                        </tr>
+                        <tr *ngFor="let user of user; index as userId" (dblclick)="userClick(user.name)" style="cursor: pointer;">
+                            <td>{{user.name}}</td>
+                            <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
+                            <td>
+                                <select #group{{userId}} id='group{{userId}}' (change)="regroupUsers(userId, user.name)">
+                                    <option>{{chosenGroup}}</option>
+                                    <ng-container *ngFor='let groupName of allGroupNames'>
+                                        <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
+                                    </ng-container>
+                                </select>
+                            </td>
+                        </tr>
+                    </table><br>
+                    <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
+                </div>
                 
-                
-
-                <label>There is also an option to duplicate a group, including its <b>properties</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br></label>
-                <input #regroupGroupTbx id='regroupGroupTbx' (change)='this.value = this.value'>
-                <button [disabled]='regroupGroupTbx.value == ""' (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button><br><br>
-            </div>
-        </div>
-
-    	<div style="text-align: left;">
-            <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br></label>
-                    <select #regroupGroupDdl id='regroupGroupDdl' (change)='this.value = this.value'>
-                        <option>{{chosenGroup}}</option>
-                        <ng-container *ngFor='let groupName of allGroupNames'>
-                            <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
-                        </ng-container>
-                    </select>
-                <button [disabled]='regroupGroupDdl.value == chosenGroup' (click)="regroupGroup(regroupGroupDdl.value)">Regroup</button><br><br><br>
-        </div>
-
-        <label style="font-size: large;"><b>Users</b></label><br><br>
-        <table *ngIf='user'  style="padding-left: 20px; padding-right: 20px;">
-            
-            <tr>
-                <th>Name</th>
-                <th>Password</th>
-                <th>Group</th>
-            </tr>
-            <tr *ngFor="let user of user; index as userId" (dblclick)="userClick(user.name)" style="cursor: pointer;">
-                <td>{{user.name}}</td>
-                <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
-                <td>
-                    <select #group{{userId}} id='group{{userId}}' (change)="regroupUsers(userId, user.name)">
-                        <option>{{chosenGroup}}</option>
-                        <ng-container *ngFor='let groupName of allGroupNames'>
-                            <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
-                        </ng-container>
-                    </select>
-                </td>
-            </tr>
-        </table><br>
-        <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
-    </div><br>
-
-    <div class="wrapper">
-        <div id='groupInfosFunctionalitiesDiv' class='group-infos-functionalities-item'>
-            <h1>Manage Properties</h1><br>
-            <label>Down below, you are able to delete all properties for this group (this will clear all in app settings for the research application)</label><br><br>
-            <button *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Properties</button>
-            <ng-container *ngIf="confirmationCheck">
-                <label #confirmationLbl>Confirm?</label><br>
-                <button #confirmationYes (click)='deleteGroupInfos(); confirmationCheck = false'>Yes</button> |
-                <button #confirmationNo (click)='confirmationCheck = false'>No</button>
-            </ng-container><br><br><br>
-            <label>You are able to add properties to the table to the left by entering an amount below.</label><br>
-            <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
-        </div>
-    </div>
-
-    <div class='groupInfos-item'>
-        <label style="font-size: large;"><b>Properties</b></label><br><br><br>
-        <label *ngIf="chosenGroupInfos.length == 0 && (amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no properties for this group</b></label>
+            </mat-tab>
         
-        <table id='groupInfosTbl' *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
-            <tr>
-                <th>Key</th>
-                <th>Value</th>
-            </tr>
+            <mat-tab label="Settings">
+
+                <div class="wrapper">
+                    <div id='groupInfosFunctionalitiesDiv' class='group-infos-functionalities-item'>
+                        <h1>Manage Properties</h1><br>
+                        <label>Down below, you are able to delete all properties for this group (this will clear all in app settings for the research application)</label><br><br>
+                        
+                        <label>You are able to add properties to the table to the left by entering an amount below.</label><br>
+                        <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
+                    </div>
+                </div>
+
+                    
+                <div class='groupInfos-item'>
+                    <label style="font-size: large;"><b>Properties</b></label><br><br><br>
+                    <label *ngIf="chosenGroupInfos.length == 0 && (amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no properties for this group</b></label>
+                    <ng-container *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
+                        <button *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Properties</button>
+                            <ng-container *ngIf="confirmationCheck">
+                                <label #confirmationLbl>Confirm?</label><br>
+                                <button #confirmationYes (click)='deleteGroupInfos(); confirmationCheck = false'>Yes</button> |
+                                <button #confirmationNo (click)='confirmationCheck = false'>No</button>
+                            </ng-container><br><br><br>
+                        <table id='groupInfosTbl' >
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                            </tr>
+                            
+                        
+                            <tr *ngFor="let infos of chosenGroupInfos; index as infosId">
+                                <td>
+                                    <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
+                                </td>
+                                <td>
+                                    <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()">
+                                </td>
+                            </tr>
+                            <tr *ngFor="let value of addedValues; let index = index">
+                                <td><input id="newKey{{index}}" type="text" name="name{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
+                                <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
+                            </tr>
+                            
+                        </table><br>
+                        <button *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0' (click)="createNewGroupInfos()">Apply</button>
+                    </ng-container>
+                </div>
+            </mat-tab>
             
-        
-            <tr *ngFor="let infos of chosenGroupInfos; index as infosId">
-                <td>
-                    <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
-                </td>
-                <td>
-                    <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()">
-                </td>
-            </tr>
-            <tr *ngFor="let value of addedValues; let index = index">
-                <td><input id="newKey{{index}}" type="text" name="name{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
-                <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
-            </tr>
-            
-        </table><br>
-        <button *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0' (click)="createNewGroupInfos()">Apply</button>
+        </mat-tab-group>
     </div>
 </div>

@@ -8,3 +8,9 @@
 <label *ngIf='confirmationCheck == true'><br>Are you sure you want to delete <b>all empty groups</b>?<br>
 <button class='button' type='button' (click)="confirmationCheck = false; deleteGroups();">Yes</button> |
 <button class='button' type='button' (click)="confirmationCheck = false">No</button></label><br><br>
+
+<ng-container *ngIf="singleConfirmationCheck && chosenGroup == group.group.name">
+    <label #confirmationLbl{{groupId}}>Confirm?</label><br>
+    <button #confirmationYes{{groupId}} (click)='deleteSingleEmptyGroup(group.group.name); singleConfirmationCheck = false'>Yes</button> |
+    <button #confirmationNo{{groupId}} (click)='singleConfirmationCheck = false'>No</button>
+</ng-container>

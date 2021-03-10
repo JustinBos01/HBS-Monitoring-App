@@ -452,3 +452,45 @@ export class GroupPageComponent implements OnInit {
     )
   }
 }
+
+@Component({
+  selector: 'app-delete-properties-dialog',
+  templateUrl: './delete-properties-dialog.html',
+  styleUrls: ['./group-page.component.css']
+})
+
+export class DeletePropertiesDialogComponent implements OnInit {
+  allGroupNames;
+  groups;
+  chosenGroupInfos;
+  chosenGroup;
+
+  ngOnInit() {
+    this.showGroupConfig()
+  } 
+
+  constructor(
+    public configService: ConfigService
+  ) { }
+
+  showGroupConfig() {
+    this.allGroupNames.length = 0;
+    this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all groups has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all groups has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(groups => {
+        this.groups = groups;
+      }
+    )
+  }
+}

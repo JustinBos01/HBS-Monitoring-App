@@ -5,6 +5,7 @@ table {
     align-self: center;
     max-height: 30%;
     height: 30%;
+    border-left:rgb(2, 189, 202)
 }
 
 th {
@@ -35,15 +36,30 @@ tr:nth-child(odd) {
     overflow-x: hidden;
     overflow-y: auto;
     text-align: left;
+    box-shadow: 1px 1px 5px grey;
+}
+
+.blueButton {
+    border-radius: 5px;
+    height: 37px;
+    background-color: rgb(0, 183, 255);
+    color: white;
+    font-weight: bold;
+    border: none;
+    width: 125px;
+}
+
+.searchBar {
+    border-radius: 10px; width: 1650px; height: 30px; outline: none;
 }
 
 .welcome-item {
     grid-area: wi;
     float:left;
+    box-shadow: 1px 1px 5px grey;
 }
 
 .md-form.mt-0{
-    width:500px;
     display:flex;
     align-items: center;  
 }
@@ -56,30 +72,10 @@ tr:nth-child(odd) {
     padding-left: 25px;
 }
 
-#filter-item {
-    grid-area: fi;
-    float:left;
-    text-align: left;
-    width: 50%;
-    max-height: 210px;
-    padding-left: 50px;
-    padding-top: 30px;
-}
-
-#create-group {
-    grid-area: cg;
-    text-align: left;
-    width: 50%;
-    max-height: 210px;
-    padding-left: 50px;
-    padding-top: 30px;
-}
-
 .grid-container {
     display: grid;
     grid-template-areas:
         'wi wi wi wi wi'
-        'tbl tbl tbl tbl tbl'
         'tbl tbl tbl tbl tbl';
     grid-gap: 10px;
     padding: 10px;

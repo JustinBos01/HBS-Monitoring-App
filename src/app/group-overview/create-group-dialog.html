@@ -1,2 +1,3 @@
-<label>Are you sure you want to delete <b>all empty groups</b>?</label><br>
-<button (click)='deleteGroups()'>Yes</button> | <button (click)='onNoClick()'>No</button>
+<label>Group Name: <input #groupNameTbx id='groupNameTbx' value='' (keyup)="groupNameTbx.value = groupNameTbx.value"></label><br>
+<label>Project (not implemented yet): <input></label><br><br>
+<button (click)='createGroup(groupNameTbx.value)' >Confirm</button> | <button (click)='onNoClick()'>Return</button>

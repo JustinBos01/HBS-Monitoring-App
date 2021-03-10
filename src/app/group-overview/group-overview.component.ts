@@ -14,8 +14,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 
 
 export interface DialogData {
-  animal: string;
-  name: string;
+  groups: string
 }
 
 @Component({
@@ -23,6 +22,7 @@ export interface DialogData {
   templateUrl: './group-overview.component.html',
   styleUrls: ['./group-overview.component.css']
 })
+
 export class GroupOverviewComponent implements OnInit {
   superuserData
   createGroupForm;
@@ -47,8 +47,6 @@ export class GroupOverviewComponent implements OnInit {
   allGroupNames = [];
 
   
-  animal: string;
-  name: string;
 
   constructor(
     public navigation: TopBarService,
@@ -81,15 +79,25 @@ export class GroupOverviewComponent implements OnInit {
     this.groupOverviewService.showGroupResponse();
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
-      width: '250px',
-      data: {name: this.name, animal: this.animal}
+  openDialogDeleteGroup(): void {
+    localStorage.setItem('selectedGroup', this.chosenGroup)
+    const dialogRef = this.dialog.open(DeleteGroupDialogComponent, {
+      width: '1000px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
+      this.showGroupResponse()
+    });
+  }
+
+  openDialogCreateGroup(): void {
+    const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
+      width: '1000px',
+      data: {groups: this.groups}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.showGroupResponse()
     });
   }
 
@@ -100,11 +108,9 @@ export class GroupOverviewComponent implements OnInit {
       .pipe(catchError((error: HttpErrorResponse) => {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
-          errorMessage = `Error: ${error.error.message}.\n
-          An error for creating a new group has occurred`;
+          errorMessage = `An error for creating a new group has occurred`;
         } else {
-          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-          An error for creating a new group has occurred`;
+          errorMessage = `An error for creating a new group has occurred`;
         }
         window.alert(errorMessage);
         return throwError(error)
@@ -419,23 +425,26 @@ export class GroupOverviewComponent implements OnInit {
 
 
 @Component({
-  selector: 'app-create-group-dialog',
-  templateUrl: './create-group-dialog.html',
+  selector: 'app-delete-group-dialog',
+  templateUrl: './delete-group-dialog.html',
   styleUrls: ['./group-overview.component.css']
 })
-export class CreateGroupDialogComponent implements OnInit {
+export class DeleteGroupDialogComponent implements OnInit {
   groups;
   emptyGroups = [];
+  selectedGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<CreateGroupDialogComponent>,
+    public dialogRef: MatDialogRef<DeleteGroupDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public groupOverviewService: GroupOverviewService,
     public configService: ConfigService
     ) {}
 
     ngOnInit() {
+      this.selectedGroup = localStorage.getItem('selectedGroup')
       this.showGroupResponse();
+      
     }
 
     showGroupResponse() {
@@ -459,79 +468,104 @@ export class CreateGroupDialogComponent implements OnInit {
       }
   
     //delete all empty groups
-    deleteGroups() {
-      this.configService.getGroups()
+    deleteSingleEmptyGroup() {
+      this.configService.deleteGroupInfos(this.selectedGroup)
         .pipe(catchError((error: HttpErrorResponse) => {
           let errorMessage = '';
           if (error.error instanceof ErrorEvent) {
             errorMessage = `Error: ${error.error.message}.\n
-            An error for retrieving all groups has occurred`;
+            An error for deleting groups has occurred`;
           } else {
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-            An error for retrieving all groups has occurred`;
+            An error for deleting groups has occurred`;
           }
           window.alert(errorMessage);
           return throwError(error)
         }))
-        .subscribe(groups => {
-          this.groups = groups;
-          for (let group of this.groups) {
-            if (group.group.users == 0) {
-              console.log(this.groups)
-              this.emptyGroups.push(group.group.name)
-            } 
+        .subscribe(nv => 
+          {
+            this.configService.deleteSingleEmptyGroup(this.selectedGroup)
+            .subscribe(_ => {
+                this.dialogRef.close();
+              }
+            )
           }
-      
-          //empty groupinfos for groups with no users
-          for (let empty of this.emptyGroups){
-            this.configService.deleteGroupInfos(empty)
-              .pipe(catchError((error: HttpErrorResponse) => {
-                let errorMessage = '';
-                if (error.error instanceof ErrorEvent) {
-                  errorMessage = `Error: ${error.error.message}.\n
-                  An error for deleting a group's has occurred`;
-                } else {
-                  errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-                  An error for deleting a group's settings has occurred`;
-                }
-                window.alert(errorMessage);
-                return throwError(error)
-              }))
-              .subscribe(nv => 
-                {
-                  //delete empty groups
-                  this.configService.deleteEmptyGroups(empty)
-                    .pipe(catchError((error: HttpErrorResponse) => {
-                      let errorMessage = '';
-                      if (error.error instanceof ErrorEvent) {
-                        errorMessage = `Error: ${error.error.message}.\n
-                        An error for deleting a group has occurred`;
-                      } else {
-                        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-                        An error for deleting a group has occurred`;
-                      }
-                      window.alert(errorMessage);
-                      return throwError(error)
-                    }))
-                    .subscribe(nv =>
-                      {
-                        if (empty == this.emptyGroups[this.emptyGroups.length - 1]){
-                          //refresh data
-                          this.showGroupResponse()
-                          this.dialogRef.close();
-                          window.location.reload();
-                        }
-                      }
-                    )
-                }
-              )
-          }
-        })
-      }
-      
-    
-  onDeleteClick(): void {
+        )
+    }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
+}
+
+
+@Component({
+  selector: 'app-create-group-dialog',
+  templateUrl: './create-group-dialog.html',
+  styleUrls: ['./group-overview.component.css']
+})
+
+export class CreateGroupDialogComponent implements OnInit {
+  groups;
+  groupData;
+
+  constructor(
+    public dialogRef: MatDialogRef<DeleteGroupDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    public groupOverviewService: GroupOverviewService,
+    public configService: ConfigService
+    ) {}
+  
+  ngOnInit() {
+    this.showGroupResponse()
+  }
+
+  showGroupResponse() {
+    this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all groups has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all groups has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(groups => {
+        this.groups = groups;
+        console.log(this.groups)
+      })
+    }
+
+  createGroup(userData) {
+    //create empty group
+    if (userData){
+      this.configService.createGroup(userData, "", "")
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `An error for creating a new group has occurred`;
+          } else {
+            errorMessage = `An error for creating a new group has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(groupdata => {
+          this.groupData = groupdata;
+          this.showGroupResponse()
+          alert("The group: " + userData + " has been added")
+          this.dialogRef.close();
+        })
+      } else {
+        alert("No group name was given.")
+        this.dialogRef.close();
+      }
+    } 
+  
   onNoClick(): void {
     this.dialogRef.close();
   }

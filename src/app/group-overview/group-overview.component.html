@@ -1,38 +1,21 @@
 
 <div class="grid-container">
-    <div id='welcome-item' class="welcome-item" style='
-    vertical-align: middle;'>
+    <div id='welcome-item' class="welcome-item" style='vertical-align: middle;'>
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100">
         <label style="font-size: large;"><h1><b> Group Overview Page</b></h1></label>
     </div>
     <div class="table" style="padding-left: 20px; padding-right: 20px;">
         <div class='wrapper'>
-            <div id='create-group'>
-                <form [formGroup]="createGroupForm">
-                    <h1><b>Manage groups</b></h1>
-                    <br>
-                    <div>
-                        <label for="groupName">
-                        Group Name
-                        </label>
-                        <input #newGroupNameTbx id='newGroupNameTbx' style='align-self: right; left: 50px;' id="groupName" formControlName="groupName" value="" (change)="isDisabled = true">
-                        <br><br>
-                    </div>
-                    <p>
-                        <button [disabled]='newGroupNameTbx.value == ""'   class="button" type="submit" (click)='filter("all", ""); createGroup(createGroupForm.value); statusFilter = "all"; groupFilter.value = ""; newGroupNameTbx.value = "";'>Create Group</button>
-                        <button class="button" type="button" (click)="openDialog(); confirmationCheck = true">Delete empty groups</button><br><br> 
-                        
-                        <label>Total users: {{allUsers}}</label>
-                    </p>
-                </form>
+            <div class="md-form mt-0" style='padding-left: 5px; padding-right: 5px'>
+                <i class="material-icons mdc-button__icon" style='padding-left: 5px; '>search</i>
+                <input #groupFilter (keyup)="groupFilter.value = groupFilter.value; filter(alteredFilter, groupFilter.value)" placeholder="Search group names.." aria-label="Search" class="form-control" type="text" style=''><br>
             </div>
-            <div id="filter-item">
-                <h1><b>Search</b></h1>
-                <br>
-                
-                <label>Search for group names: <input #groupFilter (keyup)="groupFilter.value = groupFilter.value; filter(alteredFilter, groupFilter.value)"></label><br>
+            <div>
+                <button class='blueButton' (click)="openDialogCreateGroup()">+ Add Group </button>
             </div><br>
-        </div><br><hr><br>
+        </div>
+        
+        <br><hr><br>
         <table>
             <tr>
                 <th><b>Group Name</b></th>
@@ -46,14 +29,7 @@
                 <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
                 <td>{{group.group.status}}</td>
                 <td>{{group.group.users}}</td>
-                <td>
-                    <button *ngIf="group.group.users == 0 && !singleConfirmationCheck" (click)='chosenGroup = group.group.name; singleConfirmationCheck = true'>Delete</button>
-                    <ng-container *ngIf="singleConfirmationCheck && chosenGroup == group.group.name">
-                        <label #confirmationLbl{{groupId}}>Confirm?</label><br>
-                        <button #confirmationYes{{groupId}} (click)='deleteSingleEmptyGroup(group.group.name); singleConfirmationCheck = false'>Yes</button> |
-                        <button #confirmationNo{{groupId}} (click)='singleConfirmationCheck = false'>No</button>
-                    </ng-container>
-                </td>
+                <td><button *ngIf="group.group.users == 0" (click)='chosenGroup = group.group.name; singleConfirmationCheck = true; openDialogDeleteGroup();'>Delete</button></td>
                 <td><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
             </tr>
         </table>
@@ -61,4 +37,4 @@
     
     
 </div><br><br>
-<button [routerLink]="['/']">Log out</button>
+<button [routerLink]="['/']" style="border-radius: 5px; height: 37px; background-color: rgb(0, 183, 255); color: white; font-weight: bold; border: none; width: 125px">Log out</button>

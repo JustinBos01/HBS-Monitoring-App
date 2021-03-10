@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,10 +13,10 @@ import {MatStepperModule} from '@angular/material/stepper'
 import {MatCheckboxModule} from '@angular/material/checkbox'
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatFormFieldModule } from '@angular/material/form-field'
+import {MatTabsModule} from '@angular/material/tabs';
 import { MatSelectModule } from "@angular/material/select";
 import { CommonModule } from "@angular/common";
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import {FormsModule} from '@angular/forms';
 import {MatNativeDateModule} from '@angular/material/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
@@ -41,8 +42,20 @@ import { ParadataUserComponent } from './paradata-user/paradata-user.component';
 import { ModalComponent } from './modal/modal.component';
 import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component'
 
+const material = [
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatStepperModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatTabsModule,
+  MatSelectModule,
+  MatNativeDateModule
+]
+
 @NgModule({
-  
   imports: [
     MatFormFieldModule,
     BrowserModule,
@@ -56,11 +69,13 @@ import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph
     BrowserAnimationsModule,
     MatStepperModule,
     MatSelectModule,
+    MatTabsModule,
     MatCheckboxModule,
     CommonModule,
     MatDialogModule,
     FormsModule,
     MatNativeDateModule,
+    
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},
       {path: 'menu', component: MenuPageComponent},
