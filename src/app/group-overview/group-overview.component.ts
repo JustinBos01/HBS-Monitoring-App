@@ -25,6 +25,7 @@ export interface DialogData {
 
 export class GroupOverviewComponent implements OnInit {
   superuserData
+  
   createGroupForm;
   tableForm
   groupData;
@@ -46,7 +47,6 @@ export class GroupOverviewComponent implements OnInit {
   isDisabled = false;
   allGroupNames = [];
 
-  
 
   constructor(
     public navigation: TopBarService,
@@ -58,11 +58,13 @@ export class GroupOverviewComponent implements OnInit {
     private router: Router,
     private groupOverviewService: GroupOverviewService,
     public dialog: MatDialog,
+    
   ) {
     this.createGroupForm = this.formBuilder.group({
       groupName: '',
       key: '',
       value: ''}) 
+    
     
     this.tableForm = this.formBuilder.group({
       value: ''
@@ -92,6 +94,18 @@ export class GroupOverviewComponent implements OnInit {
 
   openDialogCreateGroup(): void {
     const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
+      width: '1000px',
+      data: {groups: this.groups}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.showGroupResponse()
+    });
+  }
+
+  openDialogDuplicateGroup(chosenGroup): void {
+    localStorage.setItem("chosenGroup", chosenGroup)
+    const dialogRef = this.dialog.open(duplicateGroupDialogComponent, {
       width: '1000px',
       data: {groups: this.groups}
     });
@@ -565,6 +579,106 @@ export class CreateGroupDialogComponent implements OnInit {
         this.dialogRef.close();
       }
     } 
+  
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'app-duplicate-group-dialog',
+  templateUrl: './duplicate-group-dialog.html',
+  styleUrls: ['./group-overview.component.css']
+})
+
+export class duplicateGroupDialogComponent implements OnInit {
+  groups;
+  groupData;
+  JsonString;
+  chosenGroupInfos = [];
+  chosenGroup;
+
+  constructor(
+    public dialogRef: MatDialogRef<DeleteGroupDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    public groupOverviewService: GroupOverviewService,
+    public configService: ConfigService,
+    private router: Router,
+    ) {}
+  
+  ngOnInit() {
+    this.showGroupResponse()
+    this.chosenGroup = localStorage.getItem("chosenGroup")
+  }
+
+  showGroupResponse() {
+    this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all groups has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all groups has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(groups => {
+        this.groups = groups;
+        console.log(this.groups)
+      })
+    }
+  
+  //gets existing group infos amount
+  getGroupInfosAmount() {
+    this.chosenGroupInfos.length = 0
+    for (let group of this.groups) {
+      if (group.group.name == this.chosenGroup) {
+        try {
+          for (let index of group.groupInfos) {
+            if (index.key != '' && index.value != ''){
+              this.chosenGroupInfos.push({key: index.key, value: index.value})
+            }
+          }
+        }
+        catch {console.log('no infos available')}
+      }
+    }
+  }
+
+    //duplicate group (doesn't copy users, does copy group infos)
+  duplicateGroup(newGroupName) {
+    if (newGroupName){
+      this.getGroupInfosAmount();
+      this.JsonString = {
+        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+        "group": {"name" : newGroupName},
+        "groupInfos"  : this.chosenGroupInfos
+        }
+      this.configService.duplicateGroup(this.JsonString)
+        .pipe(catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}.\n
+            An error for duplicating a group has occurred`;
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+            An error for duplicating a group has occurred`;
+          }
+          window.alert(errorMessage);
+          return throwError(error)
+        }))
+        .subscribe(_ => {
+          this.dialogRef.close();
+          this.showGroupResponse();
+        })
+    } else {
+      alert('No new group name was entered.')
+    }
+  }
+
   
   onNoClick(): void {
     this.dialogRef.close();

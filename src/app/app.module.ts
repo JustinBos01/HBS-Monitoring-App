@@ -19,7 +19,8 @@ import { CommonModule } from "@angular/common";
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import {MatNativeDateModule} from '@angular/material/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-
+// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+// import { fas } from '@fortawesome/free-solid-svg-icons';
 
 
 import { AppComponent } from './app.component';

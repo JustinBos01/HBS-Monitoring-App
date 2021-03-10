@@ -6,12 +6,12 @@
     </div>
     <div class="table" style="padding-left: 20px; padding-right: 20px;">
         <div class='wrapper'>
-            <div class="md-form mt-0" style='padding-left: 5px; padding-right: 5px'>
-                <i class="material-icons mdc-button__icon" style='padding-left: 5px; '>search</i>
-                <input #groupFilter (keyup)="groupFilter.value = groupFilter.value; filter(alteredFilter, groupFilter.value)" placeholder="Search group names.." aria-label="Search" class="form-control" type="text" style=''><br>
+            <div class="md-form mt-0" style='padding-left: 5px; padding-right: 5px; width: 100%'>
+                <i class="material-icons mdc-button__icon" style='padding-left: 5px;'>search</i>
+                <input #groupFilter (keyup)="groupFilter.value = groupFilter.value; filter(alteredFilter, groupFilter.value)" placeholder="Search group names.." aria-label="Search" class="form-control" type="text" style='width: 90%; height: 40px; '><button class='blueButton' (click)="openDialogCreateGroup()" style=' height: 47px; width:10%'>+ Add Group </button>
             </div>
             <div>
-                <button class='blueButton' (click)="openDialogCreateGroup()">+ Add Group </button>
+                
             </div><br>
         </div>
         
@@ -21,7 +21,6 @@
                 <th><b>Group Name</b></th>
                 <th><b>Research Status</b></th>
                 <th><b>Amount of Users</b></th>
-                <th><b>Delete</b></th>
                 <th><b>Paradata</b></th>
             </tr>
 
@@ -29,8 +28,15 @@
                 <td><input id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
                 <td>{{group.group.status}}</td>
                 <td>{{group.group.users}}</td>
-                <td><button *ngIf="group.group.users == 0" (click)='chosenGroup = group.group.name; singleConfirmationCheck = true; openDialogDeleteGroup();'>Delete</button></td>
                 <td><button (click)='goToParaDataPage(group.group.name, group.group.id)'>Paradata</button></td>
+                <td>
+                    <span class="material-icons" (click)="openDialogDuplicateGroup(group.group.name)" style='color: blue'>
+                        new_label
+                    </span>
+                    <span mat-fab class="material-icons" *ngIf="group.group.users == 0" (click)='chosenGroup = group.group.name; singleConfirmationCheck = true; openDialogDeleteGroup();' style='color: red'>
+                        delete
+                    </span>
+                </td>
             </tr>
         </table>
     </div>
