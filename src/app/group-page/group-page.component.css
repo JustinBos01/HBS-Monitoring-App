@@ -3,6 +3,8 @@ table {
     border-collapse: collapse;
     width: 100%;
     align-self: center;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 th {
@@ -25,9 +27,15 @@ tr:nth-child(odd) {
 .wrapper {
     overflow: auto;
 }
+#tabbed-item {
+    grid-area: tabbed;
+    padding-left: 50px;
+    padding-top: 30px;
+    text-align: left;
+    float: left;
+}
 
 #group-functionalities-item {
-    grid-area: gfi;
     background-color: white;
     text-align: left;
     float: left;
@@ -36,17 +44,14 @@ tr:nth-child(odd) {
 }
 
 #users-functionalities-item {
-    grid-area: ufi;
     background-color: white;
     text-align: left;
     float: left;
-    width: 50%;
     padding-left: 50px;
     padding-top: 30px;
 }
 
 #group-infos-functionalities-item {
-    grid-area: gifi;
     background-color: white;
     text-align: left;
     max-height: 245px;
@@ -55,13 +60,30 @@ tr:nth-child(odd) {
 }
 
 .table-item {
-    grid-area: tbl;
     background-color: white;
     font-size: 15px;
     max-height: 625px;
     overflow-x: hidden;
     overflow-y: auto;
-    text-align: center;
+}
+
+.searchBar {
+    border-radius: 10px;
+    height: 30px;
+    outline: none;
+}
+
+.md-form.mt-0{
+    display:flex;
+    align-items: center;  
+}
+
+.material-icons.mdc-button__icon{
+    position:absolute;
+}
+
+.mdc-button__icon + input{
+    padding-left: 25px;
 }
 
 .header-item {
@@ -69,6 +91,15 @@ tr:nth-child(odd) {
     background-color: white;
     text-align: center;
     font-size: 15px;
+}
+
+.blueButton {
+    border-radius: 5px;
+    height: 37px;
+    background-color: rgb(0, 183, 255);
+    color: white;
+    font-weight: bold;
+    border: none;
 }
 
 .groupInfos-item {
@@ -87,9 +118,7 @@ tr:nth-child(odd) {
     display: grid;
     grid-template-areas:
         'HI HI HI HI'
-        'tbl tbl tbl tbl'
-        'tbl tbl tbl tbl'
-        'gIi gIi gIi gIi';
+        'tabbed tabbed tabbed tabbed';
     grid-gap: 10px;
     padding: 10px;
 }

@@ -1,2 +1,2 @@
 <label>Are you sure you want to delete <b style='color: blue'>{{selectedGroup}}</b>?</label><br>
-<span class="material-icons" (click)='deleteSingleEmptyGroup()' style="cursor: pointer; color: green">done</span> <label style="font-size: 30px">/</label> <span class="material-icons" style="cursor: pointer; color: red">close</span>
+<span class="material-icons" (click)='deleteSingleEmptyGroup()' style="cursor: pointer; color: green">done</span> <label style="font-size: 30px">/</label> <span class="material-icons" style="cursor: pointer; color: red" (click)="onNoClick()">close</span>

@@ -3,59 +3,32 @@
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
         <h1 id='statusLbl'>Group: <b>{{chosenGroup}}</b></h1>
     </div>
-    <div style="width: 1850px">
-        <mat-tab-group>
+    <div class="tabbed-item">
+        <mat-tab-group style="width: 100%">
             <mat-tab label="Users">
-                <div class='table-item' style="padding-left: 20px; padding-right: 20px;">
-                    <div class="wrapper">
-                        <div id='users-functionalities-item' class='users-functionalities-item'>
-                            <h1>Manage Users</h1><br>
-
-                            <label>To add a user to this group, click this button | </label>
-                            <button [routerLink]="['/createUsers']">Add users</button><br><br>
-                            <br>
-                            <label>Username Filter: <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)"></label><br><br>
-                        </div>
-
-                        <div id='group-functionalities-item' class='group-functionalities-item'>
-                            <h1>Manage Groups</h1><br>
-                            
-                            <ng-container *ngFor="let group of groups">
-                                <div *ngIf="chosenGroup == group.group.name">
-                                    <label>This group is currently: <b> {{group.group.status}}</b> | </label>
-                                    <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)">Enable Group</button>
-                                    <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)">Disable Group</button>
+                <br>
+                <div class='table-item' style="padding-left: 20px; padding-right: 20px">
+                    <ng-container *ngFor="let group of groups" style="overflow: hidden">
+                        <div class='wrapper' style=" overflow: hidden; border-radius: 0px;" >
+                            <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style=' padding-right: 5px; overflow: hidden border-radius: 0px'>
+                                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%'>Enable Group</button>
+                                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%' >Disable Group</button>
+                                <div class="md-form mt-0" style='position: relative; padding-left: 5px; padding-right: 5px; width: 100%'>
+                                    <i class="material-icons mdc-button__icon" style='padding-left: 5px;'>search</i>
+                                    <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)" style="width: 80; height: 47px">
                                 </div>
-                            </ng-container><br><br>
-
-                            
-                            
-
-                            <label>There is also an option to duplicate a group, including its <b>properties</b>, but not its <b>Users</b> by pressing <b><i>Duplicate</i></b>.<br></label>
-                            <input #regroupGroupTbx id='regroupGroupTbx' (change)='this.value = this.value'>
-                            <button [disabled]='regroupGroupTbx.value == ""' (click)="duplicateGroup(regroupGroupTbx.value)">Duplicate</button><br><br>
+                                <button [routerLink]="['/createUsers']" class="blueButton" style='height: 47px; width:10%'>Add users</button><br><br>
+                            </div>
                         </div>
-                    </div>
-
-                    <div style="text-align: left;">
-                        <label>To regroup all users in this group, fill in the field down below and press <b><i>Regroup</i></b> when ready.<br></label>
-                                <select #regroupGroupDdl id='regroupGroupDdl' (change)='this.value = this.value'>
-                                    <option>{{chosenGroup}}</option>
-                                    <ng-container *ngFor='let groupName of allGroupNames'>
-                                        <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
-                                    </ng-container>
-                                </select>
-                            <button [disabled]='regroupGroupDdl.value == chosenGroup' (click)="regroupGroup(regroupGroupDdl.value)">Regroup</button><br><br><br>
-                    </div>
-
-                    <label style="font-size: large;"><b>Users</b></label><br><br>
+                    </ng-container><br><br>
+                    
                     <table *ngIf='user'  style="padding-left: 20px; padding-right: 20px;">
-                        
                         <tr>
                             <th>Name</th>
                             <th>Password</th>
                             <th>Group</th>
                         </tr>
+
                         <tr *ngFor="let user of user; index as userId" (dblclick)="userClick(user.name)" style="cursor: pointer;">
                             <td>{{user.name}}</td>
                             <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
@@ -80,7 +53,6 @@
                     <div id='groupInfosFunctionalitiesDiv' class='group-infos-functionalities-item'>
                         <h1>Manage Properties</h1><br>
                         <label>Down below, you are able to delete all properties for this group (this will clear all in app settings for the research application)</label><br><br>
-                        
                         <label>You are able to add properties to the table to the left by entering an amount below.</label><br>
                         <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
                     </div>
