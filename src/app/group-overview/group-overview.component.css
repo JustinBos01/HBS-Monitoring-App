@@ -25,6 +25,10 @@ tr:nth-child(odd) {
     background-color: #eefeff;
 }
 
+.paradata:hover {
+    background-color: rgb(236,236,236);
+}
+
 .wrapper {
     display: flex;
   }
@@ -39,6 +43,10 @@ tr:nth-child(odd) {
     box-shadow: 1px 1px 5px grey;
 }
 
+
+tr:hover {
+    background-color: rgb(5,129,162);
+}
 .blueButton {
     border-radius: 5px;
     height: 37px;
@@ -50,7 +58,10 @@ tr:nth-child(odd) {
 }
 
 .searchBar {
-    border-radius: 10px; width: 1650px; height: 30px; outline: none;
+    border-radius: 10px;
+    width: 1650px;
+    height: 30px;
+    outline: none;
 }
 
 .welcome-item {

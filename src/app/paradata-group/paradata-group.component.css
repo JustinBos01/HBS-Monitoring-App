@@ -27,6 +27,10 @@ tr:nth-child(odd) {
     background-color: #eefeff;
 }
 
+tr:hover {
+    background-color: rgb(5,129,162);
+}
+
 .table-item {
     grid-area: tbl;
     background-color: white;

@@ -1,3 +1,11 @@
-<label>What do you want to name your duplicated group?<br></label>
-<input #duplicateGroupTbx><br>
-<span class="material-icons" (click)='duplicateGroup(duplicateGroupTbx.value)' style="cursor: pointer; color: green">done</span> <label style="font-size: 30px">/</label> <span class="material-icons" style="cursor: pointer; color: red" (click)="onNoClick()">close</span>
+<div style='text-align: center'>
+    <h2 >Duplicate: <b style='color: blue'>{{chosenGroup}}</b></h2>
+    <div style='text-align: center'>
+        <mat-label style='float: left' >What do you want to name your duplicated group?</mat-label> <br>
+        <input style='float: left' matInput #duplicateGroupTbx placeholder="{{chosenGroup}}copy"><br><br>
+    </div>
+    <div style='text-align: right; display:inline;'>
+        <button mat-button (click)='duplicateGroup(duplicateGroupTbx.value)' style="cursor: pointer; color: white; background-color: rgb(83,163,29); float: right;">Duplicate</button>
+        <button mat-button style="cursor: pointer; color: red; float: right;" (click)="onNoClick()">Cancel</button>
+    </div>
+</div>

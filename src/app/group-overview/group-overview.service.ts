@@ -19,18 +19,6 @@ export class GroupOverviewService {
 
   showGroupResponse() {
     this.configService.getGroups()
-      .pipe(catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Error: ${error.error.message}.\n
-          An error for retrieving all groups has occurred`;
-        } else {
-          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-          An error for retrieving all groups has occurred`;
-        }
-        window.alert(errorMessage);
-        return throwError(error)
-      }))
       .subscribe(groups => {
         this.groups = groups;
         return this.groups

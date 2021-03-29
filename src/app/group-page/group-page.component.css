@@ -19,50 +19,36 @@ td {
     padding: 8px;
 }
 
-
 tr:nth-child(odd) {
     background-color: #eefeff;
+}
+
+tr:hover {
+    background-color: rgb(5,129,162);
+}
+
+.matBtn:hover {
+    background-color: rgb(236,236,236);
 }
 
 .wrapper {
     overflow: auto;
 }
+
 #tabbed-item {
     grid-area: tabbed;
+    width: 100%;
     padding-left: 50px;
     padding-top: 30px;
     text-align: left;
     float: left;
-}
-
-#group-functionalities-item {
-    background-color: white;
-    text-align: left;
-    float: left;
-    padding-left: 50px;
-    padding-top: 30px;
-}
-
-#users-functionalities-item {
-    background-color: white;
-    text-align: left;
-    float: left;
-    padding-left: 50px;
-    padding-top: 30px;
-}
-
-#group-infos-functionalities-item {
-    background-color: white;
-    text-align: left;
-    max-height: 245px;
-    padding-left: 50px;
-    padding-top: 30px;
 }
 
 .table-item {
+    grid-area: tbl;
     background-color: white;
     font-size: 15px;
-    max-height: 625px;
+    max-height: 650px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -107,9 +93,20 @@ tr:nth-child(odd) {
     background-color: white;
     font-size: 15px;
     text-align: center;
-    max-height: 500px;
+    max-height: 325px;
     overflow-x: hidden;
     overflow-y: auto;
+    text-align: center;
+}
+
+.graph-item {
+    grid-area: graph;
+    background-color: white;
+    font-size: 15px;
+    text-align: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex; 
     text-align: center;
 }
 
@@ -117,8 +114,10 @@ tr:nth-child(odd) {
 .grid-container {
     display: grid;
     grid-template-areas:
-        'HI HI HI HI'
-        'tabbed tabbed tabbed tabbed';
+        'HI HI'
+        'tbl graph'
+        'tbl graph'
+        'tbl gIi';
     grid-gap: 10px;
     padding: 10px;
 }
@@ -137,4 +136,63 @@ tr:nth-child(odd) {
     box-shadow: 2px 2px 2px rgba(0,0,0,0.5),
             inset 2px 2px 8px rgba(0,0,0,0.5);
 }
-    
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }

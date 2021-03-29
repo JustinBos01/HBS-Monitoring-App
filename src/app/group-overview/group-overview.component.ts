@@ -13,6 +13,7 @@ import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, Http
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 
+
 export interface DialogData {
   groups: string
 }
@@ -72,6 +73,7 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.navigation.show();
     localStorage.setItem('chosenGroup', '')
     localStorage.setItem('chosenUser', '')
     this.navigation.hide();
@@ -79,6 +81,12 @@ export class GroupOverviewComponent implements OnInit {
     this.getAllUsers();
     this.getAllGroupNames();
     this.groupOverviewService.showGroupResponse();
+    setInterval(() => {
+      this.showGroupResponse()
+      this.getAllUsers();
+      this.getAllGroupNames();
+      this.groupOverviewService.showGroupResponse();
+    }, 500)
   }
 
   openDialogDeleteGroup(): void {
@@ -105,7 +113,7 @@ export class GroupOverviewComponent implements OnInit {
 
   openDialogDuplicateGroup(chosenGroup): void {
     localStorage.setItem("chosenGroup", chosenGroup)
-    const dialogRef = this.dialog.open(duplicateGroupDialogComponent, {
+    const dialogRef = this.dialog.open(DuplicateGroupDialogComponent, {
       width: '1000px',
       data: {groups: this.groups}
     });
@@ -140,18 +148,6 @@ export class GroupOverviewComponent implements OnInit {
   //get group data
   showGroupResponse() {
     this.configService.getGroups()
-      .pipe(catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Error: ${error.error.message}.\n
-          An error for retrieving all groups has occurred`;
-        } else {
-          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-          An error for retrieving all groups has occurred`;
-        }
-        window.alert(errorMessage);
-        return throwError(error)
-      }))
       .subscribe(groups => {
         this.groups = groups;
       })
@@ -159,18 +155,6 @@ export class GroupOverviewComponent implements OnInit {
 
   getAllGroupNames() {
     this.configService.getGroups()
-      .pipe(catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Error: ${error.error.message}.\n
-          An error for retrieving all group names has occurred`;
-        } else {
-          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-          An error for retrieving all group names has occurred`;
-        }
-        window.alert(errorMessage);
-        return throwError(error)
-      }))
       .subscribe(groups => {
         this.groups = groups;
         for(let groupName of this.groups) {
@@ -417,18 +401,6 @@ export class GroupOverviewComponent implements OnInit {
   //get users of ALL groups
   getAllUsers() {
     this.configService.getAllUsers()
-    .pipe(catchError((error: HttpErrorResponse) => {
-      let errorMessage = '';
-      if (error.error instanceof ErrorEvent) {
-        errorMessage = `Error: ${error.error.message}.\n
-        An error for retrieving all users has occurred`;
-      } else {
-        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-        An error for retrieving all users has occurred`;
-      }
-      window.alert(errorMessage);
-      return throwError(error)
-    }))
     .subscribe(users => {
         this.allUsers = users;
         this.allUsers = this.allUsers.userNames.length
@@ -532,6 +504,7 @@ export class CreateGroupDialogComponent implements OnInit {
   
   ngOnInit() {
     this.showGroupResponse()
+    
   }
 
   showGroupResponse() {
@@ -591,12 +564,13 @@ export class CreateGroupDialogComponent implements OnInit {
   styleUrls: ['./group-overview.component.css']
 })
 
-export class duplicateGroupDialogComponent implements OnInit {
+export class DuplicateGroupDialogComponent implements OnInit {
   groups;
   groupData;
   JsonString;
   chosenGroupInfos = [];
   chosenGroup;
+  interval: any;
 
   constructor(
     public dialogRef: MatDialogRef<DeleteGroupDialogComponent>,
@@ -608,6 +582,9 @@ export class duplicateGroupDialogComponent implements OnInit {
   
   ngOnInit() {
     this.showGroupResponse()
+    this.interval = setInterval(() => {
+      this.groups = this.showGroupResponse()
+    }, 2000);
     this.chosenGroup = localStorage.getItem("chosenGroup")
   }
 

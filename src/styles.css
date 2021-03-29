@@ -22,6 +22,8 @@ label {
     font-style: normal;
 }
 
+
+
 h1 {
     font-family: 'AkkoPro';
     font-weight: normal;
@@ -30,4 +32,17 @@ h1 {
 
 div {
   border-radius: 25px;
+}
+
+html, body { 
+    height: 100%; 
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+tr:hover {
+    background-color: rgb(5,129,162);
 }

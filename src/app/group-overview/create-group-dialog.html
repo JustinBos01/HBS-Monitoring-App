@@ -1,3 +1,9 @@
-<label>Group Name: <input #groupNameTbx  id='groupNameTbx' value='' (keyup)="groupNameTbx.value = groupNameTbx.value"></label><br>
-<label>Project (not implemented yet): <input></label><br><br>
-<span class="material-icons"  (click)='createGroup(groupNameTbx.value)' style="cursor: pointer; color: green">done</span> <label style="font-size: 30px">/</label> <span class="material-icons" style="cursor: pointer; color: red">close</span>
+<div style='text-align: center'>
+    <h2>Create Group</h2>
+    <label>Group Name: <input #groupNameTbx  id='groupNameTbx' value='' (keyup)="groupNameTbx.value = groupNameTbx.value"></label><br>
+    <label>Project (not implemented yet): <input></label><br><br>
+    <div style='text-align: right; display: inline;'>
+        <button mat-button (click)='createGroup(groupNameTbx.value)' style="cursor: pointer; background-color: rgb(83,163,29); color: white; float: right;">Create</button>
+        <button mat-button style="cursor: pointer; float: right; color: red" (click)="onNoClick()">Cancel</button>
+    </div>
+</div>

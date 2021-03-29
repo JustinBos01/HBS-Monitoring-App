@@ -1,0 +1,13 @@
+<div class="wrapper">
+    <div id='groupInfosFunctionalitiesDiv' class='group-infos-functionalities-item'>
+        <h1>Manage Properties</h1><br>
+        <label>Down below, you are able to delete all properties for this group (this will clear all in app settings for the research application)</label><br><br>
+        <label>You are able to add properties to the table to the left by entering an amount below.</label><br>
+        <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
+    </div>
+</div>
+<tr *ngFor="let value of addedValues; let index = index">
+    <td><input id="newKey{{index}}" type="text" name="name{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
+    <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
+</tr>
+<label *ngIf="(amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no properties for this group</b></label>

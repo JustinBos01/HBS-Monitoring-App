@@ -2,99 +2,181 @@
     <div class='header-item'>
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
         <h1 id='statusLbl'>Group: <b>{{chosenGroup}}</b></h1>
-    </div>
-    <div class="tabbed-item">
-        <mat-tab-group style="width: 100%">
-            <mat-tab label="Users">
-                <br>
-                <div class='table-item' style="padding-left: 20px; padding-right: 20px">
-                    <ng-container *ngFor="let group of groups" style="overflow: hidden">
-                        <div class='wrapper' style=" overflow: hidden; border-radius: 0px;" >
-                            <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style=' padding-right: 5px; overflow: hidden border-radius: 0px'>
-                                <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%'>Enable Group</button>
-                                <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%' >Disable Group</button>
-                                <div class="md-form mt-0" style='position: relative; padding-left: 5px; padding-right: 5px; width: 100%'>
-                                    <i class="material-icons mdc-button__icon" style='padding-left: 5px;'>search</i>
-                                    <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)" style="width: 80; height: 47px">
-                                </div>
-                                <button [routerLink]="['/createUsers']" class="blueButton" style='height: 47px; width:10%'>Add users</button><br><br>
-                            </div>
-                        </div>
-                    </ng-container><br><br>
-                    
-                    <table *ngIf='user'  style="padding-left: 20px; padding-right: 20px;">
-                        <tr>
-                            <th>Name</th>
-                            <th>Password</th>
-                            <th>Group</th>
-                        </tr>
-
-                        <tr *ngFor="let user of user; index as userId" (dblclick)="userClick(user.name)" style="cursor: pointer;">
-                            <td>{{user.name}}</td>
-                            <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
-                            <td>
-                                <select #group{{userId}} id='group{{userId}}' (change)="regroupUsers(userId, user.name)">
-                                    <option>{{chosenGroup}}</option>
-                                    <ng-container *ngFor='let groupName of allGroupNames'>
-                                        <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
-                                    </ng-container>
-                                </select>
-                            </td>
-                        </tr>
-                    </table><br>
-                    <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
-                </div>
-                
-            </mat-tab>
-        
-            <mat-tab label="Settings">
-
-                <div class="wrapper">
-                    <div id='groupInfosFunctionalitiesDiv' class='group-infos-functionalities-item'>
-                        <h1>Manage Properties</h1><br>
-                        <label>Down below, you are able to delete all properties for this group (this will clear all in app settings for the research application)</label><br><br>
-                        <label>You are able to add properties to the table to the left by entering an amount below.</label><br>
-                        <input #amountInput id='amountInput' type="number" (change)='addvalue(amountInput.value)' min="0">
+        <ng-container *ngFor="let group of groups" style="overflow: hidden">
+            <div class='wrapper' style=" overflow: hidden; border-radius: 0px;" >
+                <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style='padding-right: 5px; overflow: hidden border-radius: 0px'>
+                    <label class="switch" *ngIf='group.group.status == "disabled"' >
+                        <input #statusSwitch type="checkbox" (change)='statusSwitch.value = statusSwitch.value; statusChanged(group.group.status)'>
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="switch" *ngIf='group.group.status == "enabled"'>
+                        <input #statusSwitch type="checkbox" (change)='statusSwitch.value = statusSwitch.value; statusChanged(group.group.status)' checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <div style='text-align: left'>
+                        <label style='padding-left: 10px'>Group status: {{group.group.status}}<br>Access to the corresponding application is {{group.group.status}}</label>
                     </div>
                 </div>
-
-                    
-                <div class='groupInfos-item'>
-                    <label style="font-size: large;"><b>Properties</b></label><br><br><br>
-                    <label *ngIf="chosenGroupInfos.length == 0 && (amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no properties for this group</b></label>
-                    <ng-container *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
-                        <button *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Properties</button>
-                            <ng-container *ngIf="confirmationCheck">
-                                <label #confirmationLbl>Confirm?</label><br>
-                                <button #confirmationYes (click)='deleteGroupInfos(); confirmationCheck = false'>Yes</button> |
-                                <button #confirmationNo (click)='confirmationCheck = false'>No</button>
-                            </ng-container><br><br><br>
-                        <table id='groupInfosTbl' >
-                            <tr>
-                                <th>Key</th>
-                                <th>Value</th>
-                            </tr>
-                            
-                        
-                            <tr *ngFor="let infos of chosenGroupInfos; index as infosId">
-                                <td>
-                                    <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
-                                </td>
-                                <td>
-                                    <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()">
-                                </td>
-                            </tr>
-                            <tr *ngFor="let value of addedValues; let index = index">
-                                <td><input id="newKey{{index}}" type="text" name="name{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
-                                <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
-                            </tr>
-                            
-                        </table><br>
-                        <button *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0' (click)="createNewGroupInfos()">Apply</button>
-                    </ng-container>
+            </div>
+        </ng-container><br><br>
+    </div>
+    <br>
+    <div class='table-item' style="padding-left: 20px; padding-right: 20px">
+        <ng-container *ngFor="let group of groups" style="overflow: hidden">
+            <div class='wrapper' style=" overflow: hidden; border-radius: 0px;" >
+                <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style='padding-right: 5px; overflow: hidden border-radius: 0px'>
+                    <div class="md-form mt-0" style='position: relative; padding-right: 5px; width: 80%'>
+                        <i class="material-icons mdc-button__icon" style='padding-left: 5px;'>search</i>
+                        <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)" style="width: 99%; height: 47px;">
+                    </div>
+                    <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%; padding-right: 5px;'>Enable Group</button>
+                    <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%; padding-right: 5px;' >Disable Group</button>
+                    <button [routerLink]="['/createUsers']" class="blueButton" style='height: 47px; width:10%'>Add users</button><br><br>
                 </div>
+            </div>
+        </ng-container><br><br>
+        
+        <table *ngIf='user'  style="padding-left: 20px; padding-right: 20px;">
+            <tr>
+                <th>Name</th>
+                <th>Password</th>
+                <th>Group</th>
+            </tr>
+
+            <tr *ngFor="let user of user; index as userId" (dblclick)="userClick(user.name)" style="cursor: pointer;">
+                <td>{{user.name}}</td>
+                <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
+                <td>
+                    <select #group{{userId}} id='group{{userId}}' (change)="regroupUsers(userId, user.name)">
+                        <option>{{chosenGroup}}</option>
+                        <ng-container *ngFor='let groupName of allGroupNames'>
+                            <option *ngIf="groupName != chosenGroup" value="{{groupName}}">{{groupName}}</option>
+                        </ng-container>
+                    </select>
+                </td>
+            </tr>
+        </table><br>
+        <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
+    </div>
+   
+    <div class="graph-item" style=' min-width: 99%; max-width: 99%'>
+        <mat-tab-group style="max-width: 100%; width: 100%;">
+            <mat-tab label='Devices'>
+                <ng-container>
+                    <mat-tab-group style="max-width: 99%; width: 50%">
+                        <mat-tab label='Operating System' >
+                            <ng-container *ngIf='deviceDifference.length != 0'>
+                                <h2>Operating System</h2><br><hr>
+                                <canvas height="94%"
+                                
+                                baseChart
+                                [data]="deviceDoughnutChartData"
+                                [labels]="deviceDoughnutChartLabels"
+                                [chartType]="deviceDoughnutChartType">
+                                </canvas>
+                            </ng-container>
+                        </mat-tab>
+                        <mat-tab label='Models'>
+                            <ng-container *ngIf='phoneModels.length != 0'>
+                                <h2>Phone Models</h2><br><hr>
+                                <canvas height="94%"baseChart
+                                [data]="phoneModelDoughnutChartData"
+                                [labels]="phoneModelDoughnutChartLabels"
+                                [chartType]="phoneModelDoughnutChartType">
+                                </canvas>
+                            </ng-container> 
+                        </mat-tab>
+                    </mat-tab-group>
+                </ng-container>
+            </mat-tab>
+            <mat-tab label='Receipts'>
+                <ng-container *ngIf='receiptsSplit.length != 0'>
+                    <h2>Receipts</h2><br><hr>
+                    <canvas
+                    style='width: 99%; height: 100%'
+                    height="94%"
+                    baseChart
+                    [datasets]="receiptsBarChartData"
+                    [labels]="receiptsBarChartLabels"
+                    [options]="receiptsBarChartOptions"
+                    [plugins]="receiptsBarChartPlugins"
+                    [legend]="receiptsBarChartLegend"
+                    [chartType]="receiptsBarChartType"></canvas>
+                </ng-container>
             </mat-tab>
             
+            <mat-tab label='Status'>
+                <ng-container>
+                    <h2>Status</h2><br><hr>
+                    <canvas height="94%"
+                    style='width: 100%'
+                    baseChart
+                    [data]="statusDoughnutChartData"
+                    [labels]="statusDoughnutChartLabels"
+                    [chartType]="statusDoughnutChartType">
+                    </canvas>
+                </ng-container>
+            </mat-tab>
+
+            <mat-tab label='Events'>
+                <ng-container>
+                    <h2>Events</h2><br><hr><br>
+                    <h3>Group Average</h3><hr>
+                    <canvas style='width: 100%'
+                    height="47%"
+                    baseChart
+                    [data]="screenTimeParadataTime"
+                    [labels]="screenTimeParadataPages"
+                    [chartType]="phoneModelDoughnutChartType"></canvas><br>
+
+                    <ng-container *ngIf="userScreenTimeShow">
+                        <hr><br>
+                        <h3>User</h3><hr>
+                        <canvas  style='width: 100%'
+                        height="47%"
+                        baseChart
+                        [data]="screenTimeUserParadataTime"
+                        [labels]="screenTimeUserParadataPages"
+                        [chartType]="phoneModelDoughnutChartType"></canvas>
+                    </ng-container>
+                </ng-container>
+            </mat-tab>
         </mat-tab-group>
     </div>
+        
+    <div class='groupInfos-item'>
+        
+        <label *ngIf="chosenGroupInfos.length == 0 "><b>There seems to be no properties for this group</b></label>
+        <ng-container *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0'>
+            <div style='display:inline; float: left; padding-left: 10px;'>
+                <button mat-button class='matBtn' *ngIf='chosenGroupInfos.length > 0 || addedValues.length > 0' (click)="createNewGroupInfos()">Apply</button>
+            </div>
+            <label style="font-size: large; display:inline;"><b>Properties</b></label>
+            <div style='display:inline; float: right; padding-right: 10px;'>
+                <button mat-button class='matBtn' *ngIf='confirmationCheck == false' (click)="confirmationCheck; confirmationCheck = true">Delete Properties</button>
+            </div>
+                <ng-container *ngIf="confirmationCheck">
+                    <label #confirmationLbl>Confirm?</label><br>
+                    <button #confirmationYes (click)='deleteGroupInfos(); confirmationCheck = false'>Yes</button> |
+                    <button #confirmationNo (click)='confirmationCheck = false'>No</button>
+                </ng-container><br><br><br>
+            <table id='groupInfosTbl'>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            
+                <tr *ngFor="let infos of chosenGroupInfos; index as infosId">
+                    <td>
+                        <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
+                    </td>
+                    <td>
+                        <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()">
+                    </td>
+                </tr>
+            </table><br>
+            
+        </ng-container>
+    </div>
 </div>
+<img src='https://www.svgrepo.com/show/67631/back-arrow.svg' style="height: 25px; width: 25px; cursor: pointer; float: left;" routerLink='/overview'>

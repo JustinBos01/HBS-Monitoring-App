@@ -14,10 +14,12 @@ import {MatCheckboxModule} from '@angular/material/checkbox'
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatFormFieldModule } from '@angular/material/form-field'
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatButtonModule} from '@angular/material/button';
 import { MatSelectModule } from "@angular/material/select";
 import { CommonModule } from "@angular/common";
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import {MatNativeDateModule} from '@angular/material/core';
+import {MatInputModule} from '@angular/material/input';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 // import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -37,7 +39,7 @@ import { PhonePageComponent } from './phone-page/phone-page.component';
 import { ReceiptPageComponent } from './receipt-page/receipt-page.component';
 import { GroupPageComponent } from './group-page/group-page.component';
 import { CreateUsersComponent } from './create-users/create-users.component';
-import { GroupOverviewComponent } from './group-overview/group-overview.component';
+import { GroupOverviewComponent, DeleteGroupDialogComponent, CreateGroupDialogComponent, DuplicateGroupDialogComponent } from './group-overview/group-overview.component';
 import { ParadataGroupComponent } from './paradata-group/paradata-group.component';
 import { ParadataUserComponent } from './paradata-user/paradata-user.component';
 import { ModalComponent } from './modal/modal.component';
@@ -53,29 +55,22 @@ const material = [
   MatFormFieldModule,
   MatTabsModule,
   MatSelectModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatButtonModule,
+  MatInputModule,
 ]
 
 @NgModule({
   imports: [
-    MatFormFieldModule,
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
     HttpClientJsonpModule,
     ChartsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
     BrowserAnimationsModule,
-    MatStepperModule,
-    MatSelectModule,
-    MatTabsModule,
-    MatCheckboxModule,
     CommonModule,
-    MatDialogModule,
     FormsModule,
-    MatNativeDateModule,
+    material,
     
     RouterModule.forRoot([
       {path: '', component: LoginPageComponent},
@@ -89,6 +84,9 @@ const material = [
       {path: 'phone', component: PhonePageComponent},
       {path: 'receipts/:userId', component: ReceiptPageComponent},
       {path: 'createUsers', component: CreateUsersComponent}])
+  ],
+  exports:[
+    material
   ],
   declarations: [
     AppComponent,
@@ -109,6 +107,9 @@ const material = [
     ParadataUserComponent,
     ModalComponent,
     ParadataGraphPageComponent,
+    DeleteGroupDialogComponent,
+    CreateGroupDialogComponent,
+    DuplicateGroupDialogComponent,
   ],
   entryComponents: [],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
