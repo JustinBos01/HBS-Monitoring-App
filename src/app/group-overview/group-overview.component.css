@@ -43,10 +43,10 @@ tr:nth-child(odd) {
     box-shadow: 1px 1px 5px grey;
 }
 
-
 tr:hover {
-    background-color: rgb(5,129,162);
+    background-color: rgb(119, 203, 229);
 }
+
 .blueButton {
     border-radius: 5px;
     height: 37px;

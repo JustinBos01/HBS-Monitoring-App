@@ -1,4 +1,4 @@
-<div style='padding-left: 10px; text-align: center'>
+<div style='padding-left: 10px; text-align: center;'>
     <h2 style='text-align: center; display:inline;'>Delete: <b style='color: blue'>{{selectedGroup}}</b></h2>
     <span class='material-icons' style="float: right; cursor: pointer;" (click)="onNoClick()">close</span><br><br>
     <label style='text-align: center; display:inline;'><b style='color: blue'>{{selectedGroup}}</b> will be permanently deleted. This cannot be undone.</label>
@@ -8,7 +8,7 @@
     <br>
     <br>
     
-    <div style='text-align: right; display:inline;'>
+    <div style='text-align: right; display:inline;  bottom: 10px'>
         <button mat-button (click)='deleteSingleEmptyGroup()' style="cursor: pointer; background-color: rgb(233,76,10); color: white; float: right;">Delete</button> 
         <button mat-button style="cursor: pointer; float: right; color: blue" (click)="onNoClick()">Cancel</button>
     </div>

@@ -1,9 +1,9 @@
 <div class="grid-container">
     <div class='header-item'>
-        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
-        <h1 id='statusLbl'>Group: <b>{{chosenGroup}}</b></h1>
+        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer; background-color: white;">
+        <h2 id='statusLbl' style='float: left; padding-right: 20px;'>Group: <b>{{chosenGroup}}</b></h2>
         <ng-container *ngFor="let group of groups" style="overflow: hidden">
-            <div class='wrapper' style=" overflow: hidden; border-radius: 0px;" >
+            <div class='wrapper' style=" overflow: hidden; border-radius: 0px; float: center;" >
                 <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style='padding-right: 5px; overflow: hidden border-radius: 0px'>
                     <label class="switch" *ngIf='group.group.status == "disabled"' >
                         <input #statusSwitch type="checkbox" (change)='statusSwitch.value = statusSwitch.value; statusChanged(group.group.status)'>
@@ -14,24 +14,25 @@
                         <span class="slider round"></span>
                     </label>
                     <div style='text-align: left'>
-                        <label style='padding-left: 10px'>Group status: {{group.group.status}}<br>Access to the corresponding application is {{group.group.status}}</label>
+                        <label style='padding-left: 10px;  padding-top: 50px'>Group status: {{group.group.status}}</label><label *ngIf='group.group.status == enabled'>Active</label><label *ngIf='group.group.status == disabled'>Inactive</label>
                     </div>
                 </div>
             </div>
-        </ng-container><br><br>
+        </ng-container><br>
+        <div style='float: left'>
+            <a [routerLink]="['/overview']" style='color: blue; padding-right: 10px'>Overview Page</a>&rarr;<label style='padding-left: 10px;'>Group Page</label><br><br>
+        </div>
     </div>
     <br>
-    <div class='table-item' style="padding-left: 20px; padding-right: 20px">
+    <div class='table-item' style="padding-left: 20px; padding-right: 20px;">
         <ng-container *ngFor="let group of groups" style="overflow: hidden">
             <div class='wrapper' style=" overflow: hidden; border-radius: 0px;" >
                 <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style='padding-right: 5px; overflow: hidden border-radius: 0px'>
                     <div class="md-form mt-0" style='position: relative; padding-right: 5px; width: 80%'>
-                        <i class="material-icons mdc-button__icon" style='padding-left: 5px;'>search</i>
-                        <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)" style="width: 99%; height: 47px;">
+                        <span class="material-icons mdc-button__icon" style='padding-left: 10px; transform: scaleX(-1);'>search</span>
+                        <input #filterInput (keyup)="filterInput.value = filterInput.value; filterOnUsers(filterInput.value)" placeholder="Search names.." aria-label="Search" class="form-control" type="text"  style="width: 99%; height: 47px;">
                     </div>
-                    <button #disableBtn *ngIf="group.group.status == 'disabled'" (click)="enableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%; padding-right: 5px;'>Enable Group</button>
-                    <button #enableBtn *ngIf="group.group.status == 'enabled'" (click)="disableGroup(group.group.id)" class="blueButton" style='height: 47px; width:10%; padding-right: 5px;' >Disable Group</button>
-                    <button [routerLink]="['/createUsers']" class="blueButton" style='height: 47px; width:10%'>Add users</button><br><br>
+                    <button [routerLink]="['/createUsers']" class="blueButton" style='height: 47px; width:20%'>Add users</button><br><br>
                 </div>
             </div>
         </ng-container><br><br>
@@ -59,42 +60,30 @@
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
     </div>
    
-    <div class="graph-item" style=' min-width: 99%; max-width: 99%'>
-        <mat-tab-group style="max-width: 100%; width: 100%;">
-            <mat-tab label='Devices'>
-                <ng-container>
-                    <mat-tab-group style="max-width: 99%; width: 50%">
-                        <mat-tab label='Operating System' >
-                            <ng-container *ngIf='deviceDifference.length != 0'>
-                                <h2>Operating System</h2><br><hr>
-                                <canvas height="94%"
-                                
-                                baseChart
-                                [data]="deviceDoughnutChartData"
-                                [labels]="deviceDoughnutChartLabels"
-                                [chartType]="deviceDoughnutChartType">
-                                </canvas>
-                            </ng-container>
-                        </mat-tab>
-                        <mat-tab label='Models'>
-                            <ng-container *ngIf='phoneModels.length != 0'>
-                                <h2>Phone Models</h2><br><hr>
-                                <canvas height="94%"baseChart
-                                [data]="phoneModelDoughnutChartData"
-                                [labels]="phoneModelDoughnutChartLabels"
-                                [chartType]="phoneModelDoughnutChartType">
-                                </canvas>
-                            </ng-container> 
-                        </mat-tab>
-                    </mat-tab-group>
-                </ng-container>
-            </mat-tab>
-            <mat-tab label='Receipts'>
-                <ng-container *ngIf='receiptsSplit.length != 0'>
-                    <h2>Receipts</h2><br><hr>
+    <div class="graph-item">
+        <div style='max-height: 100%; max-width: 100%'>
+            <mat-tab-group width="100%" animationDuration="1000ms">
+                
+                <mat-tab label='Operating System' *ngIf='deviceDifference.length != 0'>
+                    <canvas height="94%"
+                    style='width: 100%'
+                    baseChart
+                    [data]="deviceDoughnutChartData"
+                    [labels]="deviceDoughnutChartLabels"
+                    [chartType]="deviceDoughnutChartType">
+                    </canvas>
+                </mat-tab>
+                <mat-tab label='Models' *ngIf='phoneModels.length != 0'>
+                    <canvas 
+                    style='width: 100%' height="94%" baseChart
+                    [data]="phoneModelDoughnutChartData"
+                    [labels]="phoneModelDoughnutChartLabels"
+                    [chartType]="phoneModelDoughnutChartType">
+                    </canvas>
+                </mat-tab>
+                <mat-tab label='Receipts' *ngIf='receiptsSplit.length != 0'>
                     <canvas
-                    style='width: 99%; height: 100%'
-                    height="94%"
+                    style='width: 100%; height: 100%'
                     baseChart
                     [datasets]="receiptsBarChartData"
                     [labels]="receiptsBarChartLabels"
@@ -102,12 +91,9 @@
                     [plugins]="receiptsBarChartPlugins"
                     [legend]="receiptsBarChartLegend"
                     [chartType]="receiptsBarChartType"></canvas>
-                </ng-container>
-            </mat-tab>
-            
-            <mat-tab label='Status'>
-                <ng-container>
-                    <h2>Status</h2><br><hr>
+                </mat-tab>
+                
+                <mat-tab label='Status'>
                     <canvas height="94%"
                     style='width: 100%'
                     baseChart
@@ -115,33 +101,29 @@
                     [labels]="statusDoughnutChartLabels"
                     [chartType]="statusDoughnutChartType">
                     </canvas>
-                </ng-container>
-            </mat-tab>
+                </mat-tab>
 
-            <mat-tab label='Events'>
-                <ng-container>
-                    <h2>Events</h2><br><hr><br>
-                    <h3>Group Average</h3><hr>
-                    <canvas style='width: 100%'
+                <mat-tab label='Events' *ngIf="screenTimeParadataTime">
+                    <label> test </label>
+                    <canvas
+                    style='width: 100%'
                     height="47%"
                     baseChart
                     [data]="screenTimeParadataTime"
                     [labels]="screenTimeParadataPages"
                     [chartType]="phoneModelDoughnutChartType"></canvas><br>
-
                     <ng-container *ngIf="userScreenTimeShow">
-                        <hr><br>
-                        <h3>User</h3><hr>
-                        <canvas  style='width: 100%'
+                        <canvas  
+                        style='width: 100%'
                         height="47%"
                         baseChart
                         [data]="screenTimeUserParadataTime"
                         [labels]="screenTimeUserParadataPages"
                         [chartType]="phoneModelDoughnutChartType"></canvas>
                     </ng-container>
-                </ng-container>
-            </mat-tab>
-        </mat-tab-group>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
     </div>
         
     <div class='groupInfos-item'>
@@ -179,4 +161,3 @@
         </ng-container>
     </div>
 </div>
-<img src='https://www.svgrepo.com/show/67631/back-arrow.svg' style="height: 25px; width: 25px; cursor: pointer; float: left;" routerLink='/overview'>

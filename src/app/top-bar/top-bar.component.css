@@ -20,3 +20,18 @@
 span + span {
     margin-left: 10px;
 }
+
+.iconDiv {
+    background-color: white;
+    padding: 20px 0;
+    font-size: 15px;
+}
+
+.binderDiv {
+    box-shadow: 1px 1px 5px grey;
+}
+
+nav {
+    padding-left: 10px;
+    padding-right: 10px;
+}

@@ -17,6 +17,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import { MatSelectModule } from "@angular/material/select";
 import { CommonModule } from "@angular/common";
+import { AgGridModule } from 'ag-grid-angular';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
@@ -58,6 +59,7 @@ const material = [
   MatNativeDateModule,
   MatButtonModule,
   MatInputModule,
+  AgGridModule,
 ]
 
 @NgModule({

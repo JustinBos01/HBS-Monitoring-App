@@ -3,30 +3,39 @@ table {
     border-collapse: collapse;
     width: 100%;
     align-self: center;
-    max-height: 80%;
+    max-height: 30%;
+    height: 30%;
+    border-left:rgb(2, 189, 202);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 100px;
 }
 
 th {
-    background-color: black;
-    color: white;
-    text-align: center;
-    border: 1px solid #dddddd;
+    background-color: white;
+    color: rgb(2, 189, 202);
+    text-align: left;
     padding: 8px;
 }
 
 td {
-    text-align: center;
-    border: 1px solid gray;
+    text-align: left;
     padding: 8px;
 }
 
+
 tr:nth-child(odd) {
-    background-color: #dddddd;
+    background-color: #eefeff;
+}
+
+
+tr:hover {
+    background-color: rgb(5,129,162);
 }
 
 .header-item {
     grid-area: HI;
-    background-color: lightgray;
+    background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
     font-size: 15px;
@@ -34,7 +43,7 @@ tr:nth-child(odd) {
 
 .userAddition {
     grid-area: UA;
-    background-color: lightgray;
+    background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
     max-height: 600px;
@@ -45,7 +54,7 @@ tr:nth-child(odd) {
 
 .userAdditionAmount {
     grid-area: UAAmount;
-    background-color: lightgray;
+    background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
     max-height: 600px;
@@ -65,7 +74,18 @@ tr:nth-child(odd) {
 }
 
 .grid-container > div {
-    background-color: lightgray;
     padding: 20px 0;
+    background-color: white;
     font-size: 15px;
 }
+
+.pageLbl {
+    margin: 0;
+    position: absolute;
+    top: 75px;
+    left: 175px;
+    float: left;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+

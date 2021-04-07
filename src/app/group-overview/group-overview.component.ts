@@ -47,6 +47,7 @@ export class GroupOverviewComponent implements OnInit {
   singleConfirmationCheck = false;
   isDisabled = false;
   allGroupNames = [];
+  // mat table headers = ['Group Name', 'Research Status', 'Amount of Users', 'Paradata', ''];
 
 
   constructor(
@@ -86,13 +87,14 @@ export class GroupOverviewComponent implements OnInit {
       this.getAllUsers();
       this.getAllGroupNames();
       this.groupOverviewService.showGroupResponse();
-    }, 500)
+    }, 60000)
   }
 
   openDialogDeleteGroup(): void {
     localStorage.setItem('selectedGroup', this.chosenGroup)
     const dialogRef = this.dialog.open(DeleteGroupDialogComponent, {
-      width: '1000px'
+      width: '500px',
+      height: '250px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -100,9 +102,13 @@ export class GroupOverviewComponent implements OnInit {
     });
   }
 
+  navBar() {
+    this.navigation.toggle();
+  }
   openDialogCreateGroup(): void {
     const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
-      width: '1000px',
+      width: '500px',
+      height: '250px',
       data: {groups: this.groups}
     });
 
@@ -114,7 +120,8 @@ export class GroupOverviewComponent implements OnInit {
   openDialogDuplicateGroup(chosenGroup): void {
     localStorage.setItem("chosenGroup", chosenGroup)
     const dialogRef = this.dialog.open(DuplicateGroupDialogComponent, {
-      width: '1000px',
+      width: '500px',
+      height: '250px',
       data: {groups: this.groups}
     });
 

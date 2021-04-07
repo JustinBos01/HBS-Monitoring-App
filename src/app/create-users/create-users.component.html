@@ -1,7 +1,10 @@
 <div class="grid-container" >
     <div class='header-item'>
-        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
-        <h1>Create Users</h1>
+        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer; display: inline">
+        <h1 class='pageLbl'>Create Users</h1><br>
+        <label class='bread_crumb'>
+        <a [routerLink]="['/overview']">Overview Page</a> &rarr; <a [routerLink]="['/groups/{{chosenGroup}}']">Group Page</a> &rarr; <label>Create Users Page</label>
+        </label>
     </div>
     <form [formGroup]='inputForm'>
         <form [formGroup]='createUsersForm'>
@@ -12,8 +15,6 @@
                 <label>Corresponding tag (only for randomized users): </label><input #tagTbx id='tagTbx' type='text' name='tagTbx' value="" (keyup)='tagTbx.value = tagTbx.value' (keyup.enter)='createRandomUsers(tagTbx.value)' pattern="[a-zA-Z]*"> |
                 <button [disabled]='tagTbx.value == ""' class="button" type="submit" (click)='createRandomUsers(tagTbx.value)'>Create random users</button><br><br>
 
-                <button (click)="createSuperUsers()" type="button">Add To Superusers Group</button><br>
-                <button (click)='createUsers()' type="button" *ngIf='chosenGroup != "superuser"'>Add Users</button><br><br>
                 
                 
                 <label>Add users through an excel file: </label>
@@ -22,6 +23,10 @@
             </div><br>
         </form>
         <div class="userAddition" *ngIf='amountInput.value > 0'>
+            <div style='padding-right: 10px; padding-left: 10px;'>
+                <br><button mat-button (click)="createSuperUsers()" type="button" style='float: right; padding-left: 10px;'>Add To Superusers Group</button>
+                <button mat-button (click)='createUsers()' type="button" *ngIf='chosenGroup != "superuser"' style='float: left;'>Add Users</button><br><br>
+            </div>
             <table>
                 <tr>
                     <th>Username</th>
@@ -37,7 +42,7 @@
         </div>
         
     </form>
-    <div *ngIf='unableAddition.length != 0'>
+    <div *ngIf='unableAddition.length != 0' style='background-color: white;'>
         <label *ngIf='unableAddition.length != 0'>The following users could not be added: </label>
         <label *ngFor='let index of unableAddition'><b>{{index}} <ng-container *ngIf='index != unableAddition[unableAddition.length-1]'>| </ng-container> <ng-container *ngIf='index == unableAddition[unableAddition.length-1]'>.</ng-container></b></label>
         <label *ngIf='unableAdditionAmount != 0'>{{unableAdditionAmount}}</label>

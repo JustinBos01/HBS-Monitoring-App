@@ -11,3 +11,10 @@
     <td><input id="newValue{{index}}" type="text" name="password{{index}}" (keydown.enter)='createNewGroupInfos()'></td>
 </tr>
 <label *ngIf="(amountInput.value == 0 || amountInput.value == '')"><b>There seems to be no properties for this group</b></label>
+
+<table mat-table [dataSource]='groups' class='mat-elevation-z8'>
+    <ng-container>
+        <th mat-header-cell *matHeaderCellDef>Group Name</th>
+        <td mat-cell *matCellDef='let element'><input id='group{{element.groupId}}' value='{{element.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
+    </ng-container>
+</table>
