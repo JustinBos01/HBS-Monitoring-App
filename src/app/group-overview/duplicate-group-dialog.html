@@ -1,10 +1,10 @@
 <div style='text-align: center'>
     <h2 >Duplicate: <b style='color: blue'>{{chosenGroup}}</b></h2>
     <div style='text-align: center'>
-        <mat-label style='float: left' >What do you want to name your duplicated group?</mat-label> <br>
-        <input style='float: left' matInput #duplicateGroupTbx placeholder="{{chosenGroup}}copy"><br><br>
+        <mat-label>What do you want to name your duplicated group?</mat-label> <br><br>
+        <input matInput #duplicateGroupTbx placeholder="{{chosenGroup}}copy"><br><br>
     </div>
-    <div style='text-align: right; display:inline;'>
+    <div style='position: relative; text-align: right; display:inline; top: 45px;'>
         <button mat-button (click)='duplicateGroup(duplicateGroupTbx.value)' style="cursor: pointer; color: white; background-color: rgb(83,163,29); float: right;">Duplicate</button>
         <button mat-button style="cursor: pointer; color: red; float: right;" (click)="onNoClick()">Cancel</button>
     </div>

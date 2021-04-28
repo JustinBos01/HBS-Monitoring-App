@@ -47,6 +47,10 @@ export class GroupOverviewComponent implements OnInit {
   singleConfirmationCheck = false;
   isDisabled = false;
   allGroupNames = [];
+  name;
+  monitoring;
+  caseManagement;
+  
   // mat table headers = ['Group Name', 'Research Status', 'Amount of Users', 'Paradata', ''];
 
 
@@ -75,6 +79,7 @@ export class GroupOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigation.show();
+    this.name = localStorage.getItem('superUserData.name')
     localStorage.setItem('chosenGroup', '')
     localStorage.setItem('chosenUser', '')
     this.navigation.hide();
@@ -82,12 +87,21 @@ export class GroupOverviewComponent implements OnInit {
     this.getAllUsers();
     this.getAllGroupNames();
     this.groupOverviewService.showGroupResponse();
+    this.monitoring = this.loginPageService.monitoring;
+    this.caseManagement = this.loginPageService.caseManagement;
+    console.log(this.loginPageService.caseManagement)
+    console.log(this.caseManagement)
     setInterval(() => {
-      this.showGroupResponse()
+      this.showGroupResponse();
       this.getAllUsers();
       this.getAllGroupNames();
       this.groupOverviewService.showGroupResponse();
     }, 60000)
+  }
+
+  menuToggle() {
+    const toggleMenu = document.querySelector('.menu');
+    toggleMenu.classList.toggle('active')
   }
 
   openDialogDeleteGroup(): void {
@@ -195,10 +209,12 @@ export class GroupOverviewComponent implements OnInit {
 
   //navigate to group page
   goToPage(givenGroupName, givenGroupId, event) {
-    this.groupOverviewService.chosenGroup = givenGroupName;
-    localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
-    localStorage.setItem('chosenGroupId', givenGroupId)
-    this.router.navigate(['/groups', givenGroupId])
+    if (this.monitoring == true) {
+      this.groupOverviewService.chosenGroup = givenGroupName;
+      localStorage.setItem('chosenGroup', this.groupOverviewService.chosenGroup)
+      localStorage.setItem('chosenGroupId', givenGroupId)
+      this.router.navigate(['/groups', givenGroupId])
+    }
   }
 
   //go to paradata page
@@ -554,11 +570,11 @@ export class CreateGroupDialogComponent implements OnInit {
           alert("The group: " + userData + " has been added")
           this.dialogRef.close();
         })
-      } else {
-        alert("No group name was given.")
-        this.dialogRef.close();
-      }
-    } 
+    } else {
+      alert("No group name was given.")
+      this.dialogRef.close();
+    }
+  } 
   
   onNoClick(): void {
     this.dialogRef.close();

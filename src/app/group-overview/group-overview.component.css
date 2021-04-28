@@ -44,7 +44,19 @@ tr:nth-child(odd) {
 }
 
 tr:hover {
-    background-color: rgb(119, 203, 229);
+    background-color: rgb(206, 234, 243);
+}
+
+.group_name {
+    background-color: transparent;
+    border: none;
+}
+
+.group_name:hover {
+    background-color: white;
+    border-style: solid;
+    border-color: black;
+    border: 5px;
 }
 
 .blueButton {
@@ -70,9 +82,9 @@ tr:hover {
     box-shadow: 1px 1px 5px grey;
 }
 
-.md-form.mt-0{
+.md-form.mt-0 {
     display:flex;
-    align-items: center;  
+    align-items: center;
 }
 
 .material-icons.mdc-button__icon{

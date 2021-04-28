@@ -5,5 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class LoginPageService {
   superUserData;
+  monitoring = true;
+  caseManagement = false;
   constructor() { }
 }

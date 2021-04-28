@@ -1,26 +1,44 @@
-<div class="grid-container">
-    <div class='header-item'>
-        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer; background-color: white;">
-        <h2 id='statusLbl' style='float: left; padding-right: 20px;'>Group: <b>{{chosenGroup}}</b></h2>
-        <ng-container *ngFor="let group of groups" style="overflow: hidden">
-            <div class='wrapper' style=" overflow: hidden; border-radius: 0px; float: center;" >
-                <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style='padding-right: 5px; overflow: hidden border-radius: 0px'>
-                    <label class="switch" *ngIf='group.group.status == "disabled"' >
-                        <input #statusSwitch type="checkbox" (change)='statusSwitch.value = statusSwitch.value; statusChanged(group.group.status)'>
-                        <span class="slider round"></span>
-                    </label>
-                    <label class="switch" *ngIf='group.group.status == "enabled"'>
-                        <input #statusSwitch type="checkbox" (change)='statusSwitch.value = statusSwitch.value; statusChanged(group.group.status)' checked>
-                        <span class="slider round"></span>
-                    </label>
-                    <div style='text-align: left'>
-                        <label style='padding-left: 10px;  padding-top: 50px'>Group status: {{group.group.status}}</label><label *ngIf='group.group.status == enabled'>Active</label><label *ngIf='group.group.status == disabled'>Inactive</label>
+<div id='grid' [ngClass]="{'grid-container': normalGrid, 'grid-container-case-management': caseManagement}">
+    <body style='position: static'>
+        <div class='action' style=' padding-right: 5px; z-index:10; position: absolute'>
+            <div class="profile" (click)='menuToggle()' style='cursor: pointer'>
+                <img style='float: right; width: 90%; height: 90%;' src='https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_account_circle_48px-64.png'>
+            </div>
+            <div class="menu" style='border: solid;'>
+                <h3>Account<br><span>{{name}}</span><br><span>Case Management</span></h3>
+                <hr>
+                <ul>
+                    <li>
+                        <a [routerLink]="['/']">logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+    <div class='header-item' style='display: inline'>
+        <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="center" width="100" height="100" routerLink='/overview' style="cursor: pointer; background-color: white;">
+    </div>
+
+
+    <div class='header-info-item' style='background-color: rgb(219, 250, 255)'>
+        <div style='padding-left: 10px; all: none;'>
+            <h2 id='statusLbl' style='float: left; padding-right: 20px;'>Group: <b>{{chosenGroup}}</b></h2>
+            <ng-container *ngFor="let group of groups" style="overflow: hidden">
+                <div class='wrapper' style=" overflow: hidden; border-radius: 0px; float: center;" >
+                    <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style='padding-right: 5px; overflow: hidden border-radius: 0px'>
+                        <label class="switch"  >
+                            <input #statusSwitch type="checkbox" (change)='statusChanged(group.group.status); statusSwitch.value = statusSwitch.value;' [checked]='group.group.status == "enabled"'>
+                            <span class="slider round"></span>
+                        </label>
+                        <div style='text-align: left'>
+                            <label style='padding-left: 10px;  padding-top: 50px'>Group status: {{group.group.status}}</label><!--<label *ngIf='group.group.status == enabled'>Active</label><label *ngIf='group.group.status == disabled'>Inactive</label>-->
+                        </div>
                     </div>
                 </div>
+            </ng-container><br><br>
+            <div style='float: left'>
+                <a [routerLink]="['/overview']" style='color: blue; padding-right: 10px'>Overview Page</a>&rarr;<label style='padding-left: 10px;'>Group Page</label><br><br>
             </div>
-        </ng-container><br>
-        <div style='float: left'>
-            <a [routerLink]="['/overview']" style='color: blue; padding-right: 10px'>Overview Page</a>&rarr;<label style='padding-left: 10px;'>Group Page</label><br><br>
         </div>
     </div>
     <br>
@@ -37,14 +55,14 @@
             </div>
         </ng-container><br><br>
         
-        <table *ngIf='user'  style="padding-left: 20px; padding-right: 20px;">
+        <table *ngIf='user' style="padding-left: 20px; padding-right: 20px;">
             <tr>
                 <th>Name</th>
                 <th>Password</th>
                 <th>Group</th>
             </tr>
 
-            <tr *ngFor="let user of user; index as userId" (dblclick)="userClick(user.name)" style="cursor: pointer;">
+            <tr *ngFor="let user of user; index as userId" (dblclick)="getScreenTimeUser(screenTimeUserParadata, user.name)" style="cursor: pointer;">
                 <td>{{user.name}}</td>
                 <td><input id='passwordValue{{userId}}' value='{{user.password}}' (keyup.enter)="changePassword(userId, user.name)"></td>
                 <td>
@@ -60,9 +78,9 @@
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
     </div>
    
-    <div class="graph-item">
+    <div class="graph-item" *ngIf='!caseManagement'>
         <div style='max-height: 100%; max-width: 100%'>
-            <mat-tab-group width="100%" animationDuration="1000ms">
+            <mat-tab-group mat-stretch-tabs width="100%" animationDuration="1000ms">
                 
                 <mat-tab label='Operating System' *ngIf='deviceDifference.length != 0'>
                     <canvas height="94%"
@@ -93,7 +111,7 @@
                     [chartType]="receiptsBarChartType"></canvas>
                 </mat-tab>
                 
-                <mat-tab label='Status'>
+                <mat-tab label='Status' *ngIf='statusDoughnutChartData'>
                     <canvas height="94%"
                     style='width: 100%'
                     baseChart
@@ -104,7 +122,6 @@
                 </mat-tab>
 
                 <mat-tab label='Events' *ngIf="screenTimeParadataTime">
-                    <label> test </label>
                     <canvas
                     style='width: 100%'
                     height="47%"
@@ -142,7 +159,7 @@
                     <button #confirmationYes (click)='deleteGroupInfos(); confirmationCheck = false'>Yes</button> |
                     <button #confirmationNo (click)='confirmationCheck = false'>No</button>
                 </ng-container><br><br><br>
-            <table id='groupInfosTbl'>
+            <table id='groupInfosTbl' style='padding-left: 20px; padding-right: 20px;'>
                 <tr>
                     <th>Key</th>
                     <th>Value</th>
@@ -150,10 +167,10 @@
             
                 <tr *ngFor="let infos of chosenGroupInfos; index as infosId">
                     <td>
-                        <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()">
+                        <input id="key{{infosId}}"  name="key{{infosId}}" value="{{infos.key}}" (keyup.enter)="changeGroupInfos()" [disabled]='currentGroup == "enabled"'>
                     </td>
                     <td>
-                        <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()">
+                        <input id="value{{infosId}}" name="value{{infosId}}" value="{{infos.value}}" (keyup.enter)="changeGroupInfos()" [disabled]='currentGroup == "enabled"'>
                     </td>
                 </tr>
             </table><br>

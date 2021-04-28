@@ -24,7 +24,7 @@ tr:nth-child(odd) {
 }
 
 tr:hover {
-    background-color: rgb(119, 203, 229);
+    background-color: rgb(206, 234, 243);
 }
 
 .matBtn:hover {
@@ -34,6 +34,7 @@ tr:hover {
 .wrapper {
     overflow: auto;
 }
+
 
 #tabbed-item {
     grid-area: tabbed;
@@ -74,9 +75,27 @@ tr:hover {
 
 .header-item {
     grid-area: HI;
+    justify-content: center;
+    margin: 20px auto;
+    margin-bottom: 0; 
+    margin-top: 0; 
+    margin-left: 0; 
+    margin-right: 0;
+    width: 100px;
     background-color: white;
     text-align: center;
     font-size: 15px;
+    transform: translate(0%, -10%);
+}
+
+.header-info-item {
+    position: absolute;
+    background-color: rgb(219, 250, 255);
+    width: 40%;
+    height: 10%;
+    grid-area: hIi;
+    left: 6%;
+    background-color: transparent;
 }
 
 .blueButton {
@@ -114,15 +133,32 @@ tr:hover {
 .grid-container {
     display: grid;
     grid-template-areas:
-        'HI HI'
-        'tbl graph'
-        'tbl graph'
-        'tbl gIi';
+        'HI hIi hIi'
+        'tbl tbl graph'
+        'tbl tbl graph'
+        'tbl tbl gIi';
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.grid-container-case-management {
+    display: grid;
+    grid-template-areas:
+        'HI hIi'
+        'tbl tbl'
+        'tbl tbl'
+        'gIi gIi';
     grid-gap: 10px;
     padding: 10px;
 }
 
 .grid-container > div {
+    background-color: white;
+    padding: 20px 0;
+    font-size: 15px;
+}
+
+.grid-container-case-management > div {
     background-color: white;
     padding: 20px 0;
     font-size: 15px;
@@ -144,13 +180,13 @@ tr:hover {
     height: 34px;
   }
   
-  .switch input { 
+.switch input { 
     opacity: 0;
     width: 0;
     height: 0;
-  }
+}
   
-  .slider {
+.slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -160,9 +196,9 @@ tr:hover {
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
-  }
+}
   
-  .slider:before {
+.slider:before {
     position: absolute;
     content: "";
     height: 26px;
@@ -172,27 +208,27 @@ tr:hover {
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
-  }
-  
-  input:checked + .slider {
+}
+
+input:checked + .slider {
     background-color: #2196F3;
-  }
+}
   
-  input:focus + .slider {
+input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
   }
   
-  input:checked + .slider:before {
+input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
-  }
+}
   
   /* Rounded sliders */
-  .slider.round {
+.slider.round {
     border-radius: 34px;
-  }
+}
   
-  .slider.round:before {
+.slider.round:before {
     border-radius: 50%;
-  }
+}

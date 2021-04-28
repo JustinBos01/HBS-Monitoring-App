@@ -14,3 +14,6 @@
     <button #confirmationYes{{groupId}} (click)='deleteSingleEmptyGroup(group.group.name); singleConfirmationCheck = false'>Yes</button> |
     <button #confirmationNo{{groupId}} (click)='singleConfirmationCheck = false'>No</button>
 </ng-container>
+
+{% comment %} Logout Button {% endcomment %}
+<button [routerLink]="['/']" style="border-radius: 5px; height: 37px; background-color: rgb(0, 183, 255); color: white; font-weight: bold; border: none; width: 125px; padding-left: 10px">Log out</button>

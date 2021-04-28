@@ -22,6 +22,10 @@ import { Color, Label, MultiDataSet, SingleDataSet, monkeyPatchChartJsLegend, mo
 })
 
 export class GroupPageComponent implements OnInit {
+  name;
+  normalGrid = true;
+  caseManagement = false;
+  monitoring = false;
   createGroupForm;
   changeGroupInfosForm;
   newMadeGroupInfos;
@@ -96,6 +100,7 @@ export class GroupPageComponent implements OnInit {
     Page: String,
     Time: Number
   }]
+  currentGroup;
   
   allUsernames = [];
   allUsers;
@@ -157,6 +162,7 @@ export class GroupPageComponent implements OnInit {
     this.showGroupResponse()
     this.getUsersOfGroup()
     this.navigation.hide()
+    this.name = localStorage.getItem('superUserData.name')
     this.chosenGroup = localStorage.getItem('chosenGroup')
     this.getUserReceiptData()
     this.getParadata()
@@ -165,6 +171,16 @@ export class GroupPageComponent implements OnInit {
     this.getAllUsers(this.allUsernames)
     this.getScreenTimeGroup(this.screenTimeParadata)
     this.getReceiptAmount(7, 14)
+    this.caseManagement = this.loginPageService.caseManagement;
+    if (this.caseManagement == true) {
+      this.normalGrid = false;
+    }
+    console.log(document.getElementById('grid'))
+  }
+  
+  menuToggle() {
+    const toggleMenu = document.querySelector('.menu');
+    toggleMenu.classList.toggle('active')
   }
 
   //get all users in the selected group
@@ -197,6 +213,41 @@ export class GroupPageComponent implements OnInit {
         this.getGroupInfosAmount()
         for (let group of this.groups){
           this.allGroupNames.push(group.group.name)
+          if (this.chosenGroup == group.group.name) {
+            if (group.group.status == 'enabled'){
+              this.currentGroup = 'enabled'
+            } else {
+              this.currentGroup = 'disabled'
+            }
+          } 
+        }
+      }
+    )
+  }
+
+  getThisGroup(currentGroup) {
+    this.allGroupNames.length = 0;
+    this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for retrieving all groups has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for retrieving all groups has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+      }))
+      .subscribe(groups => {
+        this.groups = groups;
+        this.getGroupInfosAmount()
+        for (let group of this.groups){
+          this.allGroupNames.push(group.group.name)
+          if (this.chosenGroup == group.group.name) {
+            currentGroup = group.group
+          } 
         }
       }
     )
@@ -208,6 +259,7 @@ export class GroupPageComponent implements OnInit {
     } else {
       this.disableGroup()
     }
+    console.log(status)
   }
 
   //enable selected group
@@ -227,6 +279,8 @@ export class GroupPageComponent implements OnInit {
       }))
       .subscribe(_ => {
         this.showGroupResponse()
+        this.currentGroup = 'enabled'
+        this.getGroupStatusDifference()
       }
     ) 
   }
@@ -248,6 +302,8 @@ export class GroupPageComponent implements OnInit {
       }))
       .subscribe(_ => {
         this.showGroupResponse()
+        this.currentGroup = 'disabled'
+        this.getGroupStatusDifference()
       }
     )
   }

@@ -1,8 +1,8 @@
 <div style='text-align: center'>
     <h2>Create Group</h2>
-    <label>Group Name: <input #groupNameTbx  id='groupNameTbx' value='' (keyup)="groupNameTbx.value = groupNameTbx.value"></label><br>
+    <label>Group Name: <input #groupNameTbx  id='groupNameTbx' value='' (keyup)="groupNameTbx.value = groupNameTbx.value"></label><br><br>
     <label>Project (not implemented yet): <input></label><br><br>
-    <div style='text-align: right; display: inline;'>
+    <div style='position: relative; text-align: right; display: inline; top: 45px;'>
         <button mat-button (click)='createGroup(groupNameTbx.value)' style="cursor: pointer; background-color: rgb(83,163,29); color: white; float: right;">Create</button>
         <button mat-button style="cursor: pointer; float: right; color: red" (click)="onNoClick()">Cancel</button>
     </div>
