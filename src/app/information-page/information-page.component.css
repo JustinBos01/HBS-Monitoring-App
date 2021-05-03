@@ -31,48 +31,16 @@ tr:nth-child(odd) {
 
 .wrapper {
     display: flex;
-  }
+}
 
-.table {
-    grid-area: tbl;
+.information {
+    grid-area: information;
     max-height: 99%;
     height: 99%;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: left;
     box-shadow: 1px 1px 5px grey;
-}
-
-tr:hover {
-    background-color: rgb(206, 234, 243);
-}
-
-.group_name {
-    background-color: transparent;
-    border: none;
-}
-
-.group_name:hover {
-    background-color: white;
-    border-color: black;
-    border: 5px;
-}
-
-.blueButton {
-    border-radius: 5px;
-    height: 37px;
-    background-color: rgb(0, 183, 255);
-    color: white;
-    font-weight: bold;
-    border: none;
-    width: 125px;
-}
-
-.searchBar {
-    border-radius: 10px;
-    width: 1650px;
-    height: 30px;
-    outline: none;
 }
 
 .welcome-item {
@@ -97,8 +65,7 @@ tr:hover {
 .grid-container {
     display: grid;
     grid-template-areas:
-        'wi wi wi wi wi'
-        'tbl tbl tbl tbl tbl';
+        'information';
     grid-gap: 10px;
     padding: 10px;
 }

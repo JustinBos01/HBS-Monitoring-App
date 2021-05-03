@@ -19,14 +19,13 @@
         <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="center" width="100" height="100" routerLink='/overview' style="cursor: pointer; background-color: white;">
     </div>
 
-
     <div class='header-info-item' style='background-color: rgb(219, 250, 255)'>
         <div style='padding-left: 10px; all: none;'>
             <h2 id='statusLbl' style='float: left; padding-right: 20px;'>Group: <b>{{chosenGroup}}</b></h2>
             <ng-container *ngFor="let group of groups" style="overflow: hidden">
                 <div class='wrapper' style=" overflow: hidden; border-radius: 0px; float: center;" >
                     <div *ngIf="group.group.name == chosenGroup" class="md-form mt-0" style='padding-right: 5px; overflow: hidden border-radius: 0px'>
-                        <label class="switch"  >
+                        <label class="switch">
                             <input #statusSwitch type="checkbox" (change)='statusChanged(group.group.status); statusSwitch.value = statusSwitch.value;' [checked]='group.group.status == "enabled"'>
                             <span class="slider round"></span>
                         </label>

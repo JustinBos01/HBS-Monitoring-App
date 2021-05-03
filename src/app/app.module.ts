@@ -44,7 +44,8 @@ import { GroupOverviewComponent, DeleteGroupDialogComponent, CreateGroupDialogCo
 import { ParadataGroupComponent } from './paradata-group/paradata-group.component';
 import { ParadataUserComponent } from './paradata-user/paradata-user.component';
 import { ModalComponent } from './modal/modal.component';
-import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component'
+import { ParadataGraphPageComponent } from './paradata-graph-page/paradata-graph-page.component';
+import { InformationPageComponent } from './information-page/information-page.component'
 
 const material = [
   MatTableModule,
@@ -85,7 +86,9 @@ const material = [
       {path: 'graphs/:groupId', component: ParadataGraphPageComponent},
       {path: 'phone', component: PhonePageComponent},
       {path: 'receipts/:userId', component: ReceiptPageComponent},
-      {path: 'createUsers', component: CreateUsersComponent}])
+      {path: 'createUsers', component: CreateUsersComponent},
+      {path: 'information', component: InformationPageComponent}
+    ])
   ],
   exports:[
     material
@@ -112,6 +115,7 @@ const material = [
     DeleteGroupDialogComponent,
     CreateGroupDialogComponent,
     DuplicateGroupDialogComponent,
+    InformationPageComponent,
   ],
   entryComponents: [],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],

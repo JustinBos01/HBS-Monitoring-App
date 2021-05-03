@@ -18,7 +18,7 @@
                 </ul>
                 <ul>
                     <li>
-                        <a [routerLink]="['/']">Information</a>
+                        <a [routerLink]="['/information']">Information</a>
                     </li>
                 </ul>
             </div>
@@ -52,7 +52,7 @@
                     <label *ngIf='group.group.status == "disabled"' style='cursor: pointer'>Inactive</label>
                 </td>
                 <td (dblclick)="goToPage(group.group.name, group.group.id)" style='cursor: pointer'>{{group.group.users}}</td>
-                <td><button mat-button class='paradata' (click)='goToParaDataPage(group.group.name, group.group.id)' [disabled]='caseManagement == false'>Paradata</button></td>
+                <td><button mat-button class='paradata' (click)='goToParaDataPage(group.group.name, group.group.id)' [disabled]='Monitoring == false'>Paradata</button></td>
                 <td>
                     <span mat-fab class="material-icons" (click)="openDialogDuplicateGroup(group.group.name)" style='color: blue; padding-right: 15px'>
                         content_copy

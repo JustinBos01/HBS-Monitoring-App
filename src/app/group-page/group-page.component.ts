@@ -753,7 +753,8 @@ export class GroupPageComponent implements OnInit {
         this.enabledGroups = this.groups.filter(this.getEnabledGroups)
         this.statusDifference.push(this.disabledGroups.length, this.enabledGroups.length)
         this.enabledPercentage = (this.enabledGroups.length / (this.disabledGroups.length+this.enabledGroups.length)) * 100
-      })
+      }
+    )
   }
 
   getScreenTimeGroup(paradataPlaceholder) {
@@ -787,7 +788,8 @@ export class GroupPageComponent implements OnInit {
           this.screenTimeParadataPages.push(element.Page)
           this.screenTimeParadataTime.push(element.Time)
         }
-      })
+      }
+    )
   }
 
   getScreenTimeUser(paradataPlaceholder, corUser) {
@@ -827,7 +829,8 @@ export class GroupPageComponent implements OnInit {
           this.screenTimeUserParadataPages.push(element.Page)
           this.screenTimeUserParadataTime.push(element.Time)
         }
-      })
+      }
+    )
   }
 
   //show correct graphs
