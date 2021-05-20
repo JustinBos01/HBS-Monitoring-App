@@ -1,15 +1,12 @@
 
 <div class="grid-container">
-    <body>
-        
-    </body>
     <div id='welcome-item' class="welcome-item" style='vertical-align: middle;'>
         <div class='action' style=' padding-right: 5px; z-index:1; position: absolute;'>
             <div class="profile" (click)='menuToggle()' style='cursor: pointer'>
                 <img style='float: right; width: 90%; height: 90%; position: static;' src='https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_account_circle_48px-64.png'>
             </div>
             <div class="menu" style='border: solid;'>
-                <h3>Account<br><span>{{name}}</span><br><span>Case Management</span></h3>
+                <h3>Account<br><span>{{name}}</span><br><span>{{role}}</span></h3>
                 <hr>
                 <ul>
                     <li>
@@ -48,8 +45,8 @@
             <tr *ngFor="let group of groups; index as groupId" style='cursor: pointer;'>
                 <td (dblclick)="goToPage(group.group.name, group.group.id)"><input class='group_name' id='group{{groupId}}' value='{{group.group.name}}' (keyup.enter)="renameGroup(groupId, group.group.name)"></td>
                 <td (dblclick)="goToPage(group.group.name, group.group.id)">
-                    <label *ngIf='group.group.status == "enabled"' style='cursor: pointer'>Active</label>
-                    <label *ngIf='group.group.status == "disabled"' style='cursor: pointer'>Inactive</label>
+                    <span *ngIf='group.group.status == "enabled"' style='cursor: pointer'>Active</span>
+                    <span *ngIf='group.group.status == "disabled"' style='cursor: pointer'>Inactive</span>
                 </td>
                 <td (dblclick)="goToPage(group.group.name, group.group.id)" style='cursor: pointer'>{{group.group.users}}</td>
                 <td><button mat-button class='paradata' (click)='goToParaDataPage(group.group.name, group.group.id)' [disabled]='Monitoring == false'>Paradata</button></td>

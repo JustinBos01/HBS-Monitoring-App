@@ -26,7 +26,7 @@ export interface DialogData {
 
 export class GroupOverviewComponent implements OnInit {
   superuserData
-  
+  role = localStorage.getItem('role');
   createGroupForm;
   tableForm
   groupData;
@@ -79,6 +79,7 @@ export class GroupOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigation.show();
+    console.log(this.role)
     this.name = localStorage.getItem('superUserData.name')
     localStorage.setItem('chosenGroup', '')
     localStorage.setItem('chosenUser', '')

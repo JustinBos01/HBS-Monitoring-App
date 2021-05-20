@@ -5,6 +5,10 @@ import { LoginPageService } from '../login-page/login-page.service'
 import { ConfigService } from '../config/config.service';
 import { TopBarService } from '../top-bar/top-bar.service';
 import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
+import { GroupOverviewComponent } from '../group-overview/group-overview.component';
 
 @Component({
   selector: 'app-login-page',
@@ -17,6 +21,9 @@ export class LoginPageComponent implements OnInit {
   loginForm;
   superUserData;
   superUsers;
+  groups;
+  errorLbl;
+  user;
 
   constructor(
     private userPageService: UserPageService,
@@ -39,13 +46,66 @@ export class LoginPageComponent implements OnInit {
     
   }
 
+  getUsersOfGroup(givenGroup) {
+    this.configService.getUsersOfGroup(givenGroup)
+    .pipe(catchError((error: HttpErrorResponse) => {
+      if (error.error instanceof ErrorEvent) {
+        //console.log("not "+givenGroup.name)
+      } else {
+        //console.log("not "+givenGroup.name)
+      }
+      return throwError(error)
+    }))
+    .subscribe(users => {
+      console.log(users)
+      // if (users.includes(localStorage.getItem('superUserData.name'))) {
+      //   this.loginPageService.role = givenGroup.name;
+      //   localStorage.setItem('role', givenGroup.name)
+      //   window.alert(this.loginPageService.role)
+      // }
+      }
+    )
+  }
 
-  //saves login data
-  onSubmit(userData) {
+  getGroups(userData) {
     this.loginPageService.superUserData = userData;
-    
     localStorage.setItem('superUserData.name', this.loginPageService.superUserData.name);
     localStorage.setItem('superUserData.password', this.loginPageService.superUserData.password);
-    this.router.navigate(['/overview'])
+
+    this.configService.getGroups()
+      .pipe(catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        console.log(userData)
+        if (error.error instanceof ErrorEvent) {
+          this.errorLbl = true
+        } else {
+          this.errorLbl = true
+        }
+        return throwError(error)
+      }))
+      .subscribe(groups => {
+        this.errorLbl = false
+        this.groups = groups;
+        for (let group of this.groups) {
+          this.configService.getUsersOfGroup(group.group.name)
+          .pipe(catchError((error: HttpErrorResponse) => {
+            if (error.error instanceof ErrorEvent) {
+            } else {
+            }
+            return throwError(error)
+          }))
+          .subscribe(users => {
+            
+            for (let user of users) {
+              if (user.name.includes(localStorage.getItem('superUserData.name'))) {
+                localStorage.setItem('role', group.group.name);
+              }
+              }
+            }
+          )
+        }
+        this.router.navigate(['/overview'])
+      }
+    )
   }
 }

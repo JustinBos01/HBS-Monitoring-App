@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { basename } from 'path';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, MultiDataSet, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 
@@ -23,6 +23,7 @@ import { Color, Label, MultiDataSet, SingleDataSet, monkeyPatchChartJsLegend, mo
 
 export class GroupPageComponent implements OnInit {
   name;
+  role = localStorage.getItem('role');
   normalGrid = true;
   caseManagement = false;
   monitoring = false;

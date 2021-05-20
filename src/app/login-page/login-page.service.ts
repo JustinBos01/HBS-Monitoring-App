@@ -7,5 +7,6 @@ export class LoginPageService {
   superUserData;
   monitoring = true;
   caseManagement = false;
+  role = '';
   constructor() { }
 }
