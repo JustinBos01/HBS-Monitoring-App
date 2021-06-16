@@ -57,8 +57,9 @@ export class ParadataGraphPageComponent implements OnInit {
   allUsers;
   userScreenTimeShow = false;
   
-  receiptsBarChartOptions: ChartOptions = {
+  options: ChartOptions = {
     responsive: true,
+    legend: { position: 'left' }
   };
   receiptsBarChartLabels: Label[] = ["Under "+ localStorage.getItem('firstLimit') + " receipts", "Between "+ String(Number(localStorage.getItem('firstLimit'))) +" and " + localStorage.getItem('secondLimit') + " receipts", "Above "+localStorage.getItem('secondLimit')+" receipts"];
   receiptsBarChartType: ChartType = 'bar';

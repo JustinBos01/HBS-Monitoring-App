@@ -95,12 +95,14 @@ export class LoginPageComponent implements OnInit {
             return throwError(error)
           }))
           .subscribe(users => {
-            
-            for (let user of users) {
-              if (user.name.includes(localStorage.getItem('superUserData.name'))) {
+            for (let i in users) {
+              if (users[i].name == localStorage.getItem('superUserData.name')) {
                 localStorage.setItem('role', group.group.name);
+                return
               }
+              
               }
+              console.log(localStorage.getItem('role'))
             }
           )
         }

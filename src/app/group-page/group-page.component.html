@@ -1,4 +1,4 @@
-<div id='grid' [ngClass]="{'grid-container': normalGrid, 'grid-container-case-management': caseManagement}">
+<div id='grid' [ngClass]="{'grid-container': normalGrid, 'grid-container-case-management': role=='casemanagement'}">
     <body style='position: static'>
         <div class='action' style=' padding-right: 5px; z-index:10; position: absolute'>
             <div class="profile" (click)='menuToggle()' style='cursor: pointer'>
@@ -30,7 +30,7 @@
                             <span class="slider round"></span>
                         </label>
                         <div style='text-align: left'>
-                            <label style='padding-left: 10px;  padding-top: 50px'>Group status: {{group.group.status}}</label><!--<label *ngIf='group.group.status == enabled'>Active</label><label *ngIf='group.group.status == disabled'>Inactive</label>-->
+                            <label style='padding-left: 10px;  padding-top: 50px'>Group status: {{researchStatus}}</label><!--<label *ngIf='group.group.status == enabled'>Active</label><label *ngIf='group.group.status == disabled'>Inactive</label>-->
                         </div>
                     </div>
                 </div>
@@ -41,6 +41,7 @@
         </div>
     </div>
     <br>
+    
     <div class='table-item' style="padding-left: 20px; padding-right: 20px;">
         <ng-container *ngFor="let group of groups" style="overflow: hidden">
             <div class='wrapper' style=" overflow: hidden; border-radius: 0px;" >
@@ -77,57 +78,67 @@
         <label *ngIf="!user"><b>There seems to be no users in this group</b></label>
     </div>
    
-    <div class="graph-item" *ngIf='!caseManagement'>
-        <div style='max-height: 100%; max-width: 100%'>
-            <mat-tab-group mat-stretch-tabs width="100%" animationDuration="1000ms">
+    <div class="graph-item" *ngIf='!(role=="casemanagement")'>
+        <div style="max-width: 80%;  margin: auto;
+                    padding: 10px;">
+            <mat-tab-group mat-stretch-tabs >
                 
-                <mat-tab label='Operating System' *ngIf='deviceDifference.length != 0'>
+                <mat-tab label='Operating System'>
+                    <br>
                     <canvas height="94%"
                     style='width: 100%'
                     baseChart
                     [data]="deviceDoughnutChartData"
                     [labels]="deviceDoughnutChartLabels"
-                    [chartType]="deviceDoughnutChartType">
+                    [chartType]="deviceDoughnutChartType"
+                    [options]="options">
                     </canvas>
                 </mat-tab>
-                <mat-tab label='Models' *ngIf='phoneModels.length != 0'>
+                <mat-tab label='Models'>
+                    <br>
                     <canvas 
                     style='width: 100%' height="94%" baseChart
                     [data]="phoneModelDoughnutChartData"
                     [labels]="phoneModelDoughnutChartLabels"
-                    [chartType]="phoneModelDoughnutChartType">
+                    [chartType]="phoneModelDoughnutChartType"
+                    [options]="options">
                     </canvas>
                 </mat-tab>
-                <mat-tab label='Receipts' *ngIf='receiptsSplit.length != 0'>
+                <mat-tab label='Receipts'>
+                    <br>
                     <canvas
                     style='width: 100%; height: 100%'
                     baseChart
                     [datasets]="receiptsBarChartData"
                     [labels]="receiptsBarChartLabels"
-                    [options]="receiptsBarChartOptions"
+                    [options]="options"
                     [plugins]="receiptsBarChartPlugins"
                     [legend]="receiptsBarChartLegend"
                     [chartType]="receiptsBarChartType"></canvas>
                 </mat-tab>
                 
-                <mat-tab label='Status' *ngIf='statusDoughnutChartData'>
+                <mat-tab label='Status'>
+                    <br>
                     <canvas height="94%"
                     style='width: 100%'
                     baseChart
                     [data]="statusDoughnutChartData"
                     [labels]="statusDoughnutChartLabels"
-                    [chartType]="statusDoughnutChartType">
+                    [chartType]="statusDoughnutChartType"
+                    [options]="options">
                     </canvas>
                 </mat-tab>
 
-                <mat-tab label='Events' *ngIf="screenTimeParadataTime">
+                <mat-tab label='Events'>
+                    <br>
                     <canvas
                     style='width: 100%'
                     height="47%"
                     baseChart
                     [data]="screenTimeParadataTime"
                     [labels]="screenTimeParadataPages"
-                    [chartType]="phoneModelDoughnutChartType"></canvas><br>
+                    [chartType]="phoneModelDoughnutChartType"
+                    [options]="options"></canvas><br>
                     <ng-container *ngIf="userScreenTimeShow">
                         <canvas  
                         style='width: 100%'
@@ -135,7 +146,8 @@
                         baseChart
                         [data]="screenTimeUserParadataTime"
                         [labels]="screenTimeUserParadataPages"
-                        [chartType]="phoneModelDoughnutChartType"></canvas>
+                        [chartType]="phoneModelDoughnutChartType"
+                        [options]="options"></canvas>
                     </ng-container>
                 </mat-tab>
             </mat-tab-group>
@@ -173,7 +185,6 @@
                     </td>
                 </tr>
             </table><br>
-            
         </ng-container>
     </div>
 </div>

@@ -63,7 +63,8 @@
                 <canvas  height="94%" baseChart 
                 [data]="deviceDoughnutChartData"
                 [labels]="deviceDoughnutChartLabels"
-                [chartType]="deviceDoughnutChartType">
+                [chartType]="deviceDoughnutChartType"
+                [options]="options">
                 </canvas>
             </ng-container>
             <ng-container *ngIf='showPhoneModelDoughnutGraph && phoneModels.length != 0'>
@@ -71,7 +72,8 @@
                 <canvas height="94%"baseChart 
                 [data]="phoneModelDoughnutChartData"
                 [labels]="phoneModelDoughnutChartLabels"
-                [chartType]="phoneModelDoughnutChartType">
+                [chartType]="phoneModelDoughnutChartType"
+                [options]="options">
                 </canvas>
             </ng-container> 
         </ng-container>
@@ -86,7 +88,8 @@
             [options]="receiptsBarChartOptions"
             [plugins]="receiptsBarChartPlugins"
             [legend]="receiptsBarChartLegend"
-            [chartType]="receiptsBarChartType"></canvas>
+            [chartType]="receiptsBarChartType"
+            [options]="options"></canvas>
         </ng-container>
 
         <ng-container *ngIf='paradataSelection.value == "Status"'>
@@ -94,7 +97,8 @@
             <canvas height="94%" baseChart
             [data]="statusDoughnutChartData"
             [labels]="statusDoughnutChartLabels"
-            [chartType]="statusDoughnutChartType">
+            [chartType]="statusDoughnutChartType"
+            [options]="options">
             </canvas>
         </ng-container>
 
@@ -106,7 +110,8 @@
             baseChart
             [data]="screenTimeParadataTime"
             [labels]="screenTimeParadataPages"
-            [chartType]="phoneModelDoughnutChartType"></canvas><br>
+            [chartType]="phoneModelDoughnutChartType"
+            [options]="options"></canvas><br>
 
             <ng-container *ngIf="userScreenTimeShow">
                 <hr><br>
@@ -116,7 +121,8 @@
                 baseChart
                 [data]="screenTimeUserParadataTime"
                 [labels]="screenTimeUserParadataPages"
-                [chartType]="phoneModelDoughnutChartType"></canvas>
+                [chartType]="phoneModelDoughnutChartType"
+                [options]="options"></canvas>
             </ng-container>
         </ng-container>
     </div>

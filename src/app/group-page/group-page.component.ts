@@ -12,7 +12,8 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color, Label, MultiDataSet, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
+import { Color, Label, MultiDataSet, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip,  } from 'ng2-charts';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class GroupPageComponent implements OnInit {
   userReceiptProductsInfo = [];
   confirmationCheck = false;
   receiptData = [];
+  researchStatus
 
   phoneData;
   activityData;
@@ -106,9 +108,9 @@ export class GroupPageComponent implements OnInit {
   allUsernames = [];
   allUsers;
   userScreenTimeShow = false;
-  
-  receiptsBarChartOptions: ChartOptions = {
+  options: ChartOptions = {
     responsive: true,
+    legend: { position: 'left' }
   };
   receiptsBarChartLabels: Label[] = ["Under "+ localStorage.getItem('firstLimit') + " receipts", "Between "+ String(Number(localStorage.getItem('firstLimit'))) +" and " + localStorage.getItem('secondLimit') + " receipts", "Above "+localStorage.getItem('secondLimit')+" receipts"];
   receiptsBarChartType: ChartType = 'bar';
@@ -121,6 +123,13 @@ export class GroupPageComponent implements OnInit {
   deviceDoughnutChartLabels: Label[] = ['IOS', 'Android'];
   deviceDoughnutChartData: MultiDataSet = [this.deviceDifference];
   deviceDoughnutChartType: ChartType = 'doughnut';
+  deviceDoughnutChartOptions: ChartOptions = {
+    responsive: true,
+    legend: { position: 'left' },
+    animation: {
+      duration: 0
+    }
+  };
 
   screenTimeDoughnutChartLabels: Label[] = [this.screenTimeParadataPages];
   screenTimeDoughnutChartData: MultiDataSet = [this.screenTimeParadataTime];
@@ -139,6 +148,7 @@ export class GroupPageComponent implements OnInit {
   phoneModelDoughnutChartType: ChartType = 'doughnut';
   
   constructor(
+    
     public configService: ConfigService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -160,23 +170,29 @@ export class GroupPageComponent implements OnInit {
     ;}
 
   ngOnInit(): void {
+    console.log(this.role)
+    if (this.role == "casemanagement") {
+      this.normalGrid = false;
+    } else {
+      this.normalGrid = true;
+    }
     this.showGroupResponse()
     this.getUsersOfGroup()
     this.navigation.hide()
     this.name = localStorage.getItem('superUserData.name')
     this.chosenGroup = localStorage.getItem('chosenGroup')
-    this.getUserReceiptData()
-    this.getParadata()
-    this.getDevicePercentage(this.newPhoneType)
-    this.getGroupStatusDifference()
-    this.getAllUsers(this.allUsernames)
-    this.getScreenTimeGroup(this.screenTimeParadata)
-    this.getReceiptAmount(7, 14)
-    this.caseManagement = this.loginPageService.caseManagement;
-    if (this.caseManagement == true) {
-      this.normalGrid = false;
+    if (this.role != "casemanagement") {
+      this.getUserReceiptData()
+      this.getParadata()
+      this.getDevicePercentage(this.newPhoneType)
+      this.getGroupStatusDifference()
+      this.getAllUsers(this.allUsernames)
+      this.getScreenTimeGroup(this.screenTimeParadata)
+      this.getReceiptAmount(7, 14)
     }
-    console.log(document.getElementById('grid'))
+    
+    console.log(this.role)
+    
   }
   
   menuToggle() {
@@ -216,9 +232,9 @@ export class GroupPageComponent implements OnInit {
           this.allGroupNames.push(group.group.name)
           if (this.chosenGroup == group.group.name) {
             if (group.group.status == 'enabled'){
-              this.currentGroup = 'enabled'
+              this.researchStatus = 'Active Research'
             } else {
-              this.currentGroup = 'disabled'
+              this.researchStatus = 'Inactive Research'
             }
           } 
         }
@@ -281,6 +297,7 @@ export class GroupPageComponent implements OnInit {
       .subscribe(_ => {
         this.showGroupResponse()
         this.currentGroup = 'enabled'
+        this.researchStatus = 'Active Research'
         this.getGroupStatusDifference()
       }
     ) 
@@ -304,6 +321,7 @@ export class GroupPageComponent implements OnInit {
       .subscribe(_ => {
         this.showGroupResponse()
         this.currentGroup = 'disabled'
+        this.researchStatus = 'Inactive Research'
         this.getGroupStatusDifference()
       }
     )
@@ -758,7 +776,7 @@ export class GroupPageComponent implements OnInit {
     )
   }
 
-  getScreenTimeGroup(paradataPlaceholder) {
+getScreenTimeGroup(paradataPlaceholder) {
     this.screenTimeParadataContent.length = 0;
     this.screenTimeParadataPages.length = 0;
     this.screenTimeParadataTime.length = 0;

@@ -25,9 +25,9 @@ export interface DialogData {
 })
 
 export class GroupOverviewComponent implements OnInit {
-  superuserData
-  role = localStorage.getItem('role');
+  superuserData;
   createGroupForm;
+  role;
   tableForm
   groupData;
   groups;
@@ -78,11 +78,13 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.navigation.show();
-    console.log(this.role)
     this.name = localStorage.getItem('superUserData.name')
     localStorage.setItem('chosenGroup', '')
     localStorage.setItem('chosenUser', '')
+    
+    this.role = localStorage.getItem('role');
     this.navigation.hide();
     this.showGroupResponse();
     this.getAllUsers();
@@ -90,8 +92,6 @@ export class GroupOverviewComponent implements OnInit {
     this.groupOverviewService.showGroupResponse();
     this.monitoring = this.loginPageService.monitoring;
     this.caseManagement = this.loginPageService.caseManagement;
-    console.log(this.loginPageService.caseManagement)
-    console.log(this.caseManagement)
     setInterval(() => {
       this.showGroupResponse();
       this.getAllUsers();
@@ -123,7 +123,7 @@ export class GroupOverviewComponent implements OnInit {
   openDialogCreateGroup(): void {
     const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
       width: '500px',
-      height: '250px',
+      height: '300px',
       data: {groups: this.groups}
     });
 
@@ -172,6 +172,26 @@ export class GroupOverviewComponent implements OnInit {
     this.configService.getGroups()
       .subscribe(groups => {
         this.groups = groups;
+        for (let group of this.groups) {
+          this.configService.getUsersOfGroup(group.group.name)
+          .pipe(catchError((error: HttpErrorResponse) => {
+            if (error.error instanceof ErrorEvent) {
+            } else {
+            }
+            return throwError(error)
+          }))
+          .subscribe(users => {
+            for (let i in users) {
+              if (users[i].name == localStorage.getItem('superUserData.name')) {
+                this.role = group.group.name;
+                console.log(this.role, users[i].name)
+              }
+              
+              }
+              console.log(localStorage.getItem('role'))
+            }
+          )
+        }
       })
     }
 
@@ -518,6 +538,10 @@ export class DeleteGroupDialogComponent implements OnInit {
 export class CreateGroupDialogComponent implements OnInit {
   groups;
   groupData;
+  suExists = true;
+  cmmExists = false;
+  allGroupNames = [];
+  role;
 
   constructor(
     public dialogRef: MatDialogRef<DeleteGroupDialogComponent>,
@@ -528,7 +552,7 @@ export class CreateGroupDialogComponent implements OnInit {
   
   ngOnInit() {
     this.showGroupResponse()
-    
+    this.getAllGroupNames()
   }
 
   showGroupResponse() {
@@ -550,6 +574,55 @@ export class CreateGroupDialogComponent implements OnInit {
         console.log(this.groups)
       })
     }
+
+  createSuperuser() {
+    this.configService.createSuperUser().pipe(catchError((error: HttpErrorResponse) => {
+      let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Error: ${error.error.message}.\n
+          An error for creating the superuser group has occurred`;
+        } else {
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+          An error for creating the superuser group has occurred`;
+        }
+        window.alert(errorMessage);
+        return throwError(error)
+    }))
+    .subscribe(
+      groups => {
+        console.log(groups)
+      }
+    )
+  }
+
+  getAllGroupNames() {
+    this.configService.getGroups()
+      .subscribe(groups => {
+        this.groups = groups;
+        for(let groupName of this.groups) {
+          this.allGroupNames.push(groupName.group.name)
+        }
+        if (this.allGroupNames.includes("superuser")) {
+          this.suExists = true;
+        } else {
+          this.suExists = false;
+        }
+        if (this.allGroupNames.includes("casemanagement")) {
+          this.cmmExists = true;
+        } else {
+          this.cmmExists = false;
+        }
+        console.log(this.suExists, this.cmmExists)
+      })
+    }
+
+  createCasemanagement() {
+    this.configService.createCasemanagement().subscribe(
+      groups => {
+        console.log(groups)
+      }
+    )
+  }
 
   createGroup(userData) {
     //create empty group

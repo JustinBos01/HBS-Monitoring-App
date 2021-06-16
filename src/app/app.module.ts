@@ -65,6 +65,7 @@ const material = [
 
 @NgModule({
   imports: [
+    
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
@@ -116,6 +117,7 @@ const material = [
     CreateGroupDialogComponent,
     DuplicateGroupDialogComponent,
     InformationPageComponent,
+    
   ],
   entryComponents: [],
   providers: [ConfigService, {provide: LocationStrategy, useClass: HashLocationStrategy}],

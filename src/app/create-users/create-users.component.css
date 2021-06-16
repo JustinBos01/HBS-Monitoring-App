@@ -35,31 +35,31 @@ tr:hover {
 .header-item {
     grid-area: HI;
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
     font-size: 15px;
+    box-shadow: 1px 1px 5px grey;
 }
 
 .userAddition {
     grid-area: UA;
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
     max-height: 600px;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: left;
+    box-shadow: 1px 1px 5px grey;
 }
 
 .userAdditionAmount {
     grid-area: UAAmount;
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
     max-height: 600px;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: left;
+    box-shadow: 1px 1px 5px grey;
 }
 
 .grid-container {
@@ -73,8 +73,8 @@ tr:hover {
 }
 
 .grid-container > div {
-    padding: 20px 0;
     background-color: white;
+    padding: 20px 0;
     font-size: 15px;
 }
 
@@ -88,3 +88,6 @@ tr:hover {
     transform: translate(-50%, -50%);
 }
 
+#amountInput {
+    width: auto;
+}

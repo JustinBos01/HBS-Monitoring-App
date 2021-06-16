@@ -105,8 +105,6 @@ export class ConfigService {
        });
   }
 
-  
-
   createGroup(groupname, key, value): Observable<GroupBody[]> {
     var configUrl = 'http://localhost:4200/budget/group/create';
     if ((key == null || key == '') && (value == null || value == '')){
@@ -161,8 +159,19 @@ export class ConfigService {
        });
   }
 
+  createSuperUser(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/users/create';
+    this.JsonString = {
+      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
+      "group"     : {"name" : "superuser"},
+      "users"     : this.createUsersService.userString
+     }
+     console.log(this.JsonString)
+    return this.http.post<Users[]>(
+      configUrl, this.JsonString);
+  }
+
   createMultipleUsers(): Observable<Users[]> {
-    console.log(this.createUsersService.userString)
     var configUrl = 'http://localhost:4200/budget/users/create';
     this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
@@ -174,12 +183,22 @@ export class ConfigService {
       configUrl, this.JsonString);
   }
 
-  createSuperUser(): Observable<Users[]> {
-    var configUrl = 'http://localhost:4200/budget/users/create';
+  createSuperUserGroup(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/group/create';
     this.JsonString = {
-      "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
-      "group"     : {"name" : "superuser"},
-      "users"     : this.createUsersService.userString
+      "superuser" : {"name" : "", "password" : ""},
+      "group"     : {"name" : "superuser"}
+     }
+     console.log(this.JsonString)
+    return this.http.post<Users[]>(
+    configUrl, this.JsonString);
+  }
+
+  createCasemanagement(): Observable<Users[]> {
+    var configUrl = 'http://localhost:4200/budget/group/create';
+    this.JsonString = {
+      "superuser" : {"name" : "", "password" : ""},
+      "group"     : {"name" : "casemanagement"}
      }
      console.log(this.JsonString)
     return this.http.post<Users[]>(

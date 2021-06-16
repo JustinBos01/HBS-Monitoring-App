@@ -278,10 +278,10 @@ export class CreateUsersComponent implements OnInit {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Error: ${error.error.message}.\n
-          An error for creating users through randomization has occurred`;
+          An error for creating superusers has occurred`;
         } else {
           errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
-          An error for creating users through randomization has occurred`;
+          An error for creating superusers has occurred`;
         }
         window.alert(errorMessage);
         return throwError(error)
