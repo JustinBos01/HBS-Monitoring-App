@@ -181,6 +181,7 @@ export class GroupPageComponent implements OnInit {
     this.navigation.hide()
     this.name = localStorage.getItem('superUserData.name')
     this.chosenGroup = localStorage.getItem('chosenGroup')
+
     if (this.role != "casemanagement") {
       this.getUserReceiptData()
       this.getParadata()
@@ -236,7 +237,10 @@ export class GroupPageComponent implements OnInit {
             } else {
               this.researchStatus = 'Inactive Research'
             }
-          } 
+          }
+
+          
+          
         }
       }
     )

@@ -22,7 +22,7 @@ export class ParadataGroupComponent implements OnInit {
   activityParadata;
   clicksData;
   receiptParadataColumns: string[] = ['userName', 'date', 'receipts'];
-  phoneParadataColumns: string[] = ['userName', 'phoneName', 'phoneType', 'phoneManufacturer', 'phoneModel', 'receipts', 'products', 'photos'];
+  phoneParadataColumns: string[] = ['userName', 'phoneType', 'phoneManufacturer', 'phoneModel', 'receipts', 'products', 'photos'];
   activityParadataColumns: string[] = ['date', 'time', 'userName', 'objectName', 'action'];
   clicksDataColumns: string[] = ['userName', 'action', 'objectName', 'clicks'];
   chosenGroup = localStorage.getItem('chosenGroup');
@@ -35,6 +35,7 @@ export class ParadataGroupComponent implements OnInit {
   filteredActivityData = [];
   filteredClicksData = [];
   availableFilters = [];
+  quickActionStatus = false;
   
   clicksDataScource;
   
@@ -126,6 +127,21 @@ export class ParadataGroupComponent implements OnInit {
         this.receiptDataSource = new MatTableDataSource(this.paradata);
         this.receiptDataSource.sort = this.sort;
         this.receiptDataSource.paginator = this.paginator;
+        
+        this.paradata.push({'date': 9,
+                          'groupName': "Justin's groepje2",
+                          'receipts': 3,
+                          'userName': "N/A"})
+        console.log(this.paradata)
+        for (let dataset of this.paradata) {
+          
+          dataset.date = String(dataset.date)
+          if (8 > dataset.date && dataset.date > 2) {
+            dataset.date = "+2 days ago"
+          } else if (dataset.date >= 8) {
+            dataset.date = "7+ days ago (inactive?)"
+          }
+        }
       })
     }
     catch(error) {
@@ -259,42 +275,44 @@ export class ParadataGroupComponent implements OnInit {
           var filterPhoneTypesRadioCbxValue = <HTMLInputElement>document.getElementById("onlyFilterPhone TypesRadio")
           var filterPhoneManufacturersRadioCbxValue = <HTMLInputElement>document.getElementById("onlyFilterPhone ManufacturersRadio")
           var filterPhoneModelssRadioCbxValue = <HTMLInputElement>document.getElementById("onlyFilterPhone ModelsRadio")
+          var noQuickActions = <HTMLInputElement>document.getElementById("noQuickActions")
           
-          
-          for (let element of this.phoneParadata){
-            if ((filterUsernameCbxValuePhones.checked || filterUsernameRadioCbxValuePhones.checked) && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
-              if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
-                if (this.filteredPhoneData.includes(element) == false){
-                  this.filteredPhoneData.push(element)
+          if (noQuickActions.checked) {
+            for (let element of this.phoneParadata){
+              if ((filterUsernameCbxValuePhones.checked || filterUsernameRadioCbxValuePhones.checked) && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
+                if (element.userName.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredPhoneData.includes(element) == false){
+                    this.filteredPhoneData.push(element)
+                  }
                 }
               }
-            }
-            
-            if ((filterPhoneTypesCbxValue.checked || filterPhoneTypesRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
-              if (element.phoneType.toLowerCase().includes(filterValue.toLowerCase())) {
-                if (this.filteredPhoneData.includes(element) == false){
-                  this.filteredPhoneData.push(element)
+              
+              if ((filterPhoneTypesCbxValue.checked || filterPhoneTypesRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
+                if (element.phoneType.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredPhoneData.includes(element) == false){
+                    this.filteredPhoneData.push(element)
+                  }
                 }
               }
-            }
 
-            if ((filterPhoneManufacturersCbxValue.checked || filterPhoneManufacturersRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
-              if (element.phoneManufacturer.toLowerCase().includes(filterValue.toLowerCase())) {
-                if (this.filteredPhoneData.includes(element) == false){
-                  this.filteredPhoneData.push(element)
+              if ((filterPhoneManufacturersCbxValue.checked || filterPhoneManufacturersRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneModelssRadioCbxValue.checked == false) {
+                if (element.phoneManufacturer.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredPhoneData.includes(element) == false){
+                    this.filteredPhoneData.push(element)
+                  }
                 }
               }
-            }
 
-            if ((filterPhoneModelssCbxValue.checked || filterPhoneModelssRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false) {
-              if (element.phoneModel.toLowerCase().includes(filterValue.toLowerCase())) {
-                if (this.filteredPhoneData.includes(element) == false){
-                  this.filteredPhoneData.push(element)
+              if ((filterPhoneModelssCbxValue.checked || filterPhoneModelssRadioCbxValue.checked) && filterUsernameRadioCbxValuePhones.checked == false && filterPhoneTypesRadioCbxValue.checked == false && filterPhoneManufacturersRadioCbxValue.checked == false) {
+                if (element.phoneModel.toLowerCase().includes(filterValue.toLowerCase())) {
+                  if (this.filteredPhoneData.includes(element) == false){
+                    this.filteredPhoneData.push(element)
+                  }
                 }
               }
             }
+            this.phoneDataSource = this.filteredPhoneData
           }
-          this.phoneDataSource = this.filteredPhoneData
         })
       } else {
         this.getPhoneParadata()
@@ -318,6 +336,7 @@ export class ParadataGroupComponent implements OnInit {
         }))
         .subscribe(data => {
           this.activityParadata = data;
+          console.log(data)
           this.activityParadata = this.activityParadata.paradataDateTimes;
           var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
           var filterPageCbxValue = <HTMLInputElement>document.getElementById('filterCbxPage')
@@ -419,10 +438,39 @@ export class ParadataGroupComponent implements OnInit {
           alert("An error has occured")
         }
       } else {
-        console.log( 'werkt niet')
         this.getEventClicks()
       }
     }
+  }
+
+  quickActions(status) {
+    this.quickActionStatus = !status
+  }
+
+  filterActiveUsersReceipts() {
+    this.configService.getPhoneParadata().subscribe(data => {
+      this.phoneParadata = data;
+      this.phoneParadata = this.phoneParadata.receiptsPerPhones;
+      this.phoneDataSource = this.phoneParadata.filter(this.activeUsersReceipts)
+      console.log(this.phoneDataSource)
+    })
+  }
+
+  filterActiveUsersPhotos() {
+    this.configService.getPhoneParadata().subscribe(data => {
+      this.phoneParadata = data;
+      this.phoneParadata = this.phoneParadata.receiptsPerPhones;
+      this.phoneDataSource = this.phoneParadata.filter(this.activeUsersPhotos)
+      console.log(this.phoneDataSource)
+    })
+  }
+
+  activeUsersReceipts(element) {
+    return element.receipts >= 1
+  }
+
+  activeUsersPhotos(element) {
+    return element.photos >= 1
   }
 
   //go to graph page

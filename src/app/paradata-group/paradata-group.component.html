@@ -4,7 +4,7 @@
             <img src="https://www.cbs.nl/Content/images/cbs-ld-logo.png" alt="CBS" align="left" width="100" height="100" routerLink='/overview' style="cursor: pointer;">
             <h1>Paradata: <b>{{chosenGroup}}</b></h1>
         </div>
-        <div class="project-selection-item" style="padding-left: 1.5em;">
+        <div class="project-selection-item" style="padding: 1.5em;">
             <label>Select the project you want the data from:
             <select #projectSelection (change)='projectSelection.value = projectSelection.value; paradataSelection.value = ""; availableFilters.length = 0'>
                 <option value=''></option>
@@ -25,15 +25,28 @@
                     <option *ngIf='projectSelection.value == "TBO"' value="test2">test2</option>
                 </select><br>
             </label><br>
-            <label>Filter: <input #filterInput id='filterInput' (keyup)='filterInput.value = filterInput.value; filterChange(paradataSelection.value, filterInput.value)' [disabled]='projectSelection.value == "" || paradataSelection.value == ""'><br><br></label>
-            <label style="color: rgb(102, 102, 102);" *ngIf='availableFilters.length != 0'>
-                Available filters: <br>
+            <label>Filter: <input #filterInput id='filterInput' [disabled]="quickActionStatus == true" (keyup)='filterInput.value = filterInput.value; filterChange(paradataSelection.value, filterInput.value)' [disabled]='projectSelection.value == "" || paradataSelection.value == ""'><br><br></label>
+
+            <ng-container  style="color: rgb(102, 102, 102);" *ngIf='availableFilters.length != 0'>
+                <label>Available filters: </label><br>
                 <ng-container *ngFor='let filterValue of availableFilters'>
-                    <input id="onlyFilter{{filterValue}}Radio" type="radio" name='filter' (change)='filterChange(paradataSelection.value, filterInput.value)'>|<input #filterCbx{{filterValue}} id='filterCbx{{filterValue}}' type='checkbox' [checked]=true (change)='filterChange(paradataSelection.value, filterInput.value)'>
-                    {{filterValue}}<br>
+                    <input [disabled]="quickActionStatus == true" id="onlyFilter{{filterValue}}Radio" type="radio" name='filter' (change)='filterChange(paradataSelection.value, filterInput.value)'>|<input #filterCbx{{filterValue}} id='filterCbx{{filterValue}}' type='checkbox' [disabled]="quickActionStatus == true" [checked]=true (change)='filterChange(paradataSelection.value, filterInput.value)'>
+                    <label [disabled]="quickActionStatus == true">{{filterValue}}</label><br>
                 </ng-container>
-                <input id="noneFilterRadio" type="radio" name='filter' checked='true' (change)='filterChange(paradataSelection.value, filterInput.value)'> None
-            </label>
+                
+                <input id="noneFilterRadio" [disabled]="quickActionStatus == true" type="radio" name='filter' checked='true' (change)='filterChange(paradataSelection.value, filterInput.value)'> <label>None</label>
+            </ng-container>
+            
+            <ng-container>
+                <hr>
+                <div class='vl'>
+                    <ng-container *ngIf="paradataSelection.value=='Phones'">
+                        <input id="onephotoQA" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked); filterActiveUsersPhotos();"><label>1+ photo scanned</label><br>
+                        <input id="oneReceiptQA" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked); filterActiveUsersReceipts();"><label>1+ receipt scanned</label><br>
+                        <input #noQuickActions id="noQuickActions" type="radio" name="quickActions" checked="true" (change)="quickActions(noQuickActions.checked); getPhoneParadata()"><label>No Quickactions</label>
+                    </ng-container>
+                </div>
+            </ng-container>
         </div>
 
         <div class="table-item" *ngIf='paradataSelection.value != ""'>
@@ -41,7 +54,7 @@
 
 
                 <ng-container matColumnDef="userName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
                     <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
                 </ng-container>
 
@@ -60,18 +73,13 @@
                 <tr mat-row *matRowDef="let myRowData; columns: receiptParadataColumns"></tr>
                 
             </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Receipts' && paradata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator *ngIf="paradataSelection.value == 'Receipts' && paradata" [pageSizeOptions]="[5, 10, 20]"  showFirstLastButtons></mat-paginator>
 
             
             <table #phoneMatTbl id='phoneMatTbl' mat-table [dataSource]='phoneDataSource' *ngIf="paradataSelection.value == 'Phones' && phoneParadata" matSort>
                 <ng-container matColumnDef="userName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
                     <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="phoneName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.phoneName}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="phoneType">

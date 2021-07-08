@@ -31,6 +31,10 @@ tr:hover {
     background-color: rgb(5,129,162);
 }
 
+.vl {
+    border-left: 1px solid black;
+}
+
 .table-item {
     grid-area: tbl;
     background-color: white;

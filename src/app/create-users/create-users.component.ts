@@ -44,6 +44,13 @@ export class CreateUsersComponent implements OnInit {
   file:File;
   userImportAddition;
 
+  randomFunc = {
+    lower: this.getRandomLower,
+    upper: this.getRandomUpper,
+    number: this.getRandomNumber,
+    symbol: this.getRandomSymbol
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private configService: ConfigService,
@@ -177,11 +184,7 @@ export class CreateUsersComponent implements OnInit {
         this.idString = this.idString + String(this.userCreationCode)
       }
 
-      for (var _i = 0; _i < 6; _i++) {
-        this.userCreationCode = this.getRandomInt(0, 10)
-        this.passwordString = this.passwordString + String(this.userCreationCode)
-      }
-
+      this.passwordString = this.generatePassword(true, true, true, false, 7)
       this.randomUsernameString = tag + this.idString;
       newMadeUID.push(this.randomUsernameString)
       if (this.allUsernames.includes(newMadeUID[newMadeUID.length-1]) == false && this.allUsernames.includes(this.randomUsernameString) == false){
@@ -208,12 +211,9 @@ export class CreateUsersComponent implements OnInit {
           this.userCreationCode = this.getRandomInt(0, 10)
           this.idString = this.idString + String(this.userCreationCode)
         }
-
-        for (var _ii = 0; _ii < 6; _ii++) {
-          this.userCreationCode = this.getRandomInt(0, 10)
-          this.passwordString = this.passwordString + String(this.userCreationCode)
-        }
-
+        
+        this.passwordString = this.generatePassword(true, true, true, false, 7)
+        //this.passwordString = Math.random().toString(36).slice(-7);
         this.randomUsernameString = tag + this.idString;
 
         if (this.allUsernames.includes(this.randomUsernameString) == false) {
@@ -359,6 +359,50 @@ export class CreateUsersComponent implements OnInit {
         return throwError(error)
       }))
       .subscribe()
+  }
+
+  generatePassword(lower, upper, number, symbol, length) {
+    let generatedPassword = '';
+    const typesCount = lower + upper + number + symbol;
+    const typesArr = [{lower}, {upper}, {number}, {symbol}].filter(item => Object.values(item)[0]);
+    
+    // Doesn't have a selected type
+    if(typesCount === 0) {
+      return '';
+    }
+    
+    // create a loop
+    for(let i=0; i<length; i+=typesCount) {
+      typesArr.forEach(type => {
+        const funcName = Object.keys(type)[0];
+        generatedPassword += this.randomFunc[funcName]();
+      });
+    }
+    
+    const finalPassword = generatedPassword.slice(0, length);
+    console.log(finalPassword)
+    
+    return finalPassword;
+  }
+
+  getRandomLower() {
+    const lower = "abcdefghijkmnopqrstuvwxyz"
+    return lower[Math.floor(Math.random() * lower.length)];
+  }
+
+  getRandomUpper() {
+    const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+    return upper[Math.floor(Math.random() * upper.length)];
+  }
+
+  getRandomNumber() {
+    const number = "123456789"
+    return number[Math.floor(Math.random() * number.length)];
+  }
+
+  getRandomSymbol() {
+    const symbols = '!@#$%^&*(){}[]=<>/,.'
+    return symbols[Math.floor(Math.random() * symbols.length)];
   }
 
 }
