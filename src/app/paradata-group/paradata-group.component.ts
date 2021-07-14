@@ -36,8 +36,19 @@ export class ParadataGroupComponent implements OnInit {
   filteredClicksData = [];
   availableFilters = [];
   quickActionStatus = false;
-  
   clicksDataScource;
+  inactiveUsersReceiptParadata = [];
+  inactiveUsersPhoneParadata = [];
+  inactiveUsersClickParadata = [];
+  activeUsersActivityParadata = [];
+  allUsers;
+  allUserNames = [];
+  inactiveCollection = [{
+      name: '',
+      group: '',
+      status: '',
+  }]
+
   
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -48,10 +59,34 @@ export class ParadataGroupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAmountOfReceipts()
-    this.getPhoneParadata()
-    this.getActivityParadata()
-    this.getEventClicks()
+    this.getAllUsers();
+  }
+
+  getAllUsers() {
+    this.configService.getUsersOfGroup(this.chosenGroup)
+    .pipe(catchError((error: HttpErrorResponse) => {
+      let errorMessage = '';
+      if (error.error instanceof ErrorEvent) {
+        errorMessage = `Error: ${error.error.message}.\n
+        An error for filtering users has occurred`;
+      } else {
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.\n
+        An error for filtering users has occurred`;
+      }
+      window.alert(errorMessage);
+      return throwError(error)
+    }))
+    .subscribe(users => {
+        this.allUsers = users;
+        for (let element of this.allUsers) {
+          this.allUserNames.push(element.name)
+        }
+        this.getAmountOfReceipts(this.allUserNames);
+        this.getPhoneParadata(this.allUserNames);
+        this.getActivityParadata();
+        this.getEventClicks(this.allUserNames);
+      }
+    )
   }
 
   //set paradata tables
@@ -83,7 +118,7 @@ export class ParadataGroupComponent implements OnInit {
   }
 
   //get all receipt paradata
-  getEventClicks() {
+  getEventClicks(dataSource?) {
     this.configService.getParadataClick()
       .pipe(catchError((error: HttpErrorResponse) => {
         let errorMessage = '';
@@ -98,15 +133,25 @@ export class ParadataGroupComponent implements OnInit {
         return throwError(error)
       }))
       .subscribe(data => {
+        this.inactiveUsersClickParadata.length = 0;
         this.clicksData = data;
         this.clicksData = this.clicksData.paradataClicks;
         this.clicksDataScource = new MatTableDataSource(this.clicksData);
         this.clicksDataScource.sort = this.sort;
         this.clicksDataScource.paginator = this.paginator;
+
+        if (dataSource != null) {
+          for (let element of this.paradata) {
+            if (dataSource.includes(element.userName)) {
+              this.inactiveUsersClickParadata.push(element)
+            }
+          }
+          console.log(this.inactiveUsersClickParadata)
+        }
       })
   }
 
-  getAmountOfReceipts() {
+  getAmountOfReceipts(dataSource?) {
     try {
       this.configService.getAmountOfReceipts()
       .pipe(catchError((error: HttpErrorResponse) => {
@@ -132,7 +177,6 @@ export class ParadataGroupComponent implements OnInit {
                           'groupName': "Justin's groepje2",
                           'receipts': 3,
                           'userName': "N/A"})
-        console.log(this.paradata)
         for (let dataset of this.paradata) {
           
           dataset.date = String(dataset.date)
@@ -142,6 +186,15 @@ export class ParadataGroupComponent implements OnInit {
             dataset.date = "7+ days ago (inactive?)"
           }
         }
+        if (dataSource != null) {
+          this.inactiveUsersReceiptParadata.length = 0;
+          for (let element of this.paradata) {
+            if (dataSource.includes(element.userName)) {
+              this.inactiveUsersReceiptParadata.push(element)
+            }
+          }
+          console.log(this.inactiveUsersReceiptParadata)
+        }
       })
     }
     catch(error) {
@@ -150,7 +203,7 @@ export class ParadataGroupComponent implements OnInit {
   }
 
   //get all phone paradata
-  getPhoneParadata() {
+  getPhoneParadata(dataSource?) {
     this.configService.getPhoneParadata()
       .pipe(catchError((error: HttpErrorResponse) => {
         let errorMessage = '';
@@ -166,6 +219,7 @@ export class ParadataGroupComponent implements OnInit {
       }))
       .subscribe(
         data => {
+          this.inactiveUsersPhoneParadata.length = 0;
           this.phoneParadata = data;
           this.phoneParadata = this.phoneParadata.receiptsPerPhones;
           this.phoneDataSource = new MatTableDataSource(this.phoneParadata);
@@ -173,13 +227,20 @@ export class ParadataGroupComponent implements OnInit {
           this.phoneDataSource.paginator = this.paginator;
           res => console.log('HTTP response', res);
           err => console.log('HTTP Error', err);
-          () => console.log('test')
+          if (dataSource != null) {
+            for (let element of this.paradata) {
+              if (dataSource.includes(element.userName)) {
+                this.inactiveUsersPhoneParadata.push(element)
+              }
+            }
+            console.log(this.inactiveUsersPhoneParadata)
+          }
       }
       )
   }
 
   //get all event paradata
-  getActivityParadata() {
+  getActivityParadata(dataSource?) {
     this.configService.getActivityParadata()
       .pipe(catchError((error: HttpErrorResponse) => {
         let errorMessage = '';
@@ -194,11 +255,20 @@ export class ParadataGroupComponent implements OnInit {
         return throwError(error)
       }))
       .subscribe(data => {
+        this.activeUsersActivityParadata.length = 0;
         this.activityParadata = data;
         this.activityParadata = this.activityParadata.paradataDateTimes;
         this.activityDataSource = new MatTableDataSource(this.activityParadata);
         this.activityDataSource.sort = this.sort;
         this.activityDataSource.paginator = this.paginator;
+        if (dataSource != null) {
+          for (let element of this.activityParadata) {
+            if (dataSource.includes(element.userName)) {
+              this.activeUsersActivityParadata.push(element)
+            }
+          }
+          console.log(this.activeUsersActivityParadata)
+        }
       })
   }
 
@@ -466,16 +536,29 @@ export class ParadataGroupComponent implements OnInit {
   }
 
   activeUsersReceipts(element) {
-    return element.receipts >= 1
+    var thres = <HTMLInputElement>document.getElementById('lowerThresReceipts')
+    return element.receipts >= thres
   }
 
   activeUsersPhotos(element) {
-    return element.photos >= 1
+    var thres = <HTMLInputElement>document.getElementById('lowerThresPhotos')
+    return element.photos >= thres.value;
   }
 
   //go to graph page
   navigate() {
     this.router.navigate(['/graphs', localStorage.getItem('chosenGroupId')])
+  }
+
+  getInactiveData() {
+    this.inactiveCollection.length = 0;
+    for (let element of this.inactiveUsersReceiptParadata) {
+      this.inactiveCollection.push({
+        name: element, 
+        group: String(this.chosenGroup), 
+        status: "Inactive"})
+    }
+    console.log(this.inactiveCollection)
   }
 }
 
