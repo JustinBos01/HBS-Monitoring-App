@@ -42,144 +42,177 @@
                 <label>Quickactions:</label>
                 <div class='vl'>
                     <ng-container *ngIf="paradataSelection.value=='Phones'">
-                        <input #photoLowerThreshold id="photoLowerThreshold" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked); filterActiveUsersPhotos();"><label> Lower threshold of </label><input [disabled]="photoLowerThreshold.checked == false" id='lowerThresPhotos' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked); filterActiveUsersPhotos();"><label> photos</label><br>
-                        <input #receiptUpperThreshold id="receiptUpperThreshold" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked); filterActiveUsersReceipts();"><label> Lower threshold of </label><input [disabled]="receiptUpperThreshold.checked == false" id='lowerThresReceipts' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked); filterActiveUsersReceipts();"><label> receipts</label><br>
-                        <input #receiptLowerThreshold id="receiptLowerThreshold" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked);"><label> Upper threshold of </label><input [disabled]="receiptLowerThreshold.checked == false" id='upperThresPhotos' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked);"><label> receipts</label><br>
-                        <input #inactiveUsersList id="inactiveUsersList" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked); getInactiveData();"><label> List inactive users (no records) </label><br>
-                        <input #noQuickActions id="noQuickActions" type="radio" name="quickActions" checked="true" (change)="quickActions(noQuickActions.checked);"><label> No Quickactions</label>
+                        <input #photoLowerThreshold id="photoLowerThreshold" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked); filterActiveUsersPhotos(); showInactive = false;"><label> Lower threshold of </label><input [disabled]="photoLowerThreshold.checked == false" id='lowerThresPhotos' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked); filterActiveUsersPhotos();"><label> photos</label><br>
+                        <input #receiptUpperThreshold id="receiptUpperThreshold" type="radio" name="quickActions"  (change)="quickActions(noQuickActions.checked); filterActiveUsersReceipts(); showInactive = false;"><label> Lower threshold of </label><input [disabled]="receiptUpperThreshold.checked == false" id='lowerThresReceipts' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked); filterActiveUsersReceipts();"><label> receipts</label><br>
+                        <input #receiptLowerThreshold id="receiptLowerThreshold" type="radio" name="quickActions"  (change)="quickActions(noQuickActions.checked); showInactive = false;"><label> Upper threshold of </label><input [disabled]="receiptLowerThreshold.checked == false" id='upperThresPhotos' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked);"><label> receipts</label><br>
+                        <input #inactiveUsersList id="inactiveUsersList" type="radio" name="quickActions"  (change)="quickActions(noQuickActions.checked); getInactiveData(); showInactive = true;"><label> List inactive users (no records) </label><br>
+                        <input #noQuickActions id="noQuickActions" type="radio" name="quickActions" checked="true" (change)="quickActions(noQuickActions.checked); showInactive = false;"><label> No Quickactions</label>
                     </ng-container>
                 </div>
             </ng-container>
         </div>
 
         <div class="table-item" *ngIf='paradataSelection.value != ""'>
-            <table #receiptMatTbl id='receiptMatTbl' mat-table [dataSource]='receiptDataSource' matSort *ngIf="paradataSelection.value == 'Receipts' && paradata">
-                <ng-container matColumnDef="userName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
-                    <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-                </ng-container>
+            <ng-container *ngIf="paradataSelection.value == 'Receipts' && paradata">
+                <table #receiptMatTbl id='receiptMatTbl' mat-table [dataSource]='receiptDataSource' matSort>
+                    <ng-container matColumnDef="userName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
+                        <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                </ng-container>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="receipts">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Receipts </th>
-                    <td mat-cell *matCellDef="let element"> {{element.receipts}} </td>
-                </ng-container>
-                
-                
-                <tr mat-header-row *matHeaderRowDef="receiptParadataColumns"></tr>
-                <tr mat-row *matRowDef="let myRowData; columns: receiptParadataColumns"></tr>
-                
-            </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Receipts' && paradata" [pageSizeOptions]="[5, 10, 20]"  showFirstLastButtons></mat-paginator>
+                    <ng-container matColumnDef="receipts">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Receipts </th>
+                        <td mat-cell *matCellDef="let element"> {{element.receipts}} </td>
+                    </ng-container>
+                    
+                    
+                    <tr mat-header-row *matHeaderRowDef="receiptParadataColumns"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: receiptParadataColumns"></tr>
+                    
+                </table><br>
+                <mat-paginator *ngIf="paradataSelection.value == 'Receipts' && paradata" [pageSizeOptions]="[5, 10, 20]"  showFirstLastButtons></mat-paginator>
+            </ng-container>
+
+            <ng-container *ngIf="paradataSelection.value == 'Phones' && phoneParadata && (showInactive == false || inactive == null)">
+                <table #phoneMatTbl id='phoneMatTbl' mat-table [dataSource]='phoneDataSource' matSort>
+                    <ng-container matColumnDef="userName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
+                        <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="phoneType">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                        <td mat-cell *matCellDef="let element"> {{element.phoneType}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="phoneManufacturer">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Manufacturer </th>
+                        <td mat-cell *matCellDef="let element"> {{element.phoneManufacturer}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="phoneModel">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Model </th>
+                        <td mat-cell *matCellDef="let element"> {{element.phoneModel}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="receipts">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Receipts </th>
+                        <td mat-cell *matCellDef="let element"> {{element.receipts}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="products">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Products </th>
+                        <td mat-cell *matCellDef="let element"> {{element.products}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="photos">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Photos </th>
+                        <td mat-cell *matCellDef="let element"> {{element.photos}} </td>
+                    </ng-container>
+                    
+                    
+                    <tr mat-header-row *matHeaderRowDef="phoneParadataColumns"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: phoneParadataColumns"></tr>
+                    
+                </table><br>
+                <mat-paginator *ngIf="paradataSelection.value == 'Phones' && phoneParadata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </ng-container>
+
+            <ng-container *ngIf="paradataSelection.value == 'Activities' && activityParadata">
+                <table #activityMatTbl id='activityMatTbl' mat-table [dataSource]='activityDataSource' matSort>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                        <td mat-cell *matCellDef="let element"> {{element.year}}/{{element.month}}/{{element.day}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="time">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+                        <td mat-cell *matCellDef="let element"> {{element.hour}}:{{element.min}}:{{element.sec}}.{{element.msec}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="userName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
+                        <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="objectName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Page </th>
+                        <td mat-cell *matCellDef="let element"> {{element.objectName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                        <td mat-cell *matCellDef="let element"> {{element.action}} </td>
+                    </ng-container>
+                    
+                    <tr mat-header-row *matHeaderRowDef="activityParadataColumns"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: activityParadataColumns"></tr>
+                    
+                </table><br>
+                <mat-paginator *ngIf="paradataSelection.value == 'Activities' && activityParadata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </ng-container>
+
+            <ng-container *ngIf="paradataSelection.value == 'Clicks' && clicksData">
+                <table #clicksMatTbl id='clicksMatTbl' mat-table [dataSource]='clicksDataSource' matSort>
+                    <ng-container matColumnDef="userName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
+                        <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                        <td mat-cell *matCellDef="let element"> {{element.action}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="objectName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Page </th>
+                        <td mat-cell *matCellDef="let element"> {{element.objectName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="clicks">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Clicks </th>
+                        <td mat-cell *matCellDef="let element"> {{element.clicks}} </td>
+                    </ng-container>
+                    
+                    <tr mat-header-row *matHeaderRowDef="clicksDataColumns"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: clicksDataColumns"></tr>
+                    
+                </table><br>
+                <mat-paginator *ngIf="paradataSelection.value == 'Clicks' && clicksData" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </ng-container>
 
             
-            <table #phoneMatTbl id='phoneMatTbl' mat-table [dataSource]='phoneDataSource' *ngIf="paradataSelection.value == 'Phones' && phoneParadata" matSort>
-                <ng-container matColumnDef="userName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
-                    <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-                </ng-container>
+            <ng-container *ngIf="inactiveDataSource != []" id='inactiveMatTbl'>
+                <br><hr><br>
+                <table #inactiveTbl mat-table [dataSource]='inactiveDataSource' matSort>
+                    <ng-container matColumnDef="group">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Group </th>
+                        <td mat-cell *matCellDef="let element"> {{element.group}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="phoneType">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-                    <td mat-cell *matCellDef="let element"> {{element.phoneType}} </td>
-                </ng-container>
+                    <ng-container matColumnDef="user">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="phoneManufacturer">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Manufacturer </th>
-                    <td mat-cell *matCellDef="let element"> {{element.phoneManufacturer}} </td>
-                </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="phoneModel">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Model </th>
-                    <td mat-cell *matCellDef="let element"> {{element.phoneModel}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="receipts">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Receipts </th>
-                    <td mat-cell *matCellDef="let element"> {{element.receipts}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="products">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Products </th>
-                    <td mat-cell *matCellDef="let element"> {{element.products}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="photos">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Photos </th>
-                    <td mat-cell *matCellDef="let element"> {{element.photos}} </td>
-                </ng-container>
-                
-                
-                <tr mat-header-row *matHeaderRowDef="phoneParadataColumns"></tr>
-                <tr mat-row *matRowDef="let myRowData; columns: phoneParadataColumns"></tr>
-                
-            </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Phones' && phoneParadata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-
-
-            <table #activityMatTbl id='activityMatTbl' mat-table [dataSource]='activityDataSource' *ngIf="paradataSelection.value == 'Activities' && activityParadata" matSort>
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.year}}/{{element.month}}/{{element.day}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="time">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
-                    <td mat-cell *matCellDef="let element"> {{element.hour}}:{{element.min}}:{{element.sec}}.{{element.msec}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="userName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
-                    <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="objectName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Page </th>
-                    <td mat-cell *matCellDef="let element"> {{element.objectName}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
-                    <td mat-cell *matCellDef="let element"> {{element.action}} </td>
-                </ng-container>
-                
-                <tr mat-header-row *matHeaderRowDef="activityParadataColumns"></tr>
-                <tr mat-row *matRowDef="let myRowData; columns: activityParadataColumns"></tr>
-                
-            </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Activities' && activityParadata" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-
-
-            <table #clicksMatTbl id='clicksMatTbl' mat-table [dataSource]='clicksDataScource' *ngIf="paradataSelection.value == 'Clicks' && clicksData" matSort>
-                <ng-container matColumnDef="userName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
-                    <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
-                    <td mat-cell *matCellDef="let element"> {{element.action}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="objectName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Page </th>
-                    <td mat-cell *matCellDef="let element"> {{element.objectName}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="clicks">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Clicks </th>
-                    <td mat-cell *matCellDef="let element"> {{element.clicks}} </td>
-                </ng-container>
-                
-                <tr mat-header-row *matHeaderRowDef="clicksDataColumns"></tr>
-                <tr mat-row *matRowDef="let myRowData; columns: clicksDataColumns"></tr>
-                
-            </table><br>
-            <mat-paginator *ngIf="paradataSelection.value == 'Clicks' && clicksData" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                    
+                    <tr mat-header-row *matHeaderRowDef="inactiveDataColumns"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: inactiveDataColumns"></tr>
+                    
+                </table><br>
+                <button mat-button (click)="exportInactive()">Export</button>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </ng-container>
             
 
 

@@ -8,6 +8,8 @@ import { of } from 'rxjs';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
+import { ExportToCsv } from 'export-to-csv';
+  
 
 
 @Component({
@@ -25,10 +27,12 @@ export class ParadataGroupComponent implements OnInit {
   phoneParadataColumns: string[] = ['userName', 'phoneType', 'phoneManufacturer', 'phoneModel', 'receipts', 'products', 'photos'];
   activityParadataColumns: string[] = ['date', 'time', 'userName', 'objectName', 'action'];
   clicksDataColumns: string[] = ['userName', 'action', 'objectName', 'clicks'];
+  inactiveDataColumns: string[] = ['group', 'user', 'status'];
   chosenGroup = localStorage.getItem('chosenGroup');
   receiptDataSource;
   phoneDataSource;
   activityDataSource;
+  inactiveDataSource;
   dataSource;
   filteredReceiptData = [];
   filteredPhoneData = [];
@@ -36,19 +40,31 @@ export class ParadataGroupComponent implements OnInit {
   filteredClicksData = [];
   availableFilters = [];
   quickActionStatus = false;
-  clicksDataScource;
+  clicksDataSource;
   inactiveUsersReceiptParadata = [];
   inactiveUsersPhoneParadata = [];
   inactiveUsersClickParadata = [];
   activeUsersActivityParadata = [];
   allUsers;
   allUserNames = [];
+  showInactive = null;
   inactiveCollection = [{
       name: '',
       group: '',
       status: '',
   }]
-
+  options = { 
+    fieldSeparator: ';',
+    quoteStrings: '"',
+    decimalSeparator: '',
+    showLabels: true, 
+    showTitle: true,
+    title: 'Inactive users',
+    useTextFile: false,
+    useBom: true,
+    useKeysAsHeaders: true,
+    // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+  };
   
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -60,6 +76,7 @@ export class ParadataGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllUsers();
+    this.showInactive = false;
   }
 
   getAllUsers() {
@@ -85,6 +102,7 @@ export class ParadataGroupComponent implements OnInit {
         this.getPhoneParadata(this.allUserNames);
         this.getActivityParadata();
         this.getEventClicks(this.allUserNames);
+        this.getInactiveData();
       }
     )
   }
@@ -136,9 +154,9 @@ export class ParadataGroupComponent implements OnInit {
         this.inactiveUsersClickParadata.length = 0;
         this.clicksData = data;
         this.clicksData = this.clicksData.paradataClicks;
-        this.clicksDataScource = new MatTableDataSource(this.clicksData);
-        this.clicksDataScource.sort = this.sort;
-        this.clicksDataScource.paginator = this.paginator;
+        this.clicksDataSource = new MatTableDataSource(this.clicksData);
+        this.clicksDataSource.sort = this.sort;
+        this.clicksDataSource.paginator = this.paginator;
 
         if (dataSource != null) {
           for (let element of this.paradata) {
@@ -281,7 +299,7 @@ export class ParadataGroupComponent implements OnInit {
     this.filteredActivityData.length = 0;
     this.activityDataSource = [];
     this.filteredClicksData.length = 0;
-    this.clicksDataScource = [];
+    this.clicksDataSource = [];
     var filterNoRadio = <HTMLInputElement>document.getElementById("noneFilterRadio")
     
     if (selectedTable == 'Receipts') {
@@ -501,7 +519,7 @@ export class ParadataGroupComponent implements OnInit {
                 }
               }
               this.clicksData = this.filteredClicksData
-              this.clicksDataScource = this.filteredClicksData
+              this.clicksDataSource = this.filteredClicksData
             })
         }
         catch(error) {
@@ -514,7 +532,7 @@ export class ParadataGroupComponent implements OnInit {
   }
 
   quickActions(status) {
-    this.quickActionStatus = !status
+    this.quickActionStatus = !status;
   }
 
   filterActiveUsersReceipts() {
@@ -551,14 +569,24 @@ export class ParadataGroupComponent implements OnInit {
   }
 
   getInactiveData() {
-    this.inactiveCollection.length = 0;
+    this.inactiveCollection.length =  0;
     for (let element of this.inactiveUsersReceiptParadata) {
-      this.inactiveCollection.push({
-        name: element, 
-        group: String(this.chosenGroup), 
-        status: "Inactive"})
+      if (element.receipts == 0 || element.photos == 0) {
+        this.inactiveCollection.push({
+          name: element.userName, 
+          group: String(this.chosenGroup), 
+          status: "Inactive"})
+      }
     }
-    console.log(this.inactiveCollection)
+    this.inactiveDataSource = new MatTableDataSource(this.inactiveCollection);
+    this.inactiveDataSource.sort = this.sort;
+    this.inactiveDataSource.paginator = this.paginator;
+    this.showInactive = true;
+  }
+
+  exportInactive() {
+    const csvExporter = new ExportToCsv(this.options);
+    csvExporter.generateCsv(this.inactiveCollection);
   }
 }
 
