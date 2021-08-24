@@ -44,6 +44,28 @@ export class ParadataGroupComponent implements OnInit {
   inactiveUsersReceiptParadata = [];
   inactiveUsersPhoneParadata = [];
   inactiveUsersClickParadata = [];
+  checkedUser = [];
+  questionairePageCompleted = [
+    {
+      name: '',
+      group: '',
+      status: '',
+    }
+  ];
+  completedUsers = [
+    {
+      name: '',
+      group: '',
+      status: '',
+    }
+  ];
+  activeUsers = [
+    {
+      name: '',
+      group: '',
+      status: '',
+    }
+  ];
   activeUsersActivityParadata = [];
   allUsers;
   allUserNames = [];
@@ -157,6 +179,21 @@ export class ParadataGroupComponent implements OnInit {
         this.clicksDataSource = new MatTableDataSource(this.clicksData);
         this.clicksDataSource.sort = this.sort;
         this.clicksDataSource.paginator = this.paginator;
+        console.log(this.clicksData)
+
+        if (this.questionairePageCompleted.length != 0) {
+          this.questionairePageCompleted.length = 0
+        }
+        console.log(this.clicksData)
+        for (let element of this.clicksData) {
+          if (element.objectName.toLowerCase() == "startquestionnairepage" && this.questionairePageCompleted.includes(element.userName) == false) {
+            this.questionairePageCompleted.push({
+                name: element.userName,
+                group: element.groupName,
+                status: "questionaire finished or in progress",
+            })
+          }
+        }
 
         if (dataSource != null) {
           for (let element of this.paradata) {
@@ -164,8 +201,9 @@ export class ParadataGroupComponent implements OnInit {
               this.inactiveUsersClickParadata.push(element)
             }
           }
-          console.log(this.inactiveUsersClickParadata)
         }
+        console.log(this.questionairePageCompleted)
+        
       })
   }
 
@@ -190,6 +228,10 @@ export class ParadataGroupComponent implements OnInit {
         this.receiptDataSource = new MatTableDataSource(this.paradata);
         this.receiptDataSource.sort = this.sort;
         this.receiptDataSource.paginator = this.paginator;
+
+        if (this.completedUsers.length != 0) {
+          this.completedUsers.length = 0;
+        }
         
         this.paradata.push({'date': 9,
                           'groupName': "Justin's groepje2",
@@ -203,7 +245,31 @@ export class ParadataGroupComponent implements OnInit {
           } else if (dataset.date >= 8) {
             dataset.date = "7+ days ago (inactive?)"
           }
+          if (this.checkedUser.includes(dataset.userName) == false) {
+            localStorage.setItem('currentUser', dataset.userName)
+            var completedCheck = this.paradata.filter(this.completedFilter)
+            this.checkedUser.push(dataset.userName)
+            if (completedCheck.length >= 7) {
+              this.completedUsers.push(
+                {
+                  name: dataset.userName,
+                  group: dataset.groupName,
+                  status: 'Completed',
+                }
+              )
+            }
+            if (completedCheck.length > 0 && completedCheck < 7) {
+              this.activeUsers.push(
+                {
+                  name: dataset.userName,
+                  group: dataset.groupName,
+                  status: 'Active',
+                }
+              )
+            }
+          }
         }
+        console.log(this.completedUsers)
         if (dataSource != null) {
           this.inactiveUsersReceiptParadata.length = 0;
           for (let element of this.paradata) {
@@ -211,7 +277,6 @@ export class ParadataGroupComponent implements OnInit {
               this.inactiveUsersReceiptParadata.push(element)
             }
           }
-          console.log(this.inactiveUsersReceiptParadata)
         }
       })
     }
@@ -251,7 +316,6 @@ export class ParadataGroupComponent implements OnInit {
                 this.inactiveUsersPhoneParadata.push(element)
               }
             }
-            console.log(this.inactiveUsersPhoneParadata)
           }
       }
       )
@@ -285,7 +349,6 @@ export class ParadataGroupComponent implements OnInit {
               this.activeUsersActivityParadata.push(element)
             }
           }
-          console.log(this.activeUsersActivityParadata)
         }
       })
   }
@@ -424,7 +487,6 @@ export class ParadataGroupComponent implements OnInit {
         }))
         .subscribe(data => {
           this.activityParadata = data;
-          console.log(data)
           this.activityParadata = this.activityParadata.paradataDateTimes;
           var filterUsernameCbxValuePhones = <HTMLInputElement>document.getElementById('filterCbxUsername')
           var filterPageCbxValue = <HTMLInputElement>document.getElementById('filterCbxPage')
@@ -540,7 +602,6 @@ export class ParadataGroupComponent implements OnInit {
       this.phoneParadata = data;
       this.phoneParadata = this.phoneParadata.receiptsPerPhones;
       this.phoneDataSource = this.phoneParadata.filter(this.activeUsersReceipts)
-      console.log(this.phoneDataSource)
     })
   }
 
@@ -549,7 +610,6 @@ export class ParadataGroupComponent implements OnInit {
       this.phoneParadata = data;
       this.phoneParadata = this.phoneParadata.receiptsPerPhones;
       this.phoneDataSource = this.phoneParadata.filter(this.activeUsersPhotos)
-      console.log(this.phoneDataSource)
     })
   }
 
@@ -561,6 +621,10 @@ export class ParadataGroupComponent implements OnInit {
   activeUsersPhotos(element) {
     var thres = <HTMLInputElement>document.getElementById('lowerThresPhotos')
     return element.photos >= thres.value;
+  }
+
+  completedFilter(element) {
+    return element.userName == localStorage.getItem("currentUser");
   }
 
   //go to graph page

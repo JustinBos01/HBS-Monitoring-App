@@ -45,7 +45,7 @@
                         <input #photoLowerThreshold id="photoLowerThreshold" type="radio" name="quickActions" (change)="quickActions(noQuickActions.checked); filterActiveUsersPhotos(); showInactive = false;"><label> Lower threshold of </label><input [disabled]="photoLowerThreshold.checked == false" id='lowerThresPhotos' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked); filterActiveUsersPhotos();"><label> photos</label><br>
                         <input #receiptUpperThreshold id="receiptUpperThreshold" type="radio" name="quickActions"  (change)="quickActions(noQuickActions.checked); filterActiveUsersReceipts(); showInactive = false;"><label> Lower threshold of </label><input [disabled]="receiptUpperThreshold.checked == false" id='lowerThresReceipts' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked); filterActiveUsersReceipts();"><label> receipts</label><br>
                         <input #receiptLowerThreshold id="receiptLowerThreshold" type="radio" name="quickActions"  (change)="quickActions(noQuickActions.checked); showInactive = false;"><label> Upper threshold of </label><input [disabled]="receiptLowerThreshold.checked == false" id='upperThresPhotos' type="number" min="1" value="1" (change)="quickActions(noQuickActions.checked);"><label> receipts</label><br>
-                        <input #inactiveUsersList id="inactiveUsersList" type="radio" name="quickActions"  (change)="quickActions(noQuickActions.checked); getInactiveData(); showInactive = true;"><label> List inactive users (no records) </label><br>
+                        <input #inactiveUsersList id="inactiveUsersList" type="radio" name="quickActions"  (change)="quickActions(noQuickActions.checked); getInactiveData(); showInactive = true; inactiveUsersList.value = inactiveUsersList.value"><label> List inactive users (no records) </label><br>
                         <input #noQuickActions id="noQuickActions" type="radio" name="quickActions" checked="true" (change)="quickActions(noQuickActions.checked); showInactive = false;"><label> No Quickactions</label>
                     </ng-container>
                 </div>
@@ -187,7 +187,7 @@
             </ng-container>
 
             
-            <ng-container *ngIf="inactiveDataSource != []" id='inactiveMatTbl'>
+            <ng-container *ngIf="inactiveUsersList" id='inactiveMatTbl'>
                 <br><hr><br>
                 <table #inactiveTbl mat-table [dataSource]='inactiveDataSource' matSort>
                     <ng-container matColumnDef="group">
@@ -221,16 +221,7 @@
                 <label *ngIf="paradataSelection.value == 'Phones' && !phoneParadata"><b>There is no phone paradata for this group</b></label>
                 <label *ngIf="paradataSelection.value == 'Activities' && !activityParadata"><b>There is no activity paradata for this group</b></label>
             </div>
-            <table *ngIf='paradataSelection.value == "test1"'>
-                <tr>
-                    <th>test1Colmn</th>
-                    <th>test2Colmn</th>
-                </tr>
-                <tr>
-                    <td>test1cell</td>
-                    <td>test2cell</td>
-                </tr>
-            </table>
+            
 
 
         </div>
