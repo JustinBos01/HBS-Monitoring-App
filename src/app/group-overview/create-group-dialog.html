@@ -1,7 +1,6 @@
 <div style='text-align: center'>
     <h2>Create Group</h2>
     <label>Group Name: <input #groupNameTbx  id='groupNameTbx' value='' (keyup)="groupNameTbx.value = groupNameTbx.value"></label><br><br>
-    <label>Project (not implemented yet): <input></label><br><br>
     <div style='position: relative; text-align: right; display: inline; top: 45px;'>
         <button mat-button [disabled]="suExists == true" (click)='createSuperuser(); onNoClick();' style="background-color: lightblue; float: right;">Superuser</button>
         <button mat-button  [disabled]="cmmExists == true" (click)='createCasemanagement(); onNoClick();' style="background-color: lightblue; float: right;">Casemanagement</button><br><br>

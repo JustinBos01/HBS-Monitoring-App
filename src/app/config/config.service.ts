@@ -107,18 +107,13 @@ export class ConfigService {
 
   createGroup(groupname, key, value): Observable<GroupBody[]> {
     var configUrl = 'http://localhost:4200/budget/group/create';
-    if ((key == null || key == '') && (value == null || value == '')){
-      this.JsonString = {
+    this.JsonString = {
       "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
       "group": {"name" : groupname},
-      "groupInfos"  : []
-     }} else {
-       this.JsonString = {
-        "superuser" : {"name" : localStorage.getItem('superUserData.name'), "password" : localStorage.getItem('superUserData.password')},
-        "group": {"name" : groupname},
-        "groupInfos"  : [ {"key" : key, "value" : value}]
-       }
-     }
+      "groupInfos"  : [ {"key" : "<key1Here>", "value" : "<valueHere>"},
+                   {"key" : "<key2Here>", "value" : "<valueHere>"},
+                   {"key" : "<key3Here>", "value" : "<valueHere>"}]
+    }
     return this.http.post<GroupBody[]>(
       configUrl, this.JsonString);
   }

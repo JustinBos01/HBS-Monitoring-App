@@ -58,6 +58,10 @@
                     <span mat-fab class="material-icons"  (click)='chosenGroup = group.group.name; singleConfirmationCheck = true; openDialogDeleteGroup();' style='color: red; padding-right: 15px'>
                         delete
                     </span>
+
+                    <span mat-fab class="material-icons" (click)='printGroup(group.group.name);' style='color: black; padding-right: 15px'>
+                        download
+                    </span>
                 </td>
             </tr>
         </table>

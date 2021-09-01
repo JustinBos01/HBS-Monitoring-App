@@ -28,7 +28,9 @@ export class ParadataGroupComponent implements OnInit {
   activityParadataColumns: string[] = ['date', 'time', 'userName', 'objectName', 'action'];
   clicksDataColumns: string[] = ['userName', 'action', 'objectName', 'clicks'];
   inactiveDataColumns: string[] = ['group', 'user', 'status'];
+  statusColumns: string[] = ['userName', 'groupName', 'status']
   chosenGroup = localStorage.getItem('chosenGroup');
+  statusDataSource;
   receiptDataSource;
   phoneDataSource;
   activityDataSource;
@@ -75,17 +77,21 @@ export class ParadataGroupComponent implements OnInit {
       group: '',
       status: '',
   }]
+  statusCollection = [{
+    name: '',
+    group: '',
+    status: '',
+}]
   options = { 
     fieldSeparator: ';',
     quoteStrings: '"',
     decimalSeparator: '',
     showLabels: true, 
     showTitle: true,
-    title: 'Inactive users',
+    title: 'Users Status',
     useTextFile: false,
     useBom: true,
     useKeysAsHeaders: true,
-    // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
   };
   
   @ViewChild(MatSort) sort: MatSort;
@@ -97,7 +103,14 @@ export class ParadataGroupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.statusCollection.length != 0) {
+      this.statusCollection.length = 0;
+    }
+    console.log(this.statusDataSource)
     this.getAllUsers();
+    this.statusDataSource = new MatTableDataSource(this.statusCollection);
+    this.statusDataSource.sort = this.sort;
+    this.statusDataSource.paginator = this.paginator;
     this.showInactive = false;
   }
 
@@ -187,7 +200,7 @@ export class ParadataGroupComponent implements OnInit {
         console.log(this.clicksData)
         for (let element of this.clicksData) {
           if (element.objectName.toLowerCase() == "startquestionnairepage" && this.questionairePageCompleted.includes(element.userName) == false) {
-            this.questionairePageCompleted.push({
+            this.statusCollection.push({
                 name: element.userName,
                 group: element.groupName,
                 status: "questionaire finished or in progress",
@@ -250,7 +263,7 @@ export class ParadataGroupComponent implements OnInit {
             var completedCheck = this.paradata.filter(this.completedFilter)
             this.checkedUser.push(dataset.userName)
             if (completedCheck.length >= 7) {
-              this.completedUsers.push(
+              this.statusCollection.push(
                 {
                   name: dataset.userName,
                   group: dataset.groupName,
@@ -258,8 +271,9 @@ export class ParadataGroupComponent implements OnInit {
                 }
               )
             }
+
             if (completedCheck.length > 0 && completedCheck < 7) {
-              this.activeUsers.push(
+              this.statusCollection.push(
                 {
                   name: dataset.userName,
                   group: dataset.groupName,
@@ -269,7 +283,7 @@ export class ParadataGroupComponent implements OnInit {
             }
           }
         }
-        console.log(this.completedUsers)
+
         if (dataSource != null) {
           this.inactiveUsersReceiptParadata.length = 0;
           for (let element of this.paradata) {
@@ -636,7 +650,7 @@ export class ParadataGroupComponent implements OnInit {
     this.inactiveCollection.length =  0;
     for (let element of this.inactiveUsersReceiptParadata) {
       if (element.receipts == 0 || element.photos == 0) {
-        this.inactiveCollection.push({
+        this.statusCollection.push({
           name: element.userName, 
           group: String(this.chosenGroup), 
           status: "Inactive"})
@@ -648,9 +662,10 @@ export class ParadataGroupComponent implements OnInit {
     this.showInactive = true;
   }
 
-  exportInactive() {
+  exportStatus(collection, titleValue) {
+    this.options.title = titleValue;
     const csvExporter = new ExportToCsv(this.options);
-    csvExporter.generateCsv(this.inactiveCollection);
+    csvExporter.generateCsv(collection);
   }
 }
 

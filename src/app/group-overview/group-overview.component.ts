@@ -11,8 +11,8 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-
-
+import { ExportToCsv } from 'export-to-csv';
+import { group } from '@angular/animations';
 
 export interface DialogData {
   groups: string
@@ -50,9 +50,19 @@ export class GroupOverviewComponent implements OnInit {
   name;
   monitoring;
   caseManagement;
-  
-  // mat table headers = ['Group Name', 'Research Status', 'Amount of Users', 'Paradata', ''];
+  usersOfGroup = [];
 
+  options = { 
+    fieldSeparator: ';',
+    quoteStrings: '"',
+    decimalSeparator: '',
+    showLabels: true, 
+    showTitle: true,
+    title: 'Users Status',
+    useTextFile: false,
+    useBom: true,
+    useKeysAsHeaders: true,
+  };
 
   constructor(
     public navigation: TopBarService,
@@ -78,7 +88,6 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.navigation.show();
     this.name = localStorage.getItem('superUserData.name')
     localStorage.setItem('chosenGroup', '')
@@ -123,7 +132,7 @@ export class GroupOverviewComponent implements OnInit {
   openDialogCreateGroup(): void {
     const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
       width: '500px',
-      height: '300px',
+      height: '250px',
       data: {groups: this.groups}
     });
 
@@ -172,6 +181,7 @@ export class GroupOverviewComponent implements OnInit {
     this.configService.getGroups()
       .subscribe(groups => {
         this.groups = groups;
+        console.log(this.groups)
         for (let group of this.groups) {
           this.configService.getUsersOfGroup(group.group.name)
           .pipe(catchError((error: HttpErrorResponse) => {
@@ -450,6 +460,25 @@ export class GroupOverviewComponent implements OnInit {
         this.allUsers = this.allUsers.userNames.length
       }
     )
+  }
+
+  exportGroup(selectedGroup, title) {
+    this.options.title = title;
+    const csvExporter = new ExportToCsv(this.options);
+    csvExporter.generateCsv(selectedGroup);
+  }
+
+  printGroup(groupName) {
+    for (let element of this.groups) {
+      if (element.group.name == groupName) {
+        this.configService.getUsersOfGroup(groupName).subscribe(users => {
+          this.usersOfGroup = users;
+          this.exportGroup(this.usersOfGroup, "users in group: "+groupName);
+        })
+        console.log(element)
+        this.exportGroup(element.groupInfos, "group infos for group: "+groupName)
+      }
+    }
   }
 }
 
@@ -752,7 +781,6 @@ export class DuplicateGroupDialogComponent implements OnInit {
       alert('No new group name was entered.')
     }
   }
-
   
   onNoClick(): void {
     this.dialogRef.close();
